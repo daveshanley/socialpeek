@@ -49,7 +49,7 @@ public class JSONGenerator extends AbstractGenerator {
      * @param dataIn the PeekData object you want to build into JSON data,
      * @return the valid JSON String
      * @see Data
-     * @see PeekData
+     * @see uk.co.mccann.socialpeek.model.PeekData
      * @throws SocialPeekException
      * 
      */
@@ -92,7 +92,7 @@ public class JSONGenerator extends AbstractGenerator {
      * @param dataIn the List of Data objects you want to build into JSON data,
      * @return the valid JSON String
      * @see Data
-     * @see PeekData
+     * @see uk.co.mccann.socialpeek.model.PeekData
      * @throws ParseException
      * 
      */

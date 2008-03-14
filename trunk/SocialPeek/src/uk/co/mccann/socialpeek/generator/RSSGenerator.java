@@ -51,7 +51,7 @@ public class RSSGenerator extends AbstractGenerator {
 	/**
      * Creates a DOM document ready for Elements.
    	 *
-     * @see AbstractGenerator
+     * @see Document
      */
 	private void createDocument() throws ParserConfigurationException {
 		
@@ -69,15 +69,13 @@ public class RSSGenerator extends AbstractGenerator {
 	/**
      * Generate RSS feed using single PeekData Object
    	 * 
-   	 * Will read, parse and build RSS string using single item, RSS uses Yahoo! Media RSS Module
+   	 * Will read, parse and build RSS string using single item, RSS uses Yahoo! Media RSS Module http://search.yahoo.com/mrss/
    	 * 
      * @param	dataIn	the PeekData object you want to build into RSS data,
      * @return the valid JSON String
      * @see Data
-     * @see {@link http://search.yahoo.com/mrss/}
-     * @see PeekData
-     * @throws SocialPeekException
-     * 
+     * @see uk.co.mccann.socialpeek.model.PeekData
+     * @throws SocialPeekException 
      */
 	public String generate(Data dataIn) throws SocialPeekException {
 		
@@ -124,7 +122,6 @@ public class RSSGenerator extends AbstractGenerator {
    	 *
    	 * @return channel DOM Element
      * @see Element
-     * 
      */
 	private Element createChannel() {
 		
@@ -273,13 +270,12 @@ public class RSSGenerator extends AbstractGenerator {
 	/**
      * Generate RSS from multiple PeekData Objects.
    	 * 
-   	 * Will read, parse and build RSS string using multiple items, RSS uses Yahoo! Media RSS Module
+   	 * Will read, parse and build RSS string using multiple items, RSS uses Yahoo! Media RSS Module http://search.yahoo.com/mrss/
    	 * 
      * @param	dataIn	the PeekData object you want to build into RSS data,
      * @return the valid JSON String
      * @see Data
-     * @see {@link http://search.yahoo.com/mrss/}
-     * @see PeekData
+     * @see uk.co.mccann.socialpeek.model.PeekData
      * @throws SocialPeekException
      * 
      */

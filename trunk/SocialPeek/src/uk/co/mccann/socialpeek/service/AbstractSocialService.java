@@ -11,14 +11,14 @@ import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.interfaces.Generator;
 import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.model.SocialService;
-import uk.co.mccann.socialpeek.parser.TwitterParser;
+
 
 public class AbstractSocialService implements SocialService {
 	
 	protected Parser parser;
 	protected GeneratorFactory genFactory;
 	protected Configurable configuration;
-	public String username, password, apiKey;
+	protected String username, password, apiKey;
 	protected Data randomPeek, userPeek;
 	protected List<Data> randomPeekList, userPeekList;
 	

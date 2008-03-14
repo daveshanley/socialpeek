@@ -1,0 +1,166 @@
+package uk.co.mccann.socialpeek.generator;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
+
+import uk.co.mccann.socialpeek.SocialPeek;
+import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
+import uk.co.mccann.socialpeek.interfaces.Data;
+import uk.co.mccann.socialpeek.interfaces.Generator;
+
+public class XMLGenerator extends AbstractGenerator {
+	
+	/* XML variables */
+	private DocumentBuilderFactory dbf;
+	private DocumentBuilder docBuilder;
+	private Document document;
+	private Element rootElement;
+		
+	public XMLGenerator() {
+		super();
+	}
+	
+	public String generate(Data dataIn) throws SocialPeekException {
+		
+		try {
+			
+			this.createDocument();
+			
+			//create the root element 
+			this.rootElement = this.document.createElement("socialpeek");
+			this.document.appendChild(this.rootElement);
+			
+			Element post = this.createPeekElement(dataIn);
+			this.rootElement.appendChild(post);
+				
+			/* create a DOM implementation */
+			DOMImplementation impl = this.document.getImplementation();
+			DOMImplementationLS implLS = (DOMImplementationLS) impl.getFeature("LS","3.0");
+			
+			/* create a writer and tell it to format the output so it's pretty! */
+			LSSerializer writer = implLS.createLSSerializer();
+			writer.getDomConfig().setParameter("format-pretty-print", true);
+			
+			/* create a serialized version of the document */ 
+			String xmlSerialized = writer.writeToString(this.document.getDocumentElement());
+			
+			return xmlSerialized;
+
+		} catch (Exception e) {
+			throw new SocialPeekException("unable to perform XML generation: " + e);
+		} 
+		
+	}
+
+	private void createDocument() throws ParserConfigurationException {
+		
+		/* create instance of document builder factory */
+		this.dbf = DocumentBuilderFactory.newInstance();
+		
+		/* create a builder */
+		this.docBuilder = this.dbf.newDocumentBuilder();
+
+		/* create new DOM document */
+		this.document = this.docBuilder.newDocument();
+	
+	}
+	
+	private Element createPeekElement(Data data){
+
+		Element post = this.document.createElement("post");
+		post.setAttribute("source", data.getLink());
+		
+		
+		/* create post elements */
+		Element headline, body, link, date, user, photo;
+		Text headlineText, bodyText, linkText, dateText, userText, photoText;
+		
+		headline = this.document.createElement("headline");
+		headlineText = this.document.createCDATASection(data.getHeadline());
+		headline.appendChild(headlineText);
+		post.appendChild(headline);
+		
+		body = this.document.createElement("body");
+		bodyText = this.document.createCDATASection(data.getBody());
+		body.appendChild(bodyText);
+		post.appendChild(body);
+		
+		link = this.document.createElement("link");
+		linkText = this.document.createTextNode(data.getLink());
+		link.appendChild(linkText);
+		post.appendChild(link);
+		
+		date = this.document.createElement("date");
+		dateText = this.document.createTextNode(this.sdf.format(data.getDate().getTime()));
+		date.appendChild(dateText);
+		post.appendChild(date);
+		
+		user = this.document.createElement("user");
+		userText = this.document.createTextNode(data.getUser());
+		user.appendChild(userText);
+		post.appendChild(user);
+		
+		if(data.getUserProfilePhoto()!=null) {
+			photo = this.document.createElement("user_photo");
+			photoText = this.document.createTextNode(data.getUserProfilePhoto());
+			photo.appendChild(photoText);
+			post.appendChild(photo);
+		}
+		
+		return post;
+
+	}
+	
+	
+	public String generate(List<Data> dataIn) throws SocialPeekException {
+		
+		try {
+			
+			this.createDocument();
+			
+			/* create root element */
+			this.rootElement = this.document.createElement("socialpeek");
+			this.rootElement.setAttribute("generator", SocialPeek.VERSION);
+			this.rootElement.setAttribute("author", SocialPeek.AUTHOR);
+			this.document.appendChild(this.rootElement);
+			
+			for(Data data : dataIn) {
+				
+				Element post = this.createPeekElement(data);
+				this.rootElement.appendChild(post);
+				
+			}
+			
+			/* create a DOM implementation */
+			DOMImplementation impl = this.document.getImplementation();
+			DOMImplementationLS implLS = (DOMImplementationLS) impl.getFeature("LS","3.0");
+			
+			/* create a writer and tell it to format the output so it's pretty! */
+			LSSerializer writer = implLS.createLSSerializer();
+			writer.getDomConfig().setParameter("format-pretty-print", true);
+			
+			/* create a serialized version of the document */ 
+			String xmlSerialized = writer.writeToString(this.document.getDocumentElement());
+			
+			return xmlSerialized;
+
+		} catch (Exception e) {
+			throw new SocialPeekException("unable to perform XML generation: " + e);
+		} 
+		
+	}
+
+	
+	
+}

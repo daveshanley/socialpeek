@@ -69,6 +69,7 @@ public class SocialPeekConfiguration implements Configurable {
      * Set the feed type to generate XML, JSON or RSS
      *
      * @see SocialPeek
+     * @param service SocialService to register
      */
 	public void registerService(SocialService service) {
 		this.generatorFactory = new GeneratorFactory(feedType);
@@ -89,7 +90,7 @@ public class SocialPeekConfiguration implements Configurable {
      * <b>RSSService.class</b> : Get information from a user defined RSS feed.
      * <b>RandomService.class</b> : Get information from a random service
      * 
-     * @param the class of the service
+     * @param serviceType the class of the service
      */
 	public void setServiceType(Class<SocialService> serviceType) {
 		// TODO Auto-generated method stub
@@ -130,7 +131,7 @@ public class SocialPeekConfiguration implements Configurable {
 	/**
      * Set the 'up to' date you want information returned (if available from service)
      *
-     * @param Calendar object of historial end point
+     * @param cal Calendar object of historial end point
      * @see Calendar
      */
 	public void setHistoricalEndPoint(Calendar cal) {
@@ -141,7 +142,7 @@ public class SocialPeekConfiguration implements Configurable {
 	/**
      * Set the 'up to' date you want information returned (if available from service)
      *
-     * @param Calendar object of historial end point
+     * @param cal Calendar object of historial end point
      * @see Calendar
      */
 	public void setHistoricalStartPoint(Calendar cal) {

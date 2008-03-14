@@ -15,6 +15,20 @@ import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 
+/**
+ * RSSGenerator
+ * Generate valid RSS 2.0 data from PeekData object(s) ready to be parsed by RSS readers or apps.
+ *
+ * <h4>Copyright and License</h4>
+ * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
+ * otherwise stated. It is released as
+ * open-source under the LGPL license. See
+ * <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
+ * for license details. This code comes with no warranty or support.
+ *
+ * @author Dave Shanley <david.shanley@europe.mccann.com>
+ */
+
 public class RSSGenerator extends AbstractGenerator {
 	
 	/* XML variables */
@@ -23,11 +37,22 @@ public class RSSGenerator extends AbstractGenerator {
 	private Document document;
 	private Element rootElement;
 	
+	/**
+     * Default constructor 
+   	 * 
+   	 * call's super from AbstractGenerator to set up SimpleDateFormat property.
+   	 * 
+     * @see AbstractGenerator
+     */
 	public RSSGenerator() {
 		super();
 	}
 	
-	
+	/**
+     * Creates a DOM document ready for Elements.
+   	 *
+     * @see AbstractGenerator
+     */
 	private void createDocument() throws ParserConfigurationException {
 		
 		/* create instance of document builder factory */
@@ -41,7 +66,19 @@ public class RSSGenerator extends AbstractGenerator {
 	
 	}
 	
-	
+	/**
+     * Generate RSS feed using single PeekData Object
+   	 * 
+   	 * Will read, parse and build RSS string using single item, RSS uses Yahoo! Media RSS Module
+   	 * 
+     * @param	dataIn	the PeekData object you want to build into RSS data,
+     * @return the valid JSON String
+     * @see Data
+     * @see {@link http://search.yahoo.com/mrss/}
+     * @see PeekData
+     * @throws SocialPeekException
+     * 
+     */
 	public String generate(Data dataIn) throws SocialPeekException {
 		
 		try {
@@ -82,6 +119,13 @@ public class RSSGenerator extends AbstractGenerator {
 		
 	}
 	
+	/**
+     * Creates RSS Channel
+   	 *
+   	 * @return channel DOM Element
+     * @see Element
+     * 
+     */
 	private Element createChannel() {
 		
 		Element channel = this.document.createElement("channel");
@@ -104,6 +148,11 @@ public class RSSGenerator extends AbstractGenerator {
 		linkText = this.document.createTextNode(SocialPeek.APPLICATION_LINK);
 		link.appendChild(linkText);
 		channel.appendChild(link);
+		
+		author = this.document.createElement("author");
+		authorText = this.document.createTextNode(SocialPeek.AUTHOR_EMAIL);
+		author.appendChild(authorText);
+		channel.appendChild(author);
 		
 		image = this.document.createElement("image");
 		imageUrl = this.document.createElement("url");
@@ -137,13 +186,21 @@ public class RSSGenerator extends AbstractGenerator {
 		
 	}
 	
+	/**
+     * Creates RSS Item for DOM
+   	 *
+   	 * @param data PeekData Object to be generated into the DOM.
+   	 * @return channel DOM Element
+     * @see Element
+     * 
+     */
 	private Element createPeekElement(Data data){
 
 		Element post = this.document.createElement("item");
 		
 		/* create post elements */
 		Element title, mediaTitle, description, link, pubdate, thumbnail, author, guid;
-		Text titleText, mediaTitleText, descriptionText, linkText, pubdateText, thumbnailText, authorText, guidText;
+		Text titleText, mediaTitleText, descriptionText, linkText, pubdateText, authorText, guidText;
 		if(data.getHeadline()!=null) {
 			title = this.document.createElement("title");
 			titleText = this.document.createTextNode(data.getHeadline());
@@ -153,7 +210,7 @@ public class RSSGenerator extends AbstractGenerator {
 		
 		if(data.getBody()!=null) {
 			
-			/* generate a nice xhtml document to display our cotent in */
+			/* generate a nice xhtml document to display our content in */
 			
 			/* summary */
 			StringWriter writer = new StringWriter();
@@ -213,7 +270,19 @@ public class RSSGenerator extends AbstractGenerator {
 	}
 	
 	
-	
+	/**
+     * Generate RSS from multiple PeekData Objects.
+   	 * 
+   	 * Will read, parse and build RSS string using multiple items, RSS uses Yahoo! Media RSS Module
+   	 * 
+     * @param	dataIn	the PeekData object you want to build into RSS data,
+     * @return the valid JSON String
+     * @see Data
+     * @see {@link http://search.yahoo.com/mrss/}
+     * @see PeekData
+     * @throws SocialPeekException
+     * 
+     */
 	public String generate(List<Data> dataIn) throws SocialPeekException {
 		try {
 			

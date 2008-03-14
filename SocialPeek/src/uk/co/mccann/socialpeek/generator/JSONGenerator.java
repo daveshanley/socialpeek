@@ -1,5 +1,6 @@
 package uk.co.mccann.socialpeek.generator;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,16 +10,50 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
+import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 
+/**
+ * JSONGenerator
+ * Generate valid JSON data from PeekData object(s) ready to be parsed by JSON friendly apps.
+ *
+ * <h4>Copyright and License</h4>
+ * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
+ * otherwise stated. It is released as
+ * open-source under the LGPL license. See
+ * <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
+ * for license details. This code comes with no warranty or support.
+ *
+ * @author Dave Shanley <david.shanley@europe.mccann.com>
+ */
 
 public class JSONGenerator extends AbstractGenerator {
 	
+	/**
+     * Default constructor 
+   	 * 
+   	 * call's super from AbstractGenerator to set up SimpleDateFormat property.
+   	 * 
+     * @see AbstractGenerator
+     */
 	public JSONGenerator() {
 		super();
 	}
 	
-	public String generate(Data dataIn) throws ParseException {
+	
+	/**
+     * Generate JSON data from single PeekData Object
+   	 * 
+   	 * Will read, parse and build JSON string using single item, JSON based on SocialPeek XML XSD.
+   	 * 
+     * @param dataIn the PeekData object you want to build into JSON data,
+     * @return the valid JSON String
+     * @see Data
+     * @see PeekData
+     * @throws SocialPeekException
+     * 
+     */
+	public String generate(Data dataIn) throws SocialPeekException {
 		
 		try {
 			/* construct a JSON Object */
@@ -44,12 +79,24 @@ public class JSONGenerator extends AbstractGenerator {
 		} catch (JSONException e) {
 			
 			/* problem building JSONObject */
-			throw new ParseException("unable to build JSON Object : " + e.getMessage());
+			throw new SocialPeekException("unable to build JSON Object : " + e.getMessage());
 		}
 		
 	}
-
-	public String generate(List<Data> dataIn) throws ParseException {
+	
+	/**
+     * Generate JSON from multiple PeekData Objects.
+   	 * 
+   	 * Will read, parse and build JSON string using multiple items, JSON based on SocialPeek XML XSD.
+   	 * 
+     * @param dataIn the List of Data objects you want to build into JSON data,
+     * @return the valid JSON String
+     * @see Data
+     * @see PeekData
+     * @throws ParseException
+     * 
+     */
+	public String generate(List<Data> dataIn) throws SocialPeekException {
 		try {
 			
 			/* iterate through posts */
@@ -86,7 +133,7 @@ public class JSONGenerator extends AbstractGenerator {
 		} catch (JSONException e) {
 			
 			/* problem building JSONObject */
-			throw new ParseException("unable to build JSON Object : " + e.getMessage());
+			throw new SocialPeekException("unable to build JSON Object : " + e.getMessage());
 		}
 	}
 

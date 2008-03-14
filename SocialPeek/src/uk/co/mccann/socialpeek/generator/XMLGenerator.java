@@ -1,6 +1,5 @@
 package uk.co.mccann.socialpeek.generator;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,8 +16,20 @@ import org.w3c.dom.ls.LSSerializer;
 import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.interfaces.Generator;
 
+/**
+ * XMLGenerator
+ * Generate valid XML data from PeekData object(s) ready to be parsed by what ever.
+ *
+ * <h4>Copyright and License</h4>
+ * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
+ * otherwise stated. It is released as
+ * open-source under the LGPL license. See
+ * <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
+ * for license details. This code comes with no warranty or support.
+ *
+ * @author Dave Shanley <david.shanley@europe.mccann.com>
+ */
 public class XMLGenerator extends AbstractGenerator {
 	
 	/* XML variables */
@@ -26,11 +37,30 @@ public class XMLGenerator extends AbstractGenerator {
 	private DocumentBuilder docBuilder;
 	private Document document;
 	private Element rootElement;
-		
+	
+	/**
+     * Default constructor 
+   	 * 
+   	 * call's super from AbstractGenerator to set up SimpleDateFormat property.
+   	 * 
+     * @see AbstractGenerator
+     */
 	public XMLGenerator() {
 		super();
 	}
 	
+	/**
+     * Generate XML feed using single PeekData Object
+   	 * 
+   	 * Will read, parse and build XML string using single item
+   	 * 
+     * @param	dataIn	the PeekData object you want to build into XML data,
+     * @return the valid XML String
+     * @see Data
+     * @see PeekData
+     * @throws SocialPeekException
+     * 
+     */
 	public String generate(Data dataIn) throws SocialPeekException {
 		
 		try {
@@ -122,7 +152,18 @@ public class XMLGenerator extends AbstractGenerator {
 
 	}
 	
-	
+	/**
+     * Generate XML feed using multiple PeekData Objects
+   	 * 
+   	 * Will read, parse and build XML string using single item
+   	 * 
+     * @param	dataIn	the PeekData object you want to build into XML data,
+     * @return the valid XML String
+     * @see Data
+     * @see PeekData
+     * @throws SocialPeekException
+     * 
+     */
 	public String generate(List<Data> dataIn) throws SocialPeekException {
 		
 		try {

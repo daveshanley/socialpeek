@@ -5,6 +5,6 @@ import uk.co.mccann.socialpeek.model.SocialService;
 
 public interface PeekFactory {
 	
-	public SocialService getPeeker(Class<SocialService> service) throws SocialPeekException;
+	public SocialService getPeeker(Class service) throws SocialPeekException;
 	
 }

@@ -17,9 +17,6 @@ package uk.co.mccann.socialpeek.exceptions;
 
 public class ParseException extends SocialPeekException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public ParseException() {

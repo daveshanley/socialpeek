@@ -43,7 +43,7 @@ public class SocialPeekFactory implements PeekFactory {
      * @see SocialPeekException
      * @throws SociialPeekException
      */
-	public SocialService getPeeker(Class<SocialService> peeker) throws SocialPeekException {
+	public SocialService getPeeker(Class peeker) throws SocialPeekException {
 		
 		for(SocialService service : this.config.getRegisteredServices()) {
 			if(peeker.equals(service.getClass())) {

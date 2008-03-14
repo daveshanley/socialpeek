@@ -2,7 +2,7 @@ package uk.co.mccann.socialpeek.generator;
 
 import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.interfaces.Generator;
-import uk.co.mccann.socialpeek.model.SocialService;
+
 
 /**
  * GeneratorFactory
@@ -23,10 +23,12 @@ public class GeneratorFactory {
 	private int feedType;
 	
 	/**
-     * 
+     * Constructor sets the feed type to create a generator for.
      *
-     * @return List of services registered
-     * @see SocialService
+     * @param feedType int defined in SocialPeek class, mapped to SocialPeek.RETURN_RSS, SocialPeek.RETURN_XML and SocialPeek.RETURN_JSON 
+     * @see #SocialPeek.JSON
+     * @see #SocialPeek.XML
+     * @see #SocialPeek.RSS
      */
 	public GeneratorFactory(int feedType) {
 		
@@ -34,8 +36,15 @@ public class GeneratorFactory {
 	
 	}
 	
+	/**
+     * Get a generator for the user defined feed type
+     *
+     * @return depending on what feed type the user has requested in the configuration, returns the appropriate generator 
+     * @see XMLGenerator
+     * @see JSONGenerator
+     * @see RSSGenerator
+     */
 	public Generator getGenerator() {
-		
 		
 		if(this.feedType == SocialPeek.RETURN_XML) {
 			

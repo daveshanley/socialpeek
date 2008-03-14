@@ -1,0 +1,259 @@
+package uk.co.mccann.socialpeek.generator;
+
+import java.io.StringWriter;
+import java.util.List;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
+import uk.co.mccann.socialpeek.SocialPeek;
+import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
+import uk.co.mccann.socialpeek.interfaces.Data;
+
+public class RSSGenerator extends AbstractGenerator {
+	
+	/* XML variables */
+	private DocumentBuilderFactory dbf;
+	private DocumentBuilder docBuilder;
+	private Document document;
+	private Element rootElement;
+	
+	public RSSGenerator() {
+		super();
+	}
+	
+	
+	private void createDocument() throws ParserConfigurationException {
+		
+		/* create instance of document builder factory */
+		this.dbf = DocumentBuilderFactory.newInstance();
+		
+		/* create a builder */
+		this.docBuilder = this.dbf.newDocumentBuilder();
+
+		/* create new DOM document */
+		this.document = this.docBuilder.newDocument();
+	
+	}
+	
+	
+	public String generate(Data dataIn) throws SocialPeekException {
+		
+		try {
+			
+			this.createDocument();
+			
+			/* create root element, use the yahoo media RSS module */
+			this.rootElement = this.document.createElement("rss");
+			this.rootElement.setAttribute("xmlns:media", "http://search.yahoo.com/mrss/");
+			this.rootElement.setAttribute("version", "2.0");
+			
+			this.document.appendChild(this.rootElement);
+			Element channel = this.createChannel();
+			Element post = this.createPeekElement(dataIn);
+			channel.appendChild(post);
+
+			/* add channel to root */
+			this.rootElement.appendChild(channel);
+				
+			/* create a DOM implementation */
+			DOMImplementation impl = this.document.getImplementation();
+			DOMImplementationLS implLS = (DOMImplementationLS) impl.getFeature("LS","3.0");
+			
+			/* create a writer and tell it to format the output so it's pretty! */
+			LSSerializer writer = implLS.createLSSerializer();
+			writer.getDomConfig().setParameter("format-pretty-print", true);
+			
+			/* create a serialized version of the document */ 
+			String xmlSerialized = writer.writeToString(this.document.getDocumentElement());
+			
+			return xmlSerialized;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SocialPeekException("unable to perform XML generation: " + e);
+		} 
+		
+		
+	}
+	
+	private Element createChannel() {
+		
+		Element channel = this.document.createElement("channel");
+		
+		/* rss channel elements */
+		Element title, link, image, imageUrl, imageTitle, imageHeight, imageWidth, imageLink, description, author ;
+		Text titleText, linkText, imageUrlText, imageTitleText, imageHeightText, imageWidthText, imageLinkText,descriptionText, authorText;
+		
+		title = this.document.createElement("title");
+		titleText = this.document.createTextNode(SocialPeek.APPLICATION_NAME);
+		title.appendChild(titleText);
+		channel.appendChild(title);
+		
+		description = this.document.createElement("description");
+		descriptionText = this.document.createTextNode(SocialPeek.APPLICATION_INFO);
+		description.appendChild(descriptionText);
+		channel.appendChild(description);
+		
+		link = this.document.createElement("link");
+		linkText = this.document.createTextNode(SocialPeek.APPLICATION_LINK);
+		link.appendChild(linkText);
+		channel.appendChild(link);
+		
+		image = this.document.createElement("image");
+		imageUrl = this.document.createElement("url");
+		imageUrlText = this.document.createTextNode(SocialPeek.APPLICATION_LOGO);
+		imageUrl.appendChild(imageUrlText);
+		image.appendChild(imageUrl);
+		
+		imageLink = this.document.createElement("link");
+		imageLinkText = this.document.createTextNode(SocialPeek.APPLICATION_LINK);
+		imageLink.appendChild(imageLinkText);
+		image.appendChild(imageLink);
+		
+		imageTitle = this.document.createElement("title");
+		imageTitleText = this.document.createTextNode(SocialPeek.APPLICATION_NAME);
+		imageTitle.appendChild(imageTitleText);
+		image.appendChild(imageTitle);
+		
+		imageWidth = this.document.createElement("width");
+		imageWidthText = this.document.createTextNode(SocialPeek.APPLICATION_LOGO_WIDTH);
+		imageWidth.appendChild(imageWidthText);
+		image.appendChild(imageWidth);
+		
+		imageHeight = this.document.createElement("height");
+		imageHeightText = this.document.createTextNode(SocialPeek.APPLICATION_LOGO_HEIGHT);
+		imageHeight.appendChild(imageHeightText);
+		image.appendChild(imageHeight);
+		
+		channel.appendChild(image);
+		
+		return channel;
+		
+	}
+	
+	private Element createPeekElement(Data data){
+
+		Element post = this.document.createElement("item");
+		
+		/* create post elements */
+		Element title, mediaTitle, description, link, pubdate, thumbnail, author, guid;
+		Text titleText, mediaTitleText, descriptionText, linkText, pubdateText, thumbnailText, authorText, guidText;
+		if(data.getHeadline()!=null) {
+			title = this.document.createElement("title");
+			titleText = this.document.createTextNode(data.getHeadline());
+			title.appendChild(titleText);
+			post.appendChild(title);
+		}
+		
+		if(data.getBody()!=null) {
+			
+			/* generate a nice xhtml document to display our cotent in */
+			
+			/* summary */
+			StringWriter writer = new StringWriter();
+			writer.append("<img align=\"right\" src=\"" + data.getUserProfilePhoto() + "\" alt=\"thumbnail\" /><br/>");
+			writer.append("<p>" + data.getBody() + "</p>");
+			writer.append("<p>Author: <strong>" + data.getUser() +"</strong><br/>");
+			writer.append("Posted: <strong>" + this.sdf.format(data.getDate().getTime()) +"</strong></p>");
+			
+			description = this.document.createElement("description");
+			descriptionText = this.document.createCDATASection(writer.toString());
+			description.appendChild(descriptionText);
+			post.appendChild(description);
+		}
+		if(data.getLink()!=null) {
+			link = this.document.createElement("link");
+			linkText = this.document.createTextNode(data.getLink());
+			link.appendChild(linkText);
+			post.appendChild(link);
+		}
+		
+		if(data.getLink()!=null) {
+			guid = this.document.createElement("guid");
+			guidText = this.document.createTextNode(data.getLink());
+			guid.appendChild(guidText);
+			post.appendChild(guid);
+		}
+		
+		
+		pubdate = this.document.createElement("date");
+		pubdateText = this.document.createTextNode(this.sdf.format(data.getDate().getTime()));
+		pubdate.appendChild(pubdateText);
+		post.appendChild(pubdate);
+		
+		
+		if(data.getUser()!=null) {
+			author = this.document.createElement("media:credit");
+			authorText = this.document.createTextNode(data.getUser());
+			author.appendChild(authorText);
+			post.appendChild(author);
+		}
+		
+		if(data.getUserProfilePhoto()!=null) {
+			thumbnail = this.document.createElement("media:thumbnail");
+			thumbnail.setAttribute("url", data.getUserProfilePhoto());
+			thumbnail.setAttribute("width", "90");
+			thumbnail.setAttribute("height", "120");
+			post.appendChild(thumbnail);
+		}
+		if(data.getHeadline() !=null) {
+			mediaTitle = this.document.createElement("media:title");
+				mediaTitleText = this.document.createTextNode(data.getHeadline());
+			mediaTitle.appendChild(mediaTitleText);
+			post.appendChild(mediaTitle);
+		}
+		return post;
+
+	}
+	
+	
+	
+	public String generate(List<Data> dataIn) throws SocialPeekException {
+		try {
+			
+			this.createDocument();
+			
+			/* create root element, use the yahoo media RSS module */
+			this.rootElement = this.document.createElement("rss");
+			this.rootElement.setAttribute("xmlns:media", "http://search.yahoo.com/mrss/");
+			this.rootElement.setAttribute("version", "2.0");
+			
+			
+			this.document.appendChild(this.rootElement);
+			Element channel = this.createChannel();
+			
+			for(Data data : dataIn) {
+				
+				Element post = this.createPeekElement(data);
+				channel.appendChild(post);
+				
+			}
+			
+			this.rootElement.appendChild(channel);
+				
+			/* create a DOM implementation */
+			DOMImplementation impl = this.document.getImplementation();
+			DOMImplementationLS implLS = (DOMImplementationLS) impl.getFeature("LS","3.0");
+			
+			/* create a writer and tell it to format the output so it's pretty! */
+			LSSerializer writer = implLS.createLSSerializer();
+			writer.getDomConfig().setParameter("format-pretty-print", true);
+			
+			/* create a serialized version of the document */ 
+			String xmlSerialized = writer.writeToString(this.document.getDocumentElement());
+			
+			return xmlSerialized;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SocialPeekException("unable to perform XML generation: " + e);
+		} 
+	}
+
+}

@@ -8,7 +8,6 @@ import java.util.List;
 
 import java.util.Random;
 
-
 import thinktank.twitter.Twitter;
 import thinktank.twitter.TwitterException;
 import thinktank.twitter.Twitter.Status;
@@ -16,11 +15,24 @@ import thinktank.twitter.Twitter.User;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.interfaces.Parser;
-import uk.co.mccann.socialpeek.model.AbstractParser;
 import uk.co.mccann.socialpeek.model.PeekData;
 import uk.co.mccann.socialpeek.model.SocialService;
 import uk.co.mccann.socialpeek.service.TwitterService;
 
+
+/**
+ * <b>TwitterParser</b><br/>
+ * Uses ThinkTank's jTwitter library to collect and process twitter information
+ *
+ * <h4>Copyright and License</h4>
+ * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
+ * otherwise stated. It is released as
+ * open-source under the LGPL license. See
+ * <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
+ * for license details. This code comes with no warranty or support.
+ *
+ * @author Dave Shanley <david.shanley@europe.mccann.com>
+ */
 public class TwitterParser extends AbstractParser implements Parser {
 	
 	Twitter twitter;
@@ -59,7 +71,7 @@ public class TwitterParser extends AbstractParser implements Parser {
 		        
 		    twitterUser.setBody(newBody);
 		    twitterUser.setHeadline(newBody);
-		    	
+		    
 		    /* check to see if there is a photo attached to the user */
 			if(status.getUser().getProfileImageUrl()!=null) {
 				twitterUser.setUserProfilePhoto(status.getUser().getProfileImageUrl().toString());

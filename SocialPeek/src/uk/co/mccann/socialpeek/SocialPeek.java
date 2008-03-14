@@ -32,7 +32,7 @@ import uk.co.mccann.socialpeek.interfaces.PeekFactory;
 	</pre></code>
  
  * <p>
- * See {@linkplain http://mccann.co.uk/socialpeek} for more information.
+ * See http://mccann.co.uk/socialpeek for more information.
  * <p>
  * Notes:
  * <ul>
@@ -52,8 +52,6 @@ import uk.co.mccann.socialpeek.interfaces.PeekFactory;
  *
  * @author Dave Shanley <david.shanley@europe.mccann.com>
  */
-
-
 public class SocialPeek {
 	
 	public final static int RETURN_XML = 1;

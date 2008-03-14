@@ -12,7 +12,7 @@ package uk.co.mccann.socialpeek.exceptions;
  * for license details. This code comes with no warranty or support.
  *
  * @author Dave Shanley <david.shanley@europe.mccann.com>
- * @see SopcialPeekException
+ * @see SocialPeekException
  */
 
 public class ParseException extends SocialPeekException {

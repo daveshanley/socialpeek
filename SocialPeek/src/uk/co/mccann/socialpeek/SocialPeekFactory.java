@@ -27,7 +27,7 @@ public class SocialPeekFactory implements PeekFactory {
 	/**
      * Returns's the correct SocialService from the configuration's list of registered services depending on class type.
      *
-     * @return SocialService that matches class argument
+     * @param config the configuration objects for this peeking factory
      * @see SocialService
      */
 	public SocialPeekFactory(Configurable config) {
@@ -38,10 +38,10 @@ public class SocialPeekFactory implements PeekFactory {
      * Returns the correct SocialService from the configuration's list of registered services depending on class type.
      *
      * @return SocialService that matches class argument
-     * @param Class of SocialService you want returned. 
+     * @param peeker of SocialService you want returned. 
      * @see SocialService
      * @see SocialPeekException
-     * @throws SociialPeekException
+     * @throws SocialPeekException
      */
 	public SocialService getPeeker(Class peeker) throws SocialPeekException {
 		

@@ -54,12 +54,11 @@ public class XMLGenerator extends AbstractGenerator {
    	 * 
    	 * Will read, parse and build XML string using single item
    	 * 
-     * @param	dataIn	the PeekData object you want to build into XML data,
+     * @param	dataIn	the PeekData object you want to build into XML data
      * @return the valid XML String
      * @see Data
-     * @see PeekData
+     * @see uk.co.mccann.socialpeek.model.PeekData
      * @throws SocialPeekException
-     * 
      */
 	public String generate(Data dataIn) throws SocialPeekException {
 		
@@ -93,6 +92,11 @@ public class XMLGenerator extends AbstractGenerator {
 		
 	}
 
+	/**
+     * Creates a DOM document ready for Elements.
+   	 *
+     * @see Document
+     */
 	private void createDocument() throws ParserConfigurationException {
 		
 		/* create instance of document builder factory */
@@ -106,6 +110,14 @@ public class XMLGenerator extends AbstractGenerator {
 	
 	}
 	
+	/**
+     * Creates RSS Item for DOM
+   	 *
+   	 * @param data PeekData Object to be generated into the DOM.
+   	 * @return channel DOM Element
+     * @see Element
+     * 
+     */
 	private Element createPeekElement(Data data){
 
 		Element post = this.document.createElement("post");
@@ -160,7 +172,7 @@ public class XMLGenerator extends AbstractGenerator {
      * @param	dataIn	the PeekData object you want to build into XML data,
      * @return the valid XML String
      * @see Data
-     * @see PeekData
+     * @see uk.co.mccann.socialpeek.model.PeekData
      * @throws SocialPeekException
      * 
      */

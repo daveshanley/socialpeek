@@ -26,9 +26,9 @@ public class GeneratorFactory {
      * Constructor sets the feed type to create a generator for.
      *
      * @param feedType int defined in SocialPeek class, mapped to SocialPeek.RETURN_RSS, SocialPeek.RETURN_XML and SocialPeek.RETURN_JSON 
-     * @see #SocialPeek.JSON
-     * @see #SocialPeek.XML
-     * @see #SocialPeek.RSS
+     * @see uk.co.mccann.socialpeek#RETURN_JSON
+     * @see uk.co.mccann.socialpeek#RETURN_XML
+     * @see uk.co.mccann.socialpeek#RETURN_RSS
      */
 	public GeneratorFactory(int feedType) {
 		

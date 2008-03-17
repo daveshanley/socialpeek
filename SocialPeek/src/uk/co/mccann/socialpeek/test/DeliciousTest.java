@@ -1,6 +1,7 @@
 package uk.co.mccann.socialpeek.test;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -11,10 +12,17 @@ import org.json.JSONArray;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
+import uk.co.mccann.socialpeek.SocialPeek;
+import uk.co.mccann.socialpeek.SocialPeekConfiguration;
+import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
 import uk.co.mccann.socialpeek.generator.RSSGenerator;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.interfaces.Generator;
+import uk.co.mccann.socialpeek.interfaces.PeekFactory;
 import uk.co.mccann.socialpeek.model.PeekData;
+import uk.co.mccann.socialpeek.model.SocialService;
+import uk.co.mccann.socialpeek.service.DeliciousService;
+import uk.co.mccann.socialpeek.service.TwitterService;
 import yarfraw.core.datamodel.CategorySubject;
 import yarfraw.core.datamodel.ChannelFeed;
 import yarfraw.core.datamodel.FeedFormat;
@@ -24,7 +32,7 @@ import org.junit.Test;
 import static org.junit.Assert.fail;
 
 public class DeliciousTest {
-	
+	/*
 	@Test public void rssFeedTest() {
 	
 		try {
@@ -47,7 +55,12 @@ public class DeliciousTest {
 			//System.out.println("Description: " +entry.getDescriptionOrSummaryText());
 			
 			data.setBody(entry.getDescriptionOrSummaryText());
-			data.setDate(Calendar.getInstance());
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd'T'kk:mm:ss'Z'");
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(sdf.parse(entry.getPubDate()));
+			
+			data.setDate(cal);
 			data.setHeadline(entry.getTitleText());
 			data.setLink(entry.getLinks().get(0).getHref());
 			data.setUser(entry.getAuthorOrCreator().get(0).getEmailOrText());
@@ -85,6 +98,40 @@ public class DeliciousTest {
 		
 		}
 	
+	}
+	*/
+	
+	@Test public void randomPeek() {
+		
+		SocialService twitterService = new TwitterService();
+		twitterService.setUsername("shanmantest");
+		twitterService.setPassword("fofcowb");
+		
+		SocialService deliciousService = new DeliciousService();
+		deliciousService.setUsername("test");
+		deliciousService.setPassword("test");
+		
+		SocialPeekConfiguration config = new SocialPeekConfiguration();
+		config.setFeedType(SocialPeek.RETURN_XML);
+		
+		config.registerService(twitterService);
+		config.registerService(deliciousService);
+		
+		/* set up our main engine */
+		SocialPeek socialPeek = new SocialPeek(config);
+		PeekFactory peekFactory = socialPeek.getPeekingFactory();
+		
+		/* start peeking! */
+		
+		try {
+		
+			System.out.println(peekFactory.getPeeker(DeliciousService.class).getRandomPeek());
+		
+		} catch (SocialPeekException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
 	}
 	
 }

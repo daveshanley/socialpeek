@@ -109,11 +109,21 @@ public class JSONGenerator extends AbstractGenerator {
 			
 				/* create a good old fashioned collection */
 				Map<String,String> dataCollection = new HashMap<String,String>();
-				dataCollection.put("headline",data.getHeadline());
-				dataCollection.put("body",data.getBody());
-				dataCollection.put("link",data.getLink());
-				dataCollection.put("date",this.sdf.format(data.getDate().getTime()));
-			
+				if(data.getHeadline()!=null) {
+					dataCollection.put("headline",data.getHeadline());
+				}
+				if(data.getBody()!=null) {
+					dataCollection.put("body",data.getBody());
+				}
+				if(data.getLink()!=null) {
+					dataCollection.put("link",data.getLink());
+				}
+				if(data.getLocation()!=null) {
+					dataCollection.put("location",data.getLocation());
+				}
+				if(data.getDate()!=null) {
+					dataCollection.put("date",this.sdf.format(data.getDate().getTime()));
+				}
 				/* check for a photo, if so, add it as an attribute*/
 				if(data.getUserProfilePhoto()!=null) {
 					dataCollection.put("user_photo",data.getUserProfilePhoto());

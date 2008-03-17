@@ -12,7 +12,19 @@ import uk.co.mccann.socialpeek.interfaces.Generator;
 import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.model.SocialService;
 
-
+/**
+ * <b>AbstractSocialService</b><br/>
+ * All services should subclass this class.
+ *
+ * <h4>Copyright and License</h4>
+ * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
+ * otherwise stated. It is released as
+ * open-source under the LGPL license. See
+ * <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
+ * for license details. This code comes with no warranty or support.
+ *
+ * @author Dave Shanley <david.shanley@europe.mccann.com>
+ */
 public class AbstractSocialService implements SocialService {
 	
 	protected Parser parser;
@@ -380,19 +392,77 @@ public class AbstractSocialService implements SocialService {
 	}
 
 	public String getLatestUserPeek(String userId) throws SocialPeekException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		/* check user has added account details */
+		if(this.getUsername() != null && this.getPassword() != null) {
+			
+			try {
+			
+				this.userPeek = this.parser.getLatestSingleUserItem(userId);
+				Generator generator = this.genFactory.getGenerator();
+				return generator.generate(this.randomPeek);
+				 
+			} catch (ParseException exp) {
+				
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+			}
+		
+		} else {
+			
+			throw new SocialPeekException("unable to use service without authentication credentials");
+			
+		}
+		
+		
 	}
 
-	public String getLatestUserPeek(int userId, int limit)
-			throws SocialPeekException {
-		// TODO Auto-generated method stub
-		return null;
+	public String getLatestUserPeek(int userId, int limit) throws SocialPeekException {
+		
+		/* check user has added account details */
+		if(this.getUsername() != null && this.getPassword() != null) {
+			
+			try {
+			
+				this.userPeekList = this.parser.getLatestMultipleUserItems(userId, limit);
+				Generator generator = this.genFactory.getGenerator();
+				return generator.generate(this.randomPeek);
+				 
+			} catch (ParseException exp) {
+				
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+			}
+		
+		} else {
+			
+			throw new SocialPeekException("unable to use service without authentication credentials");
+			
+		}
+		
 	}
 
-	public String getLatestUserPeek(String userId, int limit)
-			throws SocialPeekException {
-		// TODO Auto-generated method stub
-		return null;
+	public String getLatestUserPeek(String userId, int limit) throws SocialPeekException {
+		
+		/* check user has added account details */
+		if(this.getUsername() != null && this.getPassword() != null) {
+			
+			try {
+			
+				this.userPeekList = this.parser.getLatestMultipleUserItems(userId, limit);
+				Generator generator = this.genFactory.getGenerator();
+				return generator.generate(this.randomPeek);
+				 
+			} catch (ParseException exp) {
+				
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+			}
+		
+		} else {
+			
+			throw new SocialPeekException("unable to use service without authentication credentials");
+			
+		}
 	}
 }

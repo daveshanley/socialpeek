@@ -1,11 +1,7 @@
 package uk.co.mccann.socialpeek.interfaces;
 
 import java.util.Calendar;
-
-import org.w3c.dom.Document;
-
 import uk.co.mccann.socialpeek.generator.GeneratorFactory;
-
 
 /**
  * <b>Service</b><br/>

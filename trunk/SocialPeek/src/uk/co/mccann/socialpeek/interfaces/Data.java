@@ -48,6 +48,11 @@ public interface Data {
 	public void setUserProfilePhoto(String photo);
 	
 	/**
+     *  Set the location of the user / place of the post
+     */ 
+	public void setLocation(String location);
+	
+	/**
      *  Get the headline
      */
 	public String getHeadline();
@@ -76,6 +81,11 @@ public interface Data {
      * Get the http URL of a photo of the user who posted the link.
      */
 	public String getUserProfilePhoto();
+	
+	/**
+     *  Get the location of the user / place of the post
+     */ 
+	public String getLocation();
 	
 
 }

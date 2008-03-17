@@ -3,7 +3,6 @@ package uk.co.mccann.socialpeek.interfaces;
 import java.util.List;
 
 import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
-import uk.co.mccann.socialpeek.model.SocialService;
 
 /**
  * Peekable

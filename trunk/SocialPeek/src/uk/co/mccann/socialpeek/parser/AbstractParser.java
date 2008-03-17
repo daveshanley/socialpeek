@@ -2,8 +2,6 @@ package uk.co.mccann.socialpeek.parser;
 
 import java.util.Random;
 
-import org.w3c.dom.Document;
-
 import uk.co.mccann.socialpeek.model.SocialService;
 
 /**

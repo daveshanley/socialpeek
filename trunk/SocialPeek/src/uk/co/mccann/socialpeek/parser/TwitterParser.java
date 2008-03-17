@@ -37,12 +37,20 @@ public class TwitterParser extends AbstractParser implements Parser {
 	
 	Twitter twitter;
 	
+	/**
+     *  Default constructor, calls super constructor from AbstractParser
+     *  @param service set's the social service for the parser
+     */
 	public TwitterParser(SocialService service) {
 		super(service);
 	}
 	
 	public TwitterParser() { }
 	
+	/**
+     *  Configures the parser for any properties that need initializing
+     *  
+     */
 	public void setUpParser() {
 		
 		/* create a new twitter engine, using thinktank's jTwitter lib */
@@ -76,6 +84,9 @@ public class TwitterParser extends AbstractParser implements Parser {
 			if(status.getUser().getProfileImageUrl()!=null) {
 				twitterUser.setUserProfilePhoto(status.getUser().getProfileImageUrl().toString());
 			}
+			if(status.getUser().getLocation()!=null) {
+				twitterUser.setLocation(status.getUser().getLocation());
+			}
 				
 			return twitterUser;
 		    	
@@ -86,7 +97,7 @@ public class TwitterParser extends AbstractParser implements Parser {
 		}
 	
 	}
-	 
+	
 	public List<Data> getMultipleItems(int limit) throws ParseException {
 		
 		this.random = new Random();
@@ -171,6 +182,7 @@ public class TwitterParser extends AbstractParser implements Parser {
 
 	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
 		
+		
 		/* implementation code! */
 		try {
 			
@@ -214,26 +226,35 @@ public class TwitterParser extends AbstractParser implements Parser {
 		return extractedData.get(this.random.nextInt(extractedData.size()-1));
 	}
 
-	public List<Data> getLatestMultipleUserItems(int userId, int limit)
-			throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException {
+		return this.getMultipleUserItems(String.valueOf(userId), limit);
 	}
 
-	public List<Data> getLatestMultipleUserItems(String userId, int limit)
-			throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException {
+		return this.getMultipleUserItems(String.valueOf(userId), limit);
 	}
 
 	public Data getLatestSingleUserItem(int userId) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		String user = String.valueOf(userId);	
+		return this.getSingleUserItem(user);
+		
 	}
 
 	public Data getLatestSingleUserItem(String userId) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+		/* implementation code! */
+		
+		try {
+			
+			Status userStatus = this.twitter.getStatus(userId);
+			Data userItem = this.compileTwitterData(userStatus);
+			
+			return userItem;
+			
+		} catch (TwitterException e) {
+			
+			throw new ParseException("twitter parsing failed : " + e.getMessage());
+		}
 	}
 
 	

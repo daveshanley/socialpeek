@@ -125,33 +125,50 @@ public class XMLGenerator extends AbstractGenerator {
 		
 		
 		/* create post elements */
-		Element headline, body, link, date, user, photo;
-		Text headlineText, bodyText, linkText, dateText, userText, photoText;
+		Element headline, body, link, date, user, photo, location;
+		Text headlineText, bodyText, linkText, dateText, userText, photoText, locationText;
 		
-		headline = this.document.createElement("headline");
-		headlineText = this.document.createCDATASection(data.getHeadline());
-		headline.appendChild(headlineText);
-		post.appendChild(headline);
+		if(data.getHeadline()!=null) {
+			headline = this.document.createElement("headline");
+			headlineText = this.document.createCDATASection(data.getHeadline());
+			headline.appendChild(headlineText);
+			post.appendChild(headline);
+		}
 		
-		body = this.document.createElement("body");
-		bodyText = this.document.createCDATASection(data.getBody());
-		body.appendChild(bodyText);
-		post.appendChild(body);
+		if(data.getBody()!=null) {
+			body = this.document.createElement("body");
+			bodyText = this.document.createCDATASection(data.getBody());
+			body.appendChild(bodyText);
+			post.appendChild(body);
+		}
 		
-		link = this.document.createElement("link");
-		linkText = this.document.createTextNode(data.getLink());
-		link.appendChild(linkText);
-		post.appendChild(link);
+		if(data.getLink()!=null) {
+			link = this.document.createElement("link");
+			linkText = this.document.createTextNode(data.getLink());
+			link.appendChild(linkText);
+			post.appendChild(link);
+		}
 		
-		date = this.document.createElement("date");
-		dateText = this.document.createTextNode(this.sdf.format(data.getDate().getTime()));
-		date.appendChild(dateText);
-		post.appendChild(date);
+		if(data.getDate()!=null) {
+			date = this.document.createElement("date");
+			dateText = this.document.createTextNode(this.sdf.format(data.getDate().getTime()));
+			date.appendChild(dateText);
+			post.appendChild(date);
+		}	
+			
+		if(data.getUser()!=null) {
+			user = this.document.createElement("user");
+			userText = this.document.createTextNode(data.getUser());
+			user.appendChild(userText);
+			post.appendChild(user);
+		}
 		
-		user = this.document.createElement("user");
-		userText = this.document.createTextNode(data.getUser());
-		user.appendChild(userText);
-		post.appendChild(user);
+		if(data.getLocation()!=null) {
+			location = this.document.createElement("location");
+			locationText = this.document.createTextNode(data.getLocation());
+			location.appendChild(locationText);
+			post.appendChild(location);
+		}
 		
 		if(data.getUserProfilePhoto()!=null) {
 			photo = this.document.createElement("user_photo");

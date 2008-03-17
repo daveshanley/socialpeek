@@ -20,7 +20,7 @@ import uk.co.mccann.socialpeek.interfaces.Data;
  */
 public class PeekData implements Data {
 	
-	private String headline,body,link,user,userProfilePhoto;
+	private String headline,body,link,user,userProfilePhoto,location;
 	private Calendar date;
 	
 	/**
@@ -66,6 +66,13 @@ public class PeekData implements Data {
 	}
 	
 	/**
+     *  @see uk.co.mccann.socialpeek.interfaces.Data#getLocation()
+    */
+	public String getLocation() {
+		return this.location;
+	}
+	
+	/**
      *  @see uk.co.mccann.socialpeek.interfaces.Data#setBody(String body)
     */
 	public void setBody(String body) {
@@ -107,6 +114,14 @@ public class PeekData implements Data {
     */
 	public void setUserProfilePhoto(String photo) {
 		this.userProfilePhoto = photo;
+
+	}
+	
+	/**
+     *  @see uk.co.mccann.socialpeek.interfaces.Data#setLocation(String location)
+    */
+	public void setLocation(String location) {
+		this.location = location;
 
 	}
 	

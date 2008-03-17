@@ -1,5 +1,9 @@
 package uk.co.mccann.socialpeek.service;
 
+import java.util.List;
+
+import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
+import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.parser.TwitterParser;
 
@@ -36,4 +40,51 @@ public class TwitterService extends AbstractSocialService {
 	}
 	
 	/* override anything that needs it */
+	
+	public String getMultiplePeekUsingTag(String tag, int limit) throws SocialPeekException {
+		
+		/* not implemented */
+		throw new SocialPeekException("method not implemented for twitter service");
+	}
+
+	public String getMultiplePeekUsingTags(String[] tags, int limit) throws SocialPeekException {
+		
+		/* not implemented */
+		throw new SocialPeekException("method not implemented for twitter service");
+	}
+
+	public String getRandomPeekUsingTag(String tag) throws SocialPeekException {
+		
+		/* not implemented */
+		throw new SocialPeekException("method not implemented for twitter service");
+		
+	}
+
+	public String getRandomPeekUsingTags(String[] tags) throws SocialPeekException {
+		
+		/* not implemented */
+		throw new SocialPeekException("method not implemented for twitter service");
+	}
+
+	public List<Data> getRawMultiplePeekUsingTag(String tag, int limit) throws SocialPeekException {
+		
+		/* not implemented */
+		throw new SocialPeekException("method not implemented for twitter service");
+	}
+
+	public List<Data> getRawMultiplePeekUsingTags(String[] tags, int limit) throws SocialPeekException {
+		/* not implemented */
+		throw new SocialPeekException("method not implemented for twitter service");
+	}
+
+	public Data getRawRandomPeekUsingTag(String tag) throws SocialPeekException {
+		/* not implemented */
+		throw new SocialPeekException("method not implemented for twitter service");
+	}
+
+	public Data getRawRandomPeekUsingTags(String[] tags) throws SocialPeekException {
+		
+		/* not implemented */
+		throw new SocialPeekException("method not implemented for twitter service");
+	}
 }

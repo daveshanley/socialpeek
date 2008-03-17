@@ -128,21 +128,21 @@ public class XMLGenerator extends AbstractGenerator {
 		Element headline, body, link, date, user, photo, location;
 		Text headlineText, bodyText, linkText, dateText, userText, photoText, locationText;
 		
-		if(data.getHeadline()!=null) {
+		if(data.getHeadline()!=null && data.getHeadline().length() > 0) {
 			headline = this.document.createElement("headline");
 			headlineText = this.document.createCDATASection(data.getHeadline());
 			headline.appendChild(headlineText);
 			post.appendChild(headline);
 		}
 		
-		if(data.getBody()!=null) {
+		if(data.getBody()!=null && data.getBody().length() > 0) {
 			body = this.document.createElement("body");
 			bodyText = this.document.createCDATASection(data.getBody());
 			body.appendChild(bodyText);
 			post.appendChild(body);
 		}
 		
-		if(data.getLink()!=null) {
+		if(data.getLink()!=null && data.getLink().length() > 0) {
 			link = this.document.createElement("link");
 			linkText = this.document.createTextNode(data.getLink());
 			link.appendChild(linkText);
@@ -163,14 +163,14 @@ public class XMLGenerator extends AbstractGenerator {
 			post.appendChild(user);
 		}
 		
-		if(data.getLocation()!=null) {
+		if(data.getLocation()!=null && data.getLocation().length() > 0) {
 			location = this.document.createElement("location");
 			locationText = this.document.createTextNode(data.getLocation());
 			location.appendChild(locationText);
 			post.appendChild(location);
 		}
 		
-		if(data.getUserProfilePhoto()!=null) {
+		if(data.getUserProfilePhoto()!=null && data.getUserProfilePhoto().length() > 0) {
 			photo = this.document.createElement("user_photo");
 			photoText = this.document.createTextNode(data.getUserProfilePhoto());
 			photo.appendChild(photoText);

@@ -214,6 +214,9 @@ public class RSSGenerator extends AbstractGenerator {
 			writer.append("<img align=\"right\" src=\"" + data.getUserProfilePhoto() + "\" alt=\"thumbnail\" /><br/>");
 			writer.append("<p>" + data.getBody() + "</p>");
 			writer.append("<p>Author: <strong>" + data.getUser() +"</strong><br/>");
+			if(data.getLink() != null && data.getLink().length() > 0) {
+				writer.append("<p>Location: <strong>" + data.getLocation() +"</strong><br/>");
+			}
 			writer.append("Posted: <strong>" + this.sdf.format(data.getDate().getTime()) +"</strong></p>");
 			
 			description = this.document.createElement("description");
@@ -234,7 +237,6 @@ public class RSSGenerator extends AbstractGenerator {
 			guid.appendChild(guidText);
 			post.appendChild(guid);
 		}
-		
 		
 		pubdate = this.document.createElement("date");
 		pubdateText = this.document.createTextNode(this.sdf.format(data.getDate().getTime()));

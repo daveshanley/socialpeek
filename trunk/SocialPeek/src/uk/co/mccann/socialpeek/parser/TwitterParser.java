@@ -257,5 +257,10 @@ public class TwitterParser extends AbstractParser implements Parser {
 		}
 	}
 
+	public Data getKeywordItem(String[] keywords) throws ParseException {
+		/* not supported in this parser */
+		return null;	
+	}
+
 	
 }

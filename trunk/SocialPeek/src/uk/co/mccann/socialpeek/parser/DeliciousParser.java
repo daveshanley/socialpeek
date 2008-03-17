@@ -1,6 +1,7 @@
 package uk.co.mccann.socialpeek.parser;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -45,31 +46,159 @@ public class DeliciousParser extends AbstractParser implements Parser {
 		return null;
 	}
 
-	public List<Data> getLatestMultipleUserItems(String userId, int limit)
-			throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException {
+		
+		try {
+			
+			List<Data> extractedData = new ArrayList<Data>();
+			
+			/* set up a new RSS reader */
+			this.reader = new FeedReader(new HttpURL(DeliciousService.DELICIOUS_URL + "rss/" + userId));
+			this.channel = this.reader.readChannel();   
+		
+			/* get a list of RSS items and then shuffle them up for a random peek! */
+			List<ItemEntry> items = this.channel.getItems();
+			
+			for(ItemEntry item : items) {
+			
+				/* compile item */
+				extractedData.add(this.compileDeliciousData(item));
+		
+			}
+			
+			List<Data> compactedData = new ArrayList<Data>();
+			
+			/* now trim it up */
+			if(limit > extractedData.size()) limit = extractedData.size(); // make sure we don't go out of bounds!
+			for(int x = 0; x < limit; x++) {
+				compactedData.add(extractedData.get(x));
+			}
+			
+			return compactedData;
+			
+			
+		} catch (Exception exp) {
+			
+			throw new ParseException("unable to parse del.icio.us RSS data: " + exp.getMessage());
+			
+		}
+		
+		
 	}
 
 	public Data getLatestSingleUserItem(int userId) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return this.getLatestSingleUserItem(String.valueOf(userId));
+		
 	}
 
 	public Data getLatestSingleUserItem(String userId) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			
+			/* set up a new RSS reader */
+			this.reader = new FeedReader(new HttpURL(DeliciousService.DELICIOUS_URL + "rss/recent"));
+			this.channel = this.reader.readChannel();   
+		
+			/* get a list of RSS items and then shuffle them up for a random peek! */
+			List<ItemEntry> items = this.channel.getItems();
+			
+			/* get the first item back */
+			ItemEntry rssItem = items.get(0);
+			
+			return this.compileDeliciousData(rssItem);
+			
+		} catch (Exception exp) {
+			
+			throw new ParseException("unable to parse del.icio.us RSS data: " + exp.getMessage());
+			
+		}
 	}
 
 	public List<Data> getMultipleItems(int limit) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			
+			List<Data> extractedData = new ArrayList<Data>();
+			
+			/* set up a new RSS reader */
+			this.reader = new FeedReader(new HttpURL(DeliciousService.DELICIOUS_URL + "rss/recent"));
+			this.channel = this.reader.readChannel();   
+		
+			/* get a list of RSS items and then shuffle them up for a random peek! */
+			List<ItemEntry> items = this.channel.getItems();
+			
+			for(ItemEntry item : items) {
+			
+				/* compile item */
+				extractedData.add(this.compileDeliciousData(item));
+		
+			}
+			
+			/* shuffle it up for some randomness */
+			Collections.shuffle(extractedData);
+			
+			List<Data> compactedData = new ArrayList<Data>();
+			
+			/* now trim it up */
+			if(limit > extractedData.size()) limit = extractedData.size(); // make sure we don't go out of bounds!
+			for(int x = 0; x < limit; x++) {
+				compactedData.add(extractedData.get(x));
+			}
+			
+			return compactedData;
+			
+			
+		} catch (Exception exp) {
+			
+			throw new ParseException("unable to parse del.icio.us RSS data: " + exp.getMessage());
+			
+		}
+		
+		
 	}
 
-	public List<Data> getMultipleKeywordItems(String keyword, int limit)
-			throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {
+		
+		try {
+			
+			List<Data> extractedData = new ArrayList<Data>();
+			
+			/* set up a new RSS reader */
+			this.reader = new FeedReader(new HttpURL(DeliciousService.DELICIOUS_URL + "rss/tag/" + keyword));
+			this.channel = this.reader.readChannel();   
+		
+			/* get a list of RSS items and then shuffle them up for a random peek! */
+			List<ItemEntry> items = this.channel.getItems();
+			
+			for(ItemEntry item : items) {
+			
+				/* compile item */
+				extractedData.add(this.compileDeliciousData(item));
+		
+			}
+			
+			/* shuffle it up for some randomness */
+			Collections.shuffle(extractedData);
+			
+			List<Data> compactedData = new ArrayList<Data>();
+			
+			/* now trim it up */
+			if(limit > extractedData.size()) limit = extractedData.size(); // make sure we don't go out of bounds!
+			for(int x = 0; x < limit; x++) {
+				compactedData.add(extractedData.get(x));
+			}
+			
+			return compactedData;
+			
+			
+		} catch (Exception exp) {
+			
+			throw new ParseException("unable to parse del.icio.us RSS data: " + exp.getMessage());
+			
+		}
+		
+		
 	}
 
 	public List<Data> getMultipleKeywordItems(String[] keywords, int limit)
@@ -78,16 +207,47 @@ public class DeliciousParser extends AbstractParser implements Parser {
 		return null;
 	}
 
-	public List<Data> getMultipleUserItems(int userId, int limit)
-			throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
+	
+		return this.getMultipleUserItems(String.valueOf(userId), limit);
+	
 	}
 
-	public List<Data> getMultipleUserItems(String userId, int limit)
-			throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
+		try {
+			
+			List<Data> extractedData = new ArrayList<Data>();
+			
+			/* set up a new RSS reader */
+			this.reader = new FeedReader(new HttpURL(DeliciousService.DELICIOUS_URL + "rss/" + userId));
+			this.channel = this.reader.readChannel();   
+		
+			/* get a list of RSS items and then shuffle them up for a random peek! */
+			List<ItemEntry> items = this.channel.getItems();
+			
+			for(ItemEntry item : items) {
+			
+				/* compile item */
+				extractedData.add(this.compileDeliciousData(item));
+		
+			}
+			
+			List<Data> compactedData = new ArrayList<Data>();
+			
+			/* now trim it up */
+			if(limit > extractedData.size()) limit = extractedData.size(); // make sure we don't go out of bounds!
+			for(int x = 0; x < limit; x++) {
+				compactedData.add(extractedData.get(x));
+			}
+			
+			return compactedData;
+			
+			
+		} catch (Exception exp) {
+			
+			throw new ParseException("unable to parse del.icio.us RSS data: " + exp.getMessage());
+			
+		}
 	}
 	
 	
@@ -174,6 +334,11 @@ public class DeliciousParser extends AbstractParser implements Parser {
 	public void setUpParser() {
 		this.random = new Random();
 		this.deliciousDateFormat = new SimpleDateFormat("yyyy-mm-dd'T'kk:mm:ss'Z'");
+	}
+
+	public Data getKeywordItem(String[] keywords) throws ParseException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

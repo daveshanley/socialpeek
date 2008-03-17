@@ -156,6 +156,17 @@ public interface Parser {
 	public Data getKeywordItem(String keyword) throws ParseException;
 	
 	/**
+     * Get a single PeekData object from a service user depending multiple tags or keywords
+     * 
+     * This method may not be implemented by all services, should not be called if so.
+     * 
+     * @param keyword name of the tag you want to use.
+     * @return Single Data Object
+     * @throws ParseException
+   	 */
+	public Data getKeywordItem(String[] keywords) throws ParseException;
+	
+	/**
      * Get multiple PeekData object from a service filtered by a tag or a keyword
      * 
      * This method may not be implemented by all services, should not be called if so.

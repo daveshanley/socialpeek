@@ -102,6 +102,94 @@ public interface Peekable {
      */
 	public String getLatestUserPeek(String userId, int limit)  throws SocialPeekException;
 	
+	
+	/**
+     * Get a single peek for a keyword or tag
+   	 * 
+   	 * @param tag the tag or keyword you want to peek into (if supported)
+     * @throws SocialPeekException
+     * @return formatted string data produced by generator
+     */
+	public String getRandomPeekUsingTag(String tag) throws SocialPeekException;
+	
+	
+	/**
+     * Get a single peek for multiple keywords or tag
+   	 * 
+   	 * @param tags the String array of tags or keywords you want to peek into (if supported)
+     * @throws SocialPeekException
+     * @return formatted string data produced by generator
+     */
+	public String getRandomPeekUsingTags(String[] tags) throws SocialPeekException;
+	
+	
+	/**
+     * Get multiple peeks for a keyword or tag
+   	 * 
+     * @throws SocialPeekException
+     * @param tag the tag or keyword you want to peek into (if supported)
+     * @param limit limit the returned results 
+     * @return formatted string data produced by generator
+     */
+	public String getMultiplePeekUsingTag(String tag, int limit) throws SocialPeekException;
+	
+	
+	/**
+     * Get multiple peeks for multiple keywords or tags
+   	 * 
+     * @throws SocialPeekException
+     * @param tags String array of tags or keywords you want to use (if supported)
+     * @param limit limit the number of returned results
+     * @return formatted string data produced by generator
+     */
+	public String getMultiplePeekUsingTags(String[] tags, int limit) throws SocialPeekException;
+	
+	
+	/**
+     * Get a Data Object back for a single peek for a keyword or tag
+   	 * 
+   	 * @param tag the tag or keyword you want to peek into (if supported)
+     * @throws SocialPeekException
+     * @return plain old POJO Data object
+     */
+	public Data getRawRandomPeekUsingTag(String tag) throws SocialPeekException;
+	
+	
+	/**
+     * Get a Data object back for a single peek for multiple keywords or tag
+   	 * 
+   	 * @param tags the String array of tags or keywords you want to peek into (if supported)
+     * @throws SocialPeekException
+     * @return plain old POJO Data object
+     */
+	public Data getRawRandomPeekUsingTags(String[] tags) throws SocialPeekException;
+	
+	
+	/**
+     * Get a List filled will Data objects for multiple peeks for a keyword or tag
+   	 * 
+     * @throws SocialPeekException
+     * @param tag the tag or keyword you want to peek into (if supported)
+     * @param limit limit the returned results 
+     * @return plain old List filled with Data objects
+     */
+	public List<Data> getRawMultiplePeekUsingTag(String tag, int limit) throws SocialPeekException;
+	
+	
+	/**
+     * Get a List filled with Data Objects for multiple peeks for multiple keywords or tags
+   	 * 
+     * @throws SocialPeekException
+     * @param tags String array of tags or keywords you want to use (if supported)
+     * @param limit limit the number of returned results
+     * @return plain old list filled with Data Objects
+     */
+	public List<Data> getRawMultiplePeekUsingTags(String[] tags, int limit) throws SocialPeekException;
+	
+	
+	
+	
+	
 	/**
      * Get a single random peek without running the result through a generator
    	 * 

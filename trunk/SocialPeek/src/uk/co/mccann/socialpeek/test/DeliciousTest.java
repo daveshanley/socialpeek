@@ -134,4 +134,38 @@ public class DeliciousTest {
 		
 	}
 	
+	@Test public void userPeek() {
+		
+		SocialService twitterService = new TwitterService();
+		twitterService.setUsername("shanmantest");
+		twitterService.setPassword("fofcowb");
+		
+		SocialService deliciousService = new DeliciousService();
+		deliciousService.setUsername("test");
+		deliciousService.setPassword("test");
+		
+		SocialPeekConfiguration config = new SocialPeekConfiguration();
+		config.setFeedType(SocialPeek.RETURN_XML);
+		
+		config.registerService(twitterService);
+		config.registerService(deliciousService);
+		
+		/* set up our main engine */
+		SocialPeek socialPeek = new SocialPeek(config);
+		PeekFactory peekFactory = socialPeek.getPeekingFactory();
+		
+		/* start peeking! */
+		
+		try {
+		
+			System.out.println(peekFactory.getPeeker(DeliciousService.class).getUserPeek("theshanman"));
+		
+		} catch (SocialPeekException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+	}
+	
+	
 }

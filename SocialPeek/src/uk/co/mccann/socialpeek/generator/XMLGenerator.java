@@ -62,6 +62,7 @@ public class XMLGenerator extends AbstractGenerator {
      */
 	public String generate(Data dataIn) throws SocialPeekException {
 		
+		
 		try {
 			
 			this.createDocument();
@@ -87,6 +88,7 @@ public class XMLGenerator extends AbstractGenerator {
 			return xmlSerialized;
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new SocialPeekException("unable to perform XML generation: " + e);
 		} 
 		
@@ -119,7 +121,7 @@ public class XMLGenerator extends AbstractGenerator {
      * 
      */
 	private Element createPeekElement(Data data){
-
+		
 		Element post = this.document.createElement("post");
 		post.setAttribute("source", data.getLink());
 		

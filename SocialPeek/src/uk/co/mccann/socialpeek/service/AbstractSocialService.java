@@ -234,7 +234,7 @@ public abstract class AbstractSocialService implements SocialService {
 			
 				this.userPeekList = this.parser.getMultipleUserItems(userId, limit);
 				Generator generator = this.genFactory.getGenerator();
-				return generator.generate(this.randomPeek);
+				return generator.generate(this.userPeekList);
 			
 			} catch (ParseException exp) {
 				
@@ -475,7 +475,7 @@ public abstract class AbstractSocialService implements SocialService {
 			
 				this.userPeekList = this.parser.getMultipleKeywordItems(tag, limit);
 				Generator generator = this.genFactory.getGenerator();
-				return generator.generate(this.randomPeek);
+				return generator.generate(this.userPeekList);
 				 
 			} catch (ParseException exp) {
 				
@@ -499,7 +499,7 @@ public abstract class AbstractSocialService implements SocialService {
 			
 				this.userPeekList = this.parser.getMultipleKeywordItems(tags, limit);
 				Generator generator = this.genFactory.getGenerator();
-				return generator.generate(this.randomPeek);
+				return generator.generate(this.userPeekList);
 				 
 			} catch (ParseException exp) {
 				
@@ -525,7 +525,7 @@ public abstract class AbstractSocialService implements SocialService {
 			
 				this.userPeek = this.parser.getKeywordItem(tag);
 				Generator generator = this.genFactory.getGenerator();
-				return generator.generate(this.randomPeek);
+				return generator.generate(this.userPeek);
 				 
 			} catch (ParseException exp) {
 				
@@ -550,7 +550,7 @@ public abstract class AbstractSocialService implements SocialService {
 			
 				this.userPeek = this.parser.getKeywordItem(tags);
 				Generator generator = this.genFactory.getGenerator();
-				return generator.generate(this.randomPeek);
+				return generator.generate(this.userPeek);
 				 
 			} catch (ParseException exp) {
 				

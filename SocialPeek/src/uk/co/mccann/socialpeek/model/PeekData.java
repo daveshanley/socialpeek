@@ -129,11 +129,12 @@ public class PeekData implements Data {
 		
 		StringWriter writer = new StringWriter();
 		writer.append("_headline : " + this.getHeadline());
-		writer.append("'n_link : " + this.getLink());
+		writer.append("\n_link : " + this.getLink());
 		writer.append("\n_user : " + this.getUser());
 		writer.append("\n_date : " + this.getDate().getTime());
 		writer.append("\n_userPhoto : " + this.getUserProfilePhoto());
 		writer.append("\n_body : " + this.getBody());
+		writer.append("\n_location : " + this.getLocation());
 		
 		return writer.toString();
 		

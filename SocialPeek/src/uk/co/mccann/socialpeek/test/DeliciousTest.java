@@ -100,7 +100,7 @@ public class DeliciousTest {
 	
 	}
 	*/
-	
+	/*
 	@Test public void randomPeek() {
 		
 		SocialService twitterService = new TwitterService();
@@ -117,11 +117,8 @@ public class DeliciousTest {
 		config.registerService(twitterService);
 		config.registerService(deliciousService);
 		
-		/* set up our main engine */
 		SocialPeek socialPeek = new SocialPeek(config);
 		PeekFactory peekFactory = socialPeek.getPeekingFactory();
-		
-		/* start peeking! */
 		
 		try {
 		
@@ -150,11 +147,9 @@ public class DeliciousTest {
 		config.registerService(twitterService);
 		config.registerService(deliciousService);
 		
-		/* set up our main engine */
 		SocialPeek socialPeek = new SocialPeek(config);
 		PeekFactory peekFactory = socialPeek.getPeekingFactory();
 		
-		/* start peeking! */
 		
 		try {
 		
@@ -166,6 +161,38 @@ public class DeliciousTest {
 		}
 		
 	}
+	
+	*/
+	@Test public void keywordPeek() {
+		
+		SocialService twitterService = new TwitterService();
+		twitterService.setUsername("shanmantest");
+		twitterService.setPassword("fofcowb");
+		
+		SocialService deliciousService = new DeliciousService();
+		deliciousService.setUsername("test");
+		deliciousService.setPassword("test");
+		
+		SocialPeekConfiguration config = new SocialPeekConfiguration();
+		config.setFeedType(SocialPeek.RETURN_XML);
+		
+		config.registerService(twitterService);
+		config.registerService(deliciousService);
+		
+		SocialPeek socialPeek = new SocialPeek(config);
+		PeekFactory peekFactory = socialPeek.getPeekingFactory();
+		
+		try {
+		
+			System.out.println(peekFactory.getPeeker(TwitterService.class).getRandomPeek());
+		
+		} catch (SocialPeekException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+	}
+	
 	
 	
 }

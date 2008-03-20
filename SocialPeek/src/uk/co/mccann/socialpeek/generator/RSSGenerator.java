@@ -211,13 +211,13 @@ public class RSSGenerator extends AbstractGenerator {
 			
 			/* summary */
 			StringWriter writer = new StringWriter();
-			writer.append("<img align=\"right\" src=\"" + data.getUserProfilePhoto() + "\" alt=\"thumbnail\" /><br/>");
+			if(data.getUserProfilePhoto()!=null) writer.append("<img align=\"right\" src=\"" + data.getUserProfilePhoto() + "\" alt=\"thumbnail\" /><br/>");
 			writer.append("<p>" + data.getBody() + "</p>");
-			writer.append("<p>Author: <strong>" + data.getUser() +"</strong><br/>");
-			if(data.getLink() != null && data.getLink().length() > 0) {
+			if(data.getUser()!=null) writer.append("<p>Author: <strong>" + data.getUser() +"</strong><br/>");
+			if(data.getLocation() != null && data.getLocation().length() > 0) {
 				writer.append("<p>Location: <strong>" + data.getLocation() +"</strong><br/>");
 			}
-			writer.append("Posted: <strong>" + this.sdf.format(data.getDate().getTime()) +"</strong></p>");
+			if(data.getDate()!=null) writer.append("Posted: <strong>" + this.sdf.format(data.getDate().getTime()) +"</strong></p>");
 			
 			description = this.document.createElement("description");
 			descriptionText = this.document.createCDATASection(writer.toString());

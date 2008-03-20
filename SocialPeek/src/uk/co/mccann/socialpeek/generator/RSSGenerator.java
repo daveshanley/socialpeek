@@ -149,7 +149,7 @@ public class RSSGenerator extends AbstractGenerator {
 		author = this.document.createElement("author");
 		authorText = this.document.createTextNode(SocialPeek.AUTHOR_EMAIL);
 		author.appendChild(authorText);
-		channel.appendChild(author);
+		//channel.appendChild(author); 
 		
 		image = this.document.createElement("image");
 		imageUrl = this.document.createElement("url");
@@ -238,7 +238,7 @@ public class RSSGenerator extends AbstractGenerator {
 			post.appendChild(guid);
 		}
 		
-		pubdate = this.document.createElement("date");
+		pubdate = this.document.createElement("pubDate");
 		pubdateText = this.document.createTextNode(this.sdf.format(data.getDate().getTime()));
 		pubdate.appendChild(pubdateText);
 		post.appendChild(pubdate);

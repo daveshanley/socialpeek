@@ -64,8 +64,8 @@ public class SocialPeek {
 	public final static String APPLICATION_INFO = APPLICATION_NAME + VERSION + ", take a look at the internet - right now!";
 	public final static String APPLICATION_LINK = "http://mccann.co.uk/socialpeek";
 	public final static String APPLICATION_LOGO ="http://showreel.mccanndev.co.uk/socialpeek-logo.gif";
-	public final static String APPLICATION_LOGO_WIDTH ="139";
-	public final static String APPLICATION_LOGO_HEIGHT ="172";
+	public final static String APPLICATION_LOGO_WIDTH ="120";
+	public final static String APPLICATION_LOGO_HEIGHT ="64";
 	private Configurable config;
 	
 	/**

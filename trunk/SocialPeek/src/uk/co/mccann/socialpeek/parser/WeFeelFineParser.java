@@ -1,12 +1,12 @@
 package uk.co.mccann.socialpeek.parser;
 
-import java.io.BufferedInputStream;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,17 +15,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.xerces.parsers.DOMParser;
-import org.w3c.dom.DOMException;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.xml.sax.InputSource;
+
 
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
@@ -35,17 +31,12 @@ import uk.co.mccann.socialpeek.service.WeFeelFineService;
 
 public class WeFeelFineParser extends AbstractParser implements Parser {
 
-	private URL wwfURL;
 	private String apiURL = WeFeelFineService.API_URL + "ShowFeelings?";
 	private String returnFields = "display=xml&returnfields=feeling,gender,sentence,imageid,posturl,posttime,postdate,country,state,city,born";
 	private String limitField ="limit=";
 	private String feelingField ="feeling=";
+	private String extraImagesField ="extraimages=50";
 
-	/* XML variables */
-	private DOMParser parser;
-	private Document document;
-	private Element rootElement;
-	
 	private SimpleDateFormat wwfDateFormat;
 
 	/**
@@ -59,7 +50,8 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 		try {
 
 			/* open stream */
-			InputStream in = wwfURL.openStream();
+			URL urlObj = new URL(url);
+			InputStream in = urlObj.openStream();
 
 			/* wrap a reader around the stream */
 			BufferedReader buff = new BufferedReader(new InputStreamReader(in));
@@ -86,7 +78,7 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 	
 	
 	private String getImgPath(String postdate, String imageid, String imagesize){
-	    String imgpath = "http://images.wefeelfine.org/data/images/ ";
+	    String imgpath = "http://images.wefeelfine.org/data/images/";
 	    imgpath += postdate.replace('-','/');
 	    imgpath += "/"+imageid;
 	    if(imagesize == "thumb") imgpath += "_thumb.jpg";
@@ -102,18 +94,24 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 	
 	private List<Data> generateFeelings(int limit, String emotion) throws ParseException {
 	
-		return this.parseXML(this.apiURL + this.limitField + limit + "&" + this.feelingField + emotion + "&" +  this.returnFields);
+		return this.parseXML(this.apiURL + this.limitField + limit + "&" + this.feelingField + emotion + "&" +  this.returnFields + "&" + this.extraImagesField);
 		
 	}
 	
 	private List<Data> generateFeelings(int limit) throws ParseException {
 		
-		return this.parseXML(this.apiURL + this.limitField + limit + "&" + this.returnFields);
+		return this.parseXML(this.apiURL + this.limitField + limit + "&" + this.returnFields + "&" + this.extraImagesField);
 	}
 	
 	private List<Data> generateFeelings(String emotion) throws ParseException {
 		
-		return this.parseXML(this.apiURL  + this.feelingField + emotion + "&" +  this.returnFields + "&" + this.limitField + 50);
+		return this.parseXML(this.apiURL  + this.feelingField + emotion + "&" +  this.returnFields + "&" + this.limitField + 50 + "&" + this.extraImagesField);
+		
+	}
+	
+	private String parseDodgyCharacters(String xml) {
+		
+		return xml.replaceAll("&", "%amp%");
 		
 	}
 	
@@ -124,7 +122,15 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 			
 			DOMParser parser = new DOMParser();
 			
-			parser.parse(url);
+			/* get XML source and parse instead of using URL direct, Xerces gets upset when it finds ampersands, and for some reason
+			 * the WWF API allows ampersands in attributes to XML nodes!!! yikes 
+			 */
+			String xml = this.parseDodgyCharacters(this.getXMLSource(url));
+			BufferedReader reader = new  BufferedReader(new StringReader(xml));
+			InputSource source = new InputSource(reader);
+			
+			/* parse the data! after all that formatting */
+			parser.parse(source);
 			
 			List<Data> dataArray = new ArrayList<Data>();
 			
@@ -149,8 +155,8 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 							
 							Data data = new PeekData(); 
 							if(map.getNamedItem("feeling")!=null) data.setHeadline(map.getNamedItem("feeling").getTextContent());
-							if(map.getNamedItem("sentence")!=null)data.setBody(map.getNamedItem("sentence").getTextContent());
-							if(map.getNamedItem("posturl")!=null)data.setLink(map.getNamedItem("posturl").getTextContent());
+							if(map.getNamedItem("sentence")!=null)data.setBody(map.getNamedItem("sentence").getTextContent().replaceAll("%amp%;", "&"));
+							if(map.getNamedItem("posturl")!=null)data.setLink(map.getNamedItem("posturl").getTextContent().replaceAll("%amp%", "&"));
 							
 							/* set image */
 							String postDate = map.getNamedItem("postdate").getTextContent();
@@ -287,7 +293,15 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 		List<Data> extractedData = this.generateFeelings(limit, keyword);
 		Collections.shuffle(extractedData);
 		
-		return extractedData;
+		/* truncate data, we only want the limit returned */
+		List<Data> compactedData = new ArrayList<Data>();
+		if(limit > extractedData.size()) limit = extractedData.size(); // make sure we don't go out of bounds!
+		/* now trim it up */
+		for(int x = 0; x < limit; x++) {
+			compactedData.add(extractedData.get(x));
+		}
+		
+		return compactedData;
 		
 	}
 

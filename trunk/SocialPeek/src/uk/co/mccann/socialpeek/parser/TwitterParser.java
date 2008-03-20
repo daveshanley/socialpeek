@@ -159,8 +159,31 @@ public class TwitterParser extends AbstractParser implements Parser {
 	}
 
 	public Data getKeywordItem(String keyword) throws ParseException {
-		/* not supported in this parser */
-		return null;
+		
+		List<Data> extractedData = this.getMultipleItems(50);
+		this.random = new Random();
+		
+		/* look through extracted data and search for a particular keyword */
+		List<Data> matchingData = new ArrayList<Data>();
+		
+		for(Data data : extractedData) {
+			boolean add = false;
+			if(data.getHeadline().contains(keyword)) add = true;
+			if(data.getBody().contains(keyword)) add = true;
+			if(data.getUser().contains(keyword)) add = true;
+			if(add) {
+				if(!matchingData.contains(data)) matchingData.add(data);
+			}
+		}
+		
+		if(matchingData.size() > 0) {
+		
+			return matchingData.get(this.random.nextInt(matchingData.size()-1));
+		
+		} else {
+			
+			throw new ParseException("keyword was not found in peek");
+		}
 	}
 
 	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {
@@ -169,8 +192,33 @@ public class TwitterParser extends AbstractParser implements Parser {
 	}
 
 	public List<Data> getMultipleKeywordItems(String[] keywords, int limit) throws ParseException {
-		/* not supported in this parser */
-		return null;
+		List<Data> extractedData = this.getMultipleItems(limit);
+		this.random = new Random();
+		
+		/* look through extracted data and search for a particular keyword */
+		List<Data> matchingData = new ArrayList<Data>();
+		
+		for(Data data : extractedData) {
+			
+			for(String keyword : keywords) {
+				boolean add = false;
+				if(data.getHeadline().contains(keyword)) add = true;
+				if(data.getBody().contains(keyword)) add = true;
+				if(data.getUser().contains(keyword)) add = true;
+				if(add) {
+					if(!matchingData.contains(data)) matchingData.add(data);
+				}
+			}
+		}
+		
+		if(matchingData.size() > 0) {
+		
+			return matchingData;
+		
+		} else {
+			
+			throw new ParseException("keyword was not found in peek");
+		}
 	}
 
 	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
@@ -258,8 +306,35 @@ public class TwitterParser extends AbstractParser implements Parser {
 	}
 
 	public Data getKeywordItem(String[] keywords) throws ParseException {
-		/* not supported in this parser */
-		return null;	
+		
+		List<Data> extractedData = this.getMultipleItems(50);
+		this.random = new Random();
+		
+		/* look through extracted data and search for a particular keyword */
+		List<Data> matchingData = new ArrayList<Data>();
+		
+		for(Data data : extractedData) {
+			
+			for(String keyword : keywords) {
+				boolean add = false;
+				if(data.getHeadline().contains(keyword)) add = true;
+				if(data.getBody().contains(keyword)) add = true;
+				if(data.getUser().contains(keyword)) add = true;
+				if(add) {
+					if(!matchingData.contains(data)) matchingData.add(data);
+				}
+			}
+		}
+		
+		if(matchingData.size() > 0) {
+			System.out.println(this.random.nextInt(matchingData.size()));
+			return matchingData.get(this.random.nextInt(matchingData.size()-1));
+		
+		} else {
+			
+			throw new ParseException("keyword was not found in peek");
+		}
+		
 	}
 
 	

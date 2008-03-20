@@ -30,19 +30,20 @@ public class TwitterTests {
 		PeekFactory peekFactory = socialPeek.getPeekingFactory();
 		
 		/* start peeking! */
-		/*
-		try {
 		
-			System.out.println(peekFactory.getPeeker(TwitterService.class).getRandomPeek());
+		try {
+			String[] keywords = new String[]{"hot","sick","anger","social","thinking","sex","hungry","good","happy"};
+		
+			System.out.println(peekFactory.getPeeker(TwitterService.class).getRandomPeekUsingTags(keywords));
 		
 		} catch (SocialPeekException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
-		*/
+		
 		
 	}
-
+	/*
 	@Test public void userPeek() {
 		
 		SocialService service = new TwitterService();
@@ -53,11 +54,9 @@ public class TwitterTests {
 		config.setFeedType(SocialPeek.RETURN_RSS);
 		config.registerService(service);
 		
-		/* set up our main engine */
 		SocialPeek socialPeek = new SocialPeek(config);
 		PeekFactory peekFactory = socialPeek.getPeekingFactory();
 		
-		/* start peeking! */
 		
 		try {
 		
@@ -69,5 +68,6 @@ public class TwitterTests {
 		}
 		
 	}
+	*/
 	
 }

@@ -16,9 +16,11 @@ import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
 import uk.co.mccann.socialpeek.generator.XMLGenerator;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.interfaces.Generator;
+import uk.co.mccann.socialpeek.interfaces.PeekFactory;
 import uk.co.mccann.socialpeek.model.PeekData;
 import uk.co.mccann.socialpeek.model.SocialService;
 import uk.co.mccann.socialpeek.service.AbstractSocialService;
+import uk.co.mccann.socialpeek.service.TwitterService;
 
 public class Test {
 
@@ -82,7 +84,7 @@ public class Test {
 			System.out.println(xml);
 			*/
 			
-			SocialService service = new AbstractSocialService();
+			SocialService service = new TwitterService();
 			service.setUsername("shanmantest");
 			service.setPassword("fofcowb");
 			

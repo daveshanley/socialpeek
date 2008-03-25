@@ -611,7 +611,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 
 	public void setUpParser() {
 		this.random = new Random();
-		this.deliciousDateFormat = new SimpleDateFormat("yyyy-mm-dd'T'kk:mm:ss'Z'");
+		this.deliciousDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss'Z'");
 	}
 
 	public Data getKeywordItem(String[] keywords) throws ParseException {

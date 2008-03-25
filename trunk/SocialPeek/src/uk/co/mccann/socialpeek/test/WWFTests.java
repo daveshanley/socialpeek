@@ -1,8 +1,10 @@
 package uk.co.mccann.socialpeek.test;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import org.junit.Test;
 
@@ -50,15 +52,19 @@ public class WWFTests {
 		
 		try {
 			
-			//String data = peekFactory.getPeeker(WeFeelFineService.class).getMultiplePeekUsingTag("excited",20);
+			String data = peekFactory.getPeeker(WeFeelFineService.class).getMultiplePeekUsingTag("sexy",20);
 			//String data = peekFactory.getPeeker(TwitterService.class).getRandomPeek(50);
 			//String data = peekFactory.getPeeker(DeliciousService.class).getMultiplePeekUsingTag("thereformed",20);
 			
 			
 			//FileWriter writer = new FileWriter(new File("rssdata/wefeelfine.rss.xml"));
-			FileWriter writer = new FileWriter(new File("/usr/local/apache2/htdocs/socialpeek/feed.rss"));
-			writer.write(data);
-			writer.close();
+			File file = new File("/usr/local/apache2/htdocs/socialpeek/feed.rss");
+			file.delete();
+		
+			OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("/usr/local/apache2/htdocs/socialpeek/feed.rss",true),"UTF-8");
+			
+			osw.write(data);
+			osw.close();
 			System.out.println(data);
 			
 		} catch (SocialPeekException e) {

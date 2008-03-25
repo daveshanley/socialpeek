@@ -1,9 +1,5 @@
 package uk.co.mccann.socialpeek.service;
 
-import java.util.List;
-
-import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
-import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.parser.TwitterParser;
 
@@ -32,6 +28,9 @@ public class TwitterService extends AbstractSocialService {
 		this(new TwitterParser());
 		this.parser.setSocialService(this);
 		this.parser.setUpParser();
+		
+		/* this service requires authentication */
+		this.setRequireAuthentication(true);
 	
 	}
 	

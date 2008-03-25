@@ -29,6 +29,19 @@ import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.model.PeekData;
 import uk.co.mccann.socialpeek.service.WeFeelFineService;
 
+/**
+ * <b>WeFeelFineParser</b><br/>
+ * Use the WWF API to read and parse feelings and thoughts from around the web
+ *
+ * <h4>Copyright and License</h4>
+ * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
+ * otherwise stated. It is released as
+ * open-source under the LGPL license. See
+ * <a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>
+ * for license details. This code comes with no warranty or support.
+ *
+ * @author Dave Shanley <david.shanley@europe.mccann.com>
+ */
 public class WeFeelFineParser extends AbstractParser implements Parser {
 
 	private String apiURL = WeFeelFineService.API_URL + "ShowFeelings?";
@@ -36,6 +49,8 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 	private String limitField ="limit=";
 	private String feelingField ="feeling=";
 	private String extraImagesField ="extraimages=50";
+	private String postMonthField ="postmonth=" + (Calendar.getInstance().get(Calendar.MONTH) + 1);
+	
 
 	private SimpleDateFormat wwfDateFormat;
 
@@ -94,18 +109,18 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 	
 	private List<Data> generateFeelings(int limit, String emotion) throws ParseException {
 	
-		return this.parseXML(this.apiURL + this.limitField + limit + "&" + this.feelingField + emotion + "&" +  this.returnFields + "&" + this.extraImagesField);
+		return this.parseXML(this.apiURL + this.limitField + limit + "&" + this.feelingField + emotion + "&" +  this.returnFields + "&" + this.extraImagesField + "&" + this.postMonthField);
 		
 	}
 	
 	private List<Data> generateFeelings(int limit) throws ParseException {
 		
-		return this.parseXML(this.apiURL + this.limitField + limit + "&" + this.returnFields + "&" + this.extraImagesField);
+		return this.parseXML(this.apiURL + this.limitField + limit + "&" + this.returnFields + "&" + this.extraImagesField + "&" + this.postMonthField);
 	}
 	
 	private List<Data> generateFeelings(String emotion) throws ParseException {
 		
-		return this.parseXML(this.apiURL  + this.feelingField + emotion + "&" +  this.returnFields + "&" + this.limitField + 50 + "&" + this.extraImagesField);
+		return this.parseXML(this.apiURL  + this.feelingField + emotion + "&" +  this.returnFields + "&" + this.limitField + 50 + "&" + this.extraImagesField + "&" + this.postMonthField);
 		
 	}
 	
@@ -117,7 +132,6 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 	
 	
 	private List<Data> parseXML(String url) throws ParseException {
-
 		try {
 			
 			DOMParser parser = new DOMParser();
@@ -160,6 +174,8 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 							
 							/* set image */
 							String postDate = map.getNamedItem("postdate").getTextContent();
+							String postTime = map.getNamedItem("posttime").getTextContent();
+							
 							if(map.getNamedItem("imageid")!=null) {
 								String imageId = map.getNamedItem("imageid").getTextContent();
 								data.setUserProfilePhoto(this.getImgPath(postDate, imageId, "thumb"));
@@ -169,7 +185,13 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 							/* set date */
 							Calendar date = Calendar.getInstance();
 							date.setTime(this.wwfDateFormat.parse(postDate));
-							data.setDate(date);
+							Calendar time = Calendar.getInstance();
+							time.setTimeInMillis(Long.valueOf(postTime));
+							
+							/* compile complete time */
+							Calendar compiledTime = Calendar.getInstance();
+							compiledTime.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH), time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE));
+							data.setDate(compiledTime);
 							
 							String location, city = null, state = null, country = null;
 							if(map.getNamedItem("city")!=null) city = map.getNamedItem("city").getTextContent();
@@ -189,7 +211,7 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 							if(map.getNamedItem("gender")!=null) gender = map.getNamedItem("gender").getTextContent();
 							if(map.getNamedItem("age")!=null) age = map.getNamedItem("born").getTextContent();
 							
-							String user = null;
+							String user = "";
 							if(gender!=null) {
 								Integer genderValue = new Integer(gender);
 								if(genderValue.equals(1)) gender= "Male";
@@ -370,7 +392,7 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 	public void setUpParser() {
 		
 		this.random = new Random();
-		this.wwfDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+		this.wwfDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	}
 
 }

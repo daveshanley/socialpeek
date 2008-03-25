@@ -1,34 +1,20 @@
 package uk.co.mccann.socialpeek.test;
 
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Set;
 
-import org.apache.commons.httpclient.HttpURL;
-import org.json.JSONArray;
 import org.junit.Test;
-import org.w3c.dom.Element;
+
 
 import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.SocialPeekConfiguration;
 import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
-import uk.co.mccann.socialpeek.generator.RSSGenerator;
-import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.interfaces.Generator;
+
 import uk.co.mccann.socialpeek.interfaces.PeekFactory;
-import uk.co.mccann.socialpeek.model.PeekData;
+
 import uk.co.mccann.socialpeek.model.SocialService;
 import uk.co.mccann.socialpeek.service.DeliciousService;
 import uk.co.mccann.socialpeek.service.TwitterService;
-import yarfraw.core.datamodel.CategorySubject;
-import yarfraw.core.datamodel.ChannelFeed;
-import yarfraw.core.datamodel.FeedFormat;
-import yarfraw.core.datamodel.ItemEntry;
-import yarfraw.io.FeedReader;
-import org.junit.Test;
+
 import static org.junit.Assert.fail;
 
 public class DeliciousTest {

@@ -327,7 +327,6 @@ public class TwitterParser extends AbstractParser implements Parser {
 		}
 		
 		if(matchingData.size() > 0) {
-			System.out.println(this.random.nextInt(matchingData.size()));
 			return matchingData.get(this.random.nextInt(matchingData.size()-1));
 		
 		} else {

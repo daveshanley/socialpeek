@@ -15,6 +15,9 @@ public static final String DELICIOUS_URL ="http://del.icio.us/";
 		this(new DeliciousParser());
 		this.parser.setSocialService(this);
 		this.parser.setUpParser();
+		
+		/* this service does not require authentication */
+		this.setRequireAuthentication(false);
 	
 	}
 	

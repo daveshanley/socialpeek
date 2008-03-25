@@ -33,6 +33,7 @@ public abstract class AbstractSocialService implements SocialService {
 	protected String username, password, apiKey;
 	protected Data randomPeek, userPeek;
 	protected List<Data> randomPeekList, userPeekList;
+	protected boolean requireAuthentication;
 	
 	protected Parser getParser() {
 		return this.parser;
@@ -93,22 +94,44 @@ public abstract class AbstractSocialService implements SocialService {
 		
 	}
 	
-	public AbstractSocialService() { }
+	public AbstractSocialService() { 
+		this.requireAuthentication = true;
+	}
 	
 	public AbstractSocialService(Parser parser) {
 		
 		/* set our parser up */
 		this.parser = parser;
+		this.requireAuthentication = true;
 	
 	}
 	
 	public String getRandomPeek() throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 		
+				try {
+		
+					this.randomPeek = this.parser.getSingleItem();
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.randomPeek);
+			
+				} catch (ParseException exp) {
+			
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+			}
+		
+		} else {
+			
 			try {
-		
+				
 				this.randomPeek = this.parser.getSingleItem();
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.randomPeek);
@@ -117,22 +140,38 @@ public abstract class AbstractSocialService implements SocialService {
 			
 				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
 			}
-		
-		} else {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
 		}
 		
 	}
 
 	public String getRandomPeek(int limit) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
+				try {
 		
+					this.randomPeekList = this.parser.getMultipleItems(limit);
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.randomPeekList);
+			
+				} catch (ParseException exp) {
+					
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+			
+			}
+		
+		} else {
+			
 			try {
-		
+				
 				this.randomPeekList = this.parser.getMultipleItems(limit);
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.randomPeekList);
@@ -141,114 +180,170 @@ public abstract class AbstractSocialService implements SocialService {
 				
 				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
 			}
-		
-		} else {
-			
-			throw new SocialPeekException("unable to use service without authentication credentials");
 			
 		}
 	}
 
 	public String getUserPeek(int userId) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
-			try {
+				try {
 			
-				this.userPeek = this.parser.getSingleUserItem(userId);
-				Generator generator = this.genFactory.getGenerator();
-				return generator.generate(this.userPeek);
+					this.userPeek = this.parser.getSingleUserItem(userId);
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.userPeek);
 			
-			} catch (ParseException exp) {
+				} catch (ParseException exp) {
 				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
 			
 			}
 		
 		} else {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
+			try {
+				
+				this.userPeek = this.parser.getSingleUserItem(userId);
+				Generator generator = this.genFactory.getGenerator();
+				return generator.generate(this.userPeek);
+		
+			} catch (ParseException exp) {
 			
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+		
+			}
 		}
 		
 	}
 
 	public String getUserPeek(String userId) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
+			
+				try {
+			
+					this.userPeek = this.parser.getSingleUserItem(userId);
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.userPeek);
+			
+				} catch (ParseException exp) {
+				
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+			
+			}
+			
+		} else {
 			
 			try {
-			
+				
 				this.userPeek = this.parser.getSingleUserItem(userId);
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.userPeek);
-			
-			} catch (ParseException exp) {
-				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
-			
-			}
 		
-		} else {
+			} catch (ParseException exp) {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+		
+			}
 			
 		}
-		
 		
 	}
 
 	public String getUserPeek(int userId, int limit) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
+			
+				try {
+			
+				this.userPeekList = this.parser.getMultipleUserItems(userId, limit);
+				Generator generator = this.genFactory.getGenerator();
+				return generator.generate(this.userPeekList);
+			
+				} catch (ParseException exp) {
+				
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+			
+			}
+		
+		} else {
 			
 			try {
-			
+				
 				this.userPeekList = this.parser.getMultipleUserItems(userId, limit);
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.userPeekList);
 			
 			} catch (ParseException exp) {
 				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
 			
 			}
-		
-		} else {
-			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
 		}
 	}
 
 	public String getUserPeek(String userId, int limit) throws SocialPeekException {
 		
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
+			
+				try {
+			
+					this.userPeekList = this.parser.getMultipleUserItems(userId, limit);
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.userPeekList);
+			
+				} catch (ParseException exp) {
+				
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+			} else {
 			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+			
+			}
+		} else {
+		
 			try {
-			
+				
 				this.userPeekList = this.parser.getMultipleUserItems(userId, limit);
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.userPeekList);
-			
+		
 			} catch (ParseException exp) {
-				
+			
 				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
-			
-			}
 		
-		} else {
-			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+			}	
 		}
-		
-		
 	}
 
 	public Class getServiceClass() {
@@ -257,45 +352,74 @@ public abstract class AbstractSocialService implements SocialService {
 
 	public Data getRawDataRandomPeek() throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
-			try {
+				try {
 			
-				return this.parser.getSingleItem();
+					return this.parser.getSingleItem();
 				 
-			} catch (ParseException exp) {
+				} catch (ParseException exp) {
 				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
 			
 			}
 		
 		} else {
+		
+			try {
+				
+				return this.parser.getSingleItem();
+			 
+			} catch (ParseException exp) {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+		
+			}
 		}
 		
 	}
 
 	public List<Data> getRawDataRandomPeek(int limit) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
-			try {
+				try {
 			
-				return this.parser.getMultipleItems(limit);
+					return this.parser.getMultipleItems(limit);
 				 
-			} catch (ParseException exp) {
+				} catch (ParseException exp) {
 				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
 			
 			}
 		
 		} else {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
+			try {
+				
+				return this.parser.getMultipleItems(limit);
+			 
+			} catch (ParseException exp) {
+			
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+		
+			}	
 			
 		}
 		
@@ -303,267 +427,410 @@ public abstract class AbstractSocialService implements SocialService {
 
 	public Data getRawDataUserPeek(int userId) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
-			try {
+				try {
 			
-				return this.parser.getSingleUserItem(userId);
+					return this.parser.getSingleUserItem(userId);
 				 
-			} catch (ParseException exp) {
+				} catch (ParseException exp) {
 				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
 			
 			}
-		
 		} else {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
+			try {
+				
+				return this.parser.getSingleUserItem(userId);
+			 
+			} catch (ParseException exp) {
 			
-		}
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
 		
+			}
+		}
 		
 	}
 
 	public Data getRawDataUserPeek(String userId) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
-			try {
+				try {
 			
-				return this.parser.getSingleUserItem(userId);
+					return this.parser.getSingleUserItem(userId);
 				 
-			} catch (ParseException exp) {
+				} catch (ParseException exp) {
 				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
 			
 			}
 		
 		} else {
+			try {
+				
+				return this.parser.getSingleUserItem(userId);
+			 
+			} catch (ParseException exp) {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+		
+			}
 		}
 	}
 
 	public List<Data> getRawDataUserPeek(int userId, int limit) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
-			try {
+				try {
 			
-				return this.parser.getMultipleUserItems(userId, limit);
+					return this.parser.getMultipleUserItems(userId, limit);
 				 
-			} catch (ParseException exp) {
+				} catch (ParseException exp) {
 				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
 			
 			}
-		
 		} else {
+			try {
+				
+				return this.parser.getMultipleUserItems(userId, limit);
+			 
+			} catch (ParseException exp) {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+		
+			}
 		}
 	}
 
 	public List<Data> getRawDataUserPeek(String userId, int limit) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
-			try {
+				try {
 			
-				return this.parser.getMultipleUserItems(userId, limit);
+					return this.parser.getMultipleUserItems(userId, limit);
 				 
-			} catch (ParseException exp) {
+				} catch (ParseException exp) {
 				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+				
+				throw new SocialPeekException("unable to use service without authentication credentials");
 			
 			}
-		
 		} else {
+			try {
+				
+				return this.parser.getMultipleUserItems(userId, limit);
+			 
+			} catch (ParseException exp) {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+		
+			}
 		}
 	}
 
 	public String getLatestUserPeek(String userId) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
+				try {
+			
+					this.userPeek = this.parser.getLatestSingleUserItem(userId);
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.randomPeek);
+				 
+				} catch (ParseException exp) {
+				
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+			
+			}
+		} else {
 			try {
-			
+				
 				this.userPeek = this.parser.getLatestSingleUserItem(userId);
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.randomPeek);
-				 
+			 
 			} catch (ParseException exp) {
-				
+			
 				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
-			
+		
 			}
-		
-		} else {
-			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
 		}
-		
-		
 	}
 
 	public String getLatestUserPeek(int userId, int limit) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
+				try {
+			
+					this.userPeekList = this.parser.getLatestMultipleUserItems(userId, limit);
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.randomPeek);
+				 
+				} catch (ParseException exp) {
+				
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+				
+			}
+		} else {
 			try {
-			
+				
 				this.userPeekList = this.parser.getLatestMultipleUserItems(userId, limit);
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.randomPeek);
-				 
+			 
 			} catch (ParseException exp) {
-				
+			
 				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
-			
+		
 			}
-		
-		} else {
-			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
 		}
-		
 	}
 
 	public String getLatestUserPeek(String userId, int limit) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
+				try {
+			
+					this.userPeekList = this.parser.getLatestMultipleUserItems(userId, limit);
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.randomPeek);
+				 
+				} catch (ParseException exp) {
+				
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+			
+			}
+		} else {
 			try {
-			
+				
 				this.userPeekList = this.parser.getLatestMultipleUserItems(userId, limit);
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.randomPeek);
-				 
+			 
 			} catch (ParseException exp) {
-				
+			
 				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
-			
-			}
 		
-		} else {
-			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+			}	
 		}
 	}
 	
 	public String getMultiplePeekUsingTag(String tag, int limit) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
+				try {
+			
+					this.userPeekList = this.parser.getMultipleKeywordItems(tag, limit);
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.userPeekList);
+				 
+				} catch (ParseException exp) {
+				
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+			
+			}
+		} else {
 			try {
-			
+				
 				this.userPeekList = this.parser.getMultipleKeywordItems(tag, limit);
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.userPeekList);
-				 
+			 
 			} catch (ParseException exp) {
-				
+				exp.printStackTrace();
 				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
-			
-			}
 		
-		} else {
-			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+			}
 		}
 	}
 
 	public String getMultiplePeekUsingTags(String[] tags, int limit) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
+			
+				try {
+			
+					this.userPeekList = this.parser.getMultipleKeywordItems(tags, limit);
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.userPeekList);
+				 
+				} catch (ParseException exp) {
+				
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+			
+			}
+		} else {
 			
 			try {
-			
+				
 				this.userPeekList = this.parser.getMultipleKeywordItems(tags, limit);
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.userPeekList);
-				 
+			 
 			} catch (ParseException exp) {
-				
+			
 				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
-			
-			}
 		
-		} else {
-			
-			throw new SocialPeekException("unable to use service without authentication credentials");
+			}
 			
 		}
-		
-		
 	}
 
 	public String getRandomPeekUsingTag(String tag) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
+				try {
+			
+					this.userPeek = this.parser.getKeywordItem(tag);
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.userPeek);
+				 
+				} catch (ParseException exp) {
+				
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+			
+			}
+		} else {
 			try {
-			
+				
 				this.userPeek = this.parser.getKeywordItem(tag);
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.userPeek);
-				 
+			 
 			} catch (ParseException exp) {
-				
+			
 				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
-			
-			}
 		
-		} else {
-			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+			}
 		}
 		
 	}
 
 	public String getRandomPeekUsingTags(String[] tags) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
+				try {
+			
+					this.userPeek = this.parser.getKeywordItem(tags);
+					Generator generator = this.genFactory.getGenerator();
+					return generator.generate(this.userPeek);
+				 
+				} catch (ParseException exp) {
+				
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
+			
+			}
+		} else {
 			try {
-			
+				
 				this.userPeek = this.parser.getKeywordItem(tags);
 				Generator generator = this.genFactory.getGenerator();
 				return generator.generate(this.userPeek);
-				 
+			 
 			} catch (ParseException exp) {
-				
+			
 				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
-			
-			}
 		
-		} else {
-			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+			}
 		}
-	
 	}
 
 	public List<Data> getRawMultiplePeekUsingTag(String tag, int limit) throws SocialPeekException {
@@ -592,72 +859,119 @@ public abstract class AbstractSocialService implements SocialService {
 
 	public List<Data> getRawMultiplePeekUsingTags(String[] tags, int limit) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
-			try {
+				try {
 			
-				this.userPeekList = this.parser.getMultipleKeywordItems(tags, limit);
-				return this.userPeekList;
+					this.userPeekList = this.parser.getMultipleKeywordItems(tags, limit);
+					return this.userPeekList;
 				 
-			} catch (ParseException exp) {
+				} catch (ParseException exp) {
 				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
 			
 			}
-		
 		} else {
+			try {
+				
+				this.userPeekList = this.parser.getMultipleKeywordItems(tags, limit);
+				return this.userPeekList;
+			 
+			} catch (ParseException exp) {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+		
+			}
 		}
 	}
 
 	public Data getRawRandomPeekUsingTag(String tag) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
-			try {
+				try {
 			
-				this.userPeek= this.parser.getKeywordItem(tag);
-				return this.userPeek;
+					this.userPeek= this.parser.getKeywordItem(tag);
+					return this.userPeek;
 				 
-			} catch (ParseException exp) {
+				} catch (ParseException exp) {
 				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
 			
 			}
-		
 		} else {
+			try {
+				
+				this.userPeek= this.parser.getKeywordItem(tag);
+				return this.userPeek;
+			 
+			} catch (ParseException exp) {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+		
+			}
 		}
 		
 	}
 
 	public Data getRawRandomPeekUsingTags(String[] tags) throws SocialPeekException {
 		
-		/* check user has added account details */
-		if(this.getUsername() != null && this.getPassword() != null) {
+		if(this.isRequireAuthentication()) {
+			/* check user has added account details */
+			if(this.getUsername() != null && this.getPassword() != null) {
 			
-			try {
+				try {
 			
-				this.userPeek= this.parser.getKeywordItem(tags);
-				return this.userPeek;
+					this.userPeek= this.parser.getKeywordItem(tags);
+					return this.userPeek;
 				 
-			} catch (ParseException exp) {
+				} catch (ParseException exp) {
 				
-				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+					throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+			
+				}
+		
+			} else {
+			
+				throw new SocialPeekException("unable to use service without authentication credentials");
 			
 			}
-		
 		} else {
+			try {
+				
+				this.userPeek= this.parser.getKeywordItem(tags);
+				return this.userPeek;
+			 
+			} catch (ParseException exp) {
 			
-			throw new SocialPeekException("unable to use service without authentication credentials");
-			
+				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
+		
+			}
 		}
+	}
+
+	public boolean isRequireAuthentication() {
+		return requireAuthentication;
+	}
+
+	public void setRequireAuthentication(boolean requireAuthentication) {
+		this.requireAuthentication = requireAuthentication;
 	}
 	
 }

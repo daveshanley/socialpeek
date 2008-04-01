@@ -1,8 +1,5 @@
 package uk.co.mccann.socialpeek.parser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,7 +12,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
@@ -25,7 +21,7 @@ import uk.co.mccann.socialpeek.model.LastFMTrack;
 import uk.co.mccann.socialpeek.model.LastFMUser;
 import uk.co.mccann.socialpeek.model.PeekData;
 import uk.co.mccann.socialpeek.service.LastFMService;
-import uk.co.mccann.socialpeek.service.WeFeelFineService;
+
 
 /**
 * <b>LastFMParser</b><br/>
@@ -55,6 +51,98 @@ public class LastFMParser extends AbstractParser implements Parser {
 		}
 		
 	}
+	
+	private List<LastFMTrack> extractTrackFromTag(String tag, int limit) throws ParseException {
+		
+		try {
+			DOMParser parser = new DOMParser();
+			/* parse the data! after all that formatting */
+			parser.parse(LastFMService.TAG_API + tag.replace(" ", "+") + "/toptracks.xml");
+			
+			List<LastFMTrack> trackArray = new ArrayList<LastFMTrack>();
+			
+			/* get DOM doc from parsed remote URL */
+			Document node = parser.getDocument();
+			
+			/* first node should always be 'tag' */
+			if (node.hasChildNodes()) {
+				
+				/* get feelings node, and all feeling children */
+				if (node.getFirstChild().getFirstChild() != null) {
+					
+					/* all children */
+					NodeList children = node.getFirstChild().getChildNodes();
+					
+					for (int x = 0; x < children.getLength(); x++) {
+						
+						LastFMTrack trackObject = new LastFMTrack();
+						
+						/* track */
+						Node track = children.item(x);
+						
+						/* attributes */
+						NamedNodeMap map = track.getAttributes();
+						if(map !=null) {
+							//System.out.println("Track Name: " + map.getNamedItem("name").getTextContent());
+							trackObject.setName(map.getNamedItem("name").getTextContent());
+						}
+						
+						/* look at the track */
+						if(track.hasChildNodes()) {
+							
+							NodeList trackNodes = track.getChildNodes();
+							
+							for (int y = 0; y < trackNodes.getLength(); y++) {
+								
+								Node trackItem = trackNodes.item(y);
+								if(!trackItem.getNodeName().equals("#text")) {
+									
+									if(trackItem.getNodeName().equals("artist")) {
+										NamedNodeMap artistmap = trackItem.getAttributes();
+										//System.out.println(" - Artist: " + artistmap.getNamedItem("name").getTextContent());
+										trackObject.setArtist(artistmap.getNamedItem("name").getTextContent());
+									} else {
+										if(trackItem.getNodeName().equals("url")) trackObject.setUrl(trackItem.getChildNodes().item(0).getNodeValue());
+										if(trackItem.getNodeName().equals("thumbnail")) trackObject.setThumbnail(trackItem.getChildNodes().item(0).getNodeValue());
+										if(trackItem.getNodeName().equals("image")) trackObject.setImage(trackItem.getChildNodes().item(0).getNodeValue());
+										//System.out.println(" - " + trackItem.getNodeName() + " = " + trackItem.getChildNodes().item(0).getNodeValue());
+									}
+									
+									trackArray.add(trackObject);
+								}
+							}
+						}
+						
+					}
+
+				}
+			
+			}
+			
+			/* shuffle charts */
+			Collections.shuffle(trackArray);
+			
+			/* truncate list to limit size */
+			List<LastFMTrack> compactedTrackList = new ArrayList<LastFMTrack>();
+			if(limit > trackArray.size()) limit = trackArray.size();
+			int counter = 1;
+			for(LastFMTrack track : trackArray) {
+				if(counter < limit) {
+					compactedTrackList.add(track);
+					counter++;
+				} else {
+					break;
+				}
+			}
+			return compactedTrackList;
+			
+		
+		} catch (Exception exp) {
+			exp.printStackTrace();
+			throw new ParseException("unable to parse LastFM XML: " + exp.getMessage());
+		}
+	}
+	
 	
 	private List<LastFMTrack> extractTrackFromChart(int limit) throws ParseException {
 		
@@ -129,10 +217,11 @@ public class LastFMParser extends AbstractParser implements Parser {
 			/* truncate list to limit size */
 			List<LastFMTrack> compactedTrackList = new ArrayList<LastFMTrack>();
 			if(limit > trackArray.size()) limit = trackArray.size();
-			int counter = 0;
+			int counter = 1;
 			for(LastFMTrack track : trackArray) {
 				if(counter < limit) {
 					compactedTrackList.add(track);
+					counter++;
 				} else {
 					break;
 				}
@@ -144,8 +233,6 @@ public class LastFMParser extends AbstractParser implements Parser {
 			exp.printStackTrace();
 			throw new ParseException("unable to parse LastFM XML: " + exp.getMessage());
 		}
-		
-		
 	}
 	
 	private LastFMUser extractFanFromArtist(LastFMTrack track) throws ParseException {
@@ -228,6 +315,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 			for(LastFMUser user : userArray) {
 				if(counter < limit) {
 					compactedUserList.add(user);
+					counter++;
 				} else {
 					break;
 				}
@@ -247,7 +335,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 	private LastFMRecentTrack extractRecentPlayFromFan(LastFMUser user) throws ParseException {
 		List<LastFMRecentTrack> tracks = this.extractRecentPlayFromFan(user, 10);
 		if(tracks.size() > 0){ 
-			return tracks.get(0); // returns most recent play
+			return tracks.get(this.random.nextInt(tracks.size()-1)); // returns most recent play
 		} else {
 			return null;
 		}
@@ -268,14 +356,11 @@ public class LastFMParser extends AbstractParser implements Parser {
 			/* get DOM doc from parsed remote URL */
 			Document node = parser.getDocument();
 			
-			LastFMRecentTrack trackObject = new LastFMRecentTrack();
+			
 			
 			/* attributes */
 			NamedNodeMap mainmap = node.getFirstChild().getAttributes();
-			if(mainmap !=null) {
-				//System.out.println("User Name: " + mainmap.getNamedItem("user").getTextContent());
-				trackObject.setUsername(mainmap.getNamedItem("user").getTextContent());
-			}
+			
 			
 			/* first node should always be 'recenttracks' */
 			if (node.hasChildNodes()) {
@@ -287,6 +372,12 @@ public class LastFMParser extends AbstractParser implements Parser {
 					NodeList children = node.getFirstChild().getChildNodes();
 					
 					for (int x = 0; x < children.getLength(); x++) {
+						
+						LastFMRecentTrack trackObject = new LastFMRecentTrack();
+						if(mainmap !=null) {
+							//System.out.println("User Name: " + mainmap.getNamedItem("user").getTextContent());
+							trackObject.setUsername(mainmap.getNamedItem("user").getTextContent());
+						}
 						
 						/* track */
 						Node track = children.item(x);
@@ -308,11 +399,10 @@ public class LastFMParser extends AbstractParser implements Parser {
 									if(trackItem.getNodeName().equals("date")) trackObject.setPlayed(this.lastfmDateFormat.parse(trackItem.getChildNodes().item(0).getNodeValue()));
 									//System.out.println(" - " + trackItem.getNodeName() + " = " + trackItem.getChildNodes().item(0).getNodeValue());
 									
-									
-									trackArray.add(trackObject);
 									}
 								}
 							}
+							trackArray.add(trackObject);
 						}
 						
 					}
@@ -328,6 +418,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 			for(LastFMRecentTrack track : trackArray) {
 				if(counter < limit) {
 					compactedTrackList.add(track);
+					counter++;
 				} else {
 					break;
 				}
@@ -391,65 +482,53 @@ public class LastFMParser extends AbstractParser implements Parser {
 	}
 	
 	public Data getKeywordItem(String keyword) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		/* get a single track from the charts */
+		List<LastFMTrack> tracks = extractTrackFromTag(keyword, 50);
+		List<Data> dataArray = new ArrayList<Data>();
+		/* iterate over multiple items, use the limit to work out just how many artists to use */
+		
+		for(LastFMTrack track : tracks) {
+			
+				Data data = new PeekData();
+				data.setHeadline(track.getName());
+				String body = "'<a href=\"" + track.getUrl() + "\">" + track.getName() + "</a>', by <a href=\"http://www.last.fm/music/" + track.getArtist().replaceAll(" ","+") + "\">" + track.getArtist() + "</a> is a really popular '" + keyword + "' tune.";
+				data.setBody(body);
+				Calendar trackCal = Calendar.getInstance();
+				data.setDate(trackCal);
+				data.setLink(track.getUrl());
+				data.setUserProfilePhoto(track.getThumbnail());
+				dataArray.add(data);
+			
+		}
+		return dataArray.get(this.random.nextInt(dataArray.size()-1));
+		
+		
 	}
 
 	public Data getKeywordItem(String[] keywords) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Data> keywordData = this.getMultipleKeywordItems(keywords, 50);
+		if(keywordData.size() > 0) {
+			return keywordData.get(this.random.nextInt(keywordData.size()-1));
+		} else {
+			return null;
+		}
+		
 	}
 
-	public List<Data> getLatestMultipleUserItems(int userId, int limit)
-			throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException {
+		
+		return this.getLatestMultipleUserItems(String.valueOf(userId), limit);
 	}
 
-	public List<Data> getLatestMultipleUserItems(String userId, int limit)
-			throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Data getLatestSingleUserItem(int userId) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Data getLatestSingleUserItem(String userId) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Data> getMultipleItems(int limit) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Data> getMultipleKeywordItems(String keyword, int limit)
-			throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Data> getMultipleKeywordItems(String[] keywords, int limit)
-			throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Data> getMultipleUserItems(int userId, int limit)
-			throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
+	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException {
 		
 		/* get user profile */
 		LastFMUser userProfile = this.getFanProfile(userId);
 		List<LastFMRecentTrack> trackList = this.extractRecentPlayFromFan(userProfile, limit);
+		
+		System.out.println("size of data array " + trackList.size());
 		
 		List<Data> dataList = new ArrayList<Data>();
 		for(LastFMRecentTrack track : trackList) {
@@ -472,6 +551,140 @@ public class LastFMParser extends AbstractParser implements Parser {
 		return dataList;
 	}
 
+	public Data getLatestSingleUserItem(int userId) throws ParseException {
+		
+		return this.getLatestSingleUserItem(String.valueOf(userId));
+	}
+
+	public Data getLatestSingleUserItem(String userId) throws ParseException {
+		
+		/* get a single track from the charts */
+		LastFMUser fan = this.getFanProfile(userId);
+		LastFMRecentTrack recentTrack = extractRecentPlayFromFan(fan);
+		
+		Data data = new PeekData();
+		data.setHeadline(recentTrack.getName());
+		String body = "<a href=\"http://www.last.fm/user/" + fan.getUsername().replaceAll(" ","+") + "\">" + fan.getUsername() + "</a> was listening to '<a href=\"" + recentTrack.getUrl() + "\">" + recentTrack.getName() + "</a>', by <a href=\"http://www.last.fm/music/" + recentTrack.getArtist().replaceAll(" ","+") + "\">" + recentTrack.getArtist() + "</a>";
+			   body += " on " + this.lastfmDateFormat.format(recentTrack.getPlayed());
+		data.setBody(body);
+		Calendar trackCal = Calendar.getInstance();
+		trackCal.setTime(recentTrack.getPlayed());
+		data.setDate(trackCal);
+		data.setLink(recentTrack.getUrl());
+		data.setUser(fan.getUsername());
+		data.setUserProfilePhoto(fan.getImage());
+		
+		return data;
+		
+	}
+
+	public List<Data> getMultipleItems(int limit) throws ParseException {
+		
+		/* get a single track from the charts */
+		List<LastFMTrack> tracks = extractTrackFromChart(limit);
+		List<Data> dataArray = new ArrayList<Data>();
+		int counter = 0;
+		/* iterate over multiple items, use the limit to work out just how many artists to use */
+		
+		for(LastFMTrack track : tracks) {
+			if(counter < limit) {
+			
+			LastFMUser fan = extractFanFromArtist(track); // get a random ran from each artist
+			LastFMRecentTrack recentTrack = extractRecentPlayFromFan(fan);
+			
+			if(recentTrack!=null) {
+				Data data = new PeekData();
+				data.setHeadline(recentTrack.getName());
+				String body = "<a href=\"http://www.last.fm/user/" + fan.getUsername().replaceAll(" ","+") + "\">" + fan.getUsername() + "</a> was listening to '<a href=\"" + recentTrack.getUrl() + "\">" + recentTrack.getName() + "</a>', by <a href=\"http://www.last.fm/music/" + recentTrack.getArtist().replaceAll(" ","+") + "\">" + recentTrack.getArtist() + "</a>";
+					body += " on " + this.lastfmDateFormat.format(recentTrack.getPlayed());
+				data.setBody(body);
+				Calendar trackCal = Calendar.getInstance();
+				trackCal.setTime(recentTrack.getPlayed());
+				data.setDate(trackCal);
+				data.setLink(recentTrack.getUrl());
+				data.setUser(fan.getUsername());
+				data.setUserProfilePhoto(fan.getImage());
+				dataArray.add(data);
+			
+			} 
+			counter++;
+			} else { break; }
+		}
+		return dataArray;
+		
+	}
+
+	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {
+		
+		/* get a single track from the charts */
+		List<LastFMTrack> tracks = extractTrackFromTag(keyword, limit);
+		List<Data> dataArray = new ArrayList<Data>();
+		
+		/* iterate over multiple items, use the limit to work out just how many artists to use */
+		for(LastFMTrack track : tracks) {
+			
+				Data data = new PeekData();
+				data.setHeadline(track.getName());
+				String body = "'<a href=\"" + track.getUrl() + "\">" + track.getName() + "</a>', by <a href=\"http://www.last.fm/music/" + track.getArtist().replaceAll(" ","+") + "\">" + track.getArtist() + "</a> is a really popular '" + keyword + "' tune.";
+				data.setBody(body);
+				Calendar trackCal = Calendar.getInstance();
+				data.setDate(trackCal);
+				data.setLink(track.getUrl());
+				data.setUserProfilePhoto(track.getThumbnail());
+				dataArray.add(data);
+			
+		}
+		return dataArray;
+		
+	}
+
+	public List<Data> getMultipleKeywordItems(String[] keywords, int limit) throws ParseException {
+		
+		/* get a single track from the charts */
+		List<Data> dataArray = new ArrayList<Data>();
+		
+		/* work out ratio of of entries to catch per keyword */
+		int ratio = limit / keywords.length;
+		
+		/* for each keyword, grab ratio of data */
+		for(String keyword : keywords) {
+			
+			List<LastFMTrack> tracks = extractTrackFromTag(keyword, ratio);
+			
+			/* iterate over multiple items, use the limit to work out just how many artists to use */
+			for(LastFMTrack track : tracks) {
+			
+				Data data = new PeekData();
+				data.setHeadline(track.getName());
+				String body = "'<a href=\"" + track.getUrl() + "\">" + track.getName() + "</a>', by <a href=\"http://www.last.fm/music/" + track.getArtist().replaceAll(" ","+") + "\">" + track.getArtist() + "</a> is a really popular '" + keyword + "' tune.";
+				data.setBody(body);
+				Calendar trackCal = Calendar.getInstance();
+				data.setDate(trackCal);
+				data.setLink(track.getUrl());
+				data.setUserProfilePhoto(track.getThumbnail());
+				dataArray.add(data);
+			
+			}
+		}
+		
+		/* mix it all up a little */
+		Collections.shuffle(dataArray);
+		
+		return dataArray;
+		
+	}
+
+	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
+		return this.getLatestMultipleUserItems(String.valueOf(userId), limit);
+	}
+
+	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
+		
+		List<Data> dataArray = this.getLatestMultipleUserItems(userId, limit);
+		Collections.shuffle(dataArray);
+		return dataArray;
+	}
+
 	public Data getSingleItem() throws ParseException {
 		
 		/* get a single track from the charts */
@@ -490,22 +703,36 @@ public class LastFMParser extends AbstractParser implements Parser {
 		data.setLink(recentTrack.getUrl());
 		data.setUser(fan.getUsername());
 		data.setUserProfilePhoto(fan.getImage());
-		
-		System.out.println(recentTrack);
-		LastFMUser profile = this.getFanProfile(fan.getUsername());
-		System.out.println(profile);
-		
 		return data;
 	}
 
 	public Data getSingleUserItem(int userId) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return this.getSingleUserItem(String.valueOf(userId));
+		
 	}
 
 	public Data getSingleUserItem(String userId) throws ParseException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		/* get a single track from the charts */
+		
+		LastFMUser fan = this.getFanProfile(userId);
+		LastFMRecentTrack recentTrack = extractRecentPlayFromFan(fan);
+		
+		Data data = new PeekData();
+		data.setHeadline(recentTrack.getName());
+		String body = "<a href=\"http://www.last.fm/user/" + fan.getUsername().replaceAll(" ","+") + "\">" + fan.getUsername() + "</a> was listening to '<a href=\"" + recentTrack.getUrl() + "\">" + recentTrack.getName() + "</a>', by <a href=\"http://www.last.fm/music/" + recentTrack.getArtist().replaceAll(" ","+") + "\">" + recentTrack.getArtist() + "</a>";
+			   body += " on " + this.lastfmDateFormat.format(recentTrack.getPlayed());
+		data.setBody(body);
+		Calendar trackCal = Calendar.getInstance();
+		trackCal.setTime(recentTrack.getPlayed());
+		data.setDate(trackCal);
+		data.setLink(recentTrack.getUrl());
+		data.setUser(fan.getUsername());
+		data.setUserProfilePhoto(fan.getImage());
+		
+		return data;
+	
 	}
 
 	public void setUpParser() {

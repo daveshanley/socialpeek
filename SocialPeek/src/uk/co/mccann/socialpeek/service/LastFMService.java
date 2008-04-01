@@ -12,6 +12,7 @@ public class LastFMService extends AbstractSocialService {
 	public static String CURRENT_CHART = API_URL + "place/" + UK_LOCATION + "/toptracks.xml";
 	public static String ARTIST_API = API_URL + "artist/";
 	public static String USER_API = API_URL + "user/";
+	public static String TAG_API = API_URL + "tag/";
 	
 	public LastFMService() {
 		

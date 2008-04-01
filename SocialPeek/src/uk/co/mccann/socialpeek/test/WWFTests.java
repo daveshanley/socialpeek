@@ -14,6 +14,7 @@ import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
 import uk.co.mccann.socialpeek.interfaces.PeekFactory;
 import uk.co.mccann.socialpeek.model.SocialService;
 import uk.co.mccann.socialpeek.service.DeliciousService;
+import uk.co.mccann.socialpeek.service.LastFMService;
 import uk.co.mccann.socialpeek.service.TwitterService;
 import uk.co.mccann.socialpeek.service.WeFeelFineService;
 import static org.junit.Assert.fail;
@@ -52,7 +53,7 @@ public class WWFTests {
 		
 		try {
 			
-			String data = peekFactory.getPeeker(WeFeelFineService.class).getMultiplePeekUsingTag("sexy",20);
+			String data = peekFactory.getPeeker(WeFeelFineService.class).getMultiplePeekUsingTags(new String[]{"proud","happy","confusing"},50);
 			//String data = peekFactory.getPeeker(TwitterService.class).getRandomPeek(50);
 			//String data = peekFactory.getPeeker(DeliciousService.class).getMultiplePeekUsingTag("thereformed",20);
 			

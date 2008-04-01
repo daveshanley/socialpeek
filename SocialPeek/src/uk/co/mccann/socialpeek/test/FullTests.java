@@ -15,6 +15,7 @@ import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
 import uk.co.mccann.socialpeek.interfaces.PeekFactory;
 import uk.co.mccann.socialpeek.model.SocialService;
 import uk.co.mccann.socialpeek.service.DeliciousService;
+import uk.co.mccann.socialpeek.service.LastFMService;
 import uk.co.mccann.socialpeek.service.TechnoratiService;
 import uk.co.mccann.socialpeek.service.TwitterService;
 import uk.co.mccann.socialpeek.service.WeFeelFineService;
@@ -22,7 +23,63 @@ import uk.co.mccann.socialpeek.service.WeFeelFineService;
 
 public class FullTests {
 
-	@Test public void singlePeekTest() {
+//	@Test public void singlePeekTest() {
+//		
+//		SocialService service = new WeFeelFineService();
+//		
+//		
+//		SocialService tservice = new TwitterService();
+//		tservice.setUsername("shanmantest");
+//		tservice.setPassword("fofcowb");
+//		
+//		SocialService dservice = new DeliciousService();
+//		
+//		SocialService nservice = new TechnoratiService();
+//		
+//		
+//		
+//		SocialPeekConfiguration config = new SocialPeekConfiguration();
+//		config.setFeedType(SocialPeek.RETURN_RSS);
+//		config.registerService(service);
+//		config.registerService(tservice);
+//		config.registerService(dservice);
+//		config.registerService(nservice);
+//		
+//		
+//		
+//		SocialPeek socialPeek = new SocialPeek(config);
+//		PeekFactory peekFactory = socialPeek.getPeekingFactory();
+//		
+//		
+//		try {
+//			
+//			String data = peekFactory.getPeeker(TechnoratiService.class).getMultiplePeekUsingTag("art",20);
+//			//String data = peekFactory.getPeeker(TwitterService.class).getRandomPeek(50);
+//			//String data = peekFactory.getPeeker(DeliciousService.class).getMultiplePeekUsingTag("thereformed",20);
+//			
+//			
+//			//FileWriter writer = new FileWriter(new File("rssdata/wefeelfine.rss.xml"));
+//			File file = new File("/usr/local/apache2/htdocs/socialpeek/feed.rss");
+//			file.delete();
+//		
+//			OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("/usr/local/apache2/htdocs/socialpeek/feed.rss",true),"UTF-8");
+//			
+//			//osw.write(data);
+//			osw.close();
+//			//System.out.println(data);
+//			
+//		} catch (SocialPeekException e) {
+//			e.printStackTrace();
+//			fail(e.getMessage());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			fail(e.getMessage());
+//		}
+//		
+//	}
+	
+	
+	@Test public void multipleRandomPeekTest() {
 		
 		SocialService service = new WeFeelFineService();
 		
@@ -32,8 +89,8 @@ public class FullTests {
 		tservice.setPassword("fofcowb");
 		
 		SocialService dservice = new DeliciousService();
-		
 		SocialService nservice = new TechnoratiService();
+		SocialService gservice = new LastFMService();
 		
 		
 		
@@ -43,6 +100,8 @@ public class FullTests {
 		config.registerService(tservice);
 		config.registerService(dservice);
 		config.registerService(nservice);
+		config.registerService(gservice);
+		
 		
 		
 		
@@ -54,12 +113,9 @@ public class FullTests {
 		
 		try {
 			
-			String data = peekFactory.getPeeker(TechnoratiService.class).getMultiplePeekUsingTag("art",20);
-			//String data = peekFactory.getPeeker(TwitterService.class).getRandomPeek(50);
-			//String data = peekFactory.getPeeker(DeliciousService.class).getMultiplePeekUsingTag("thereformed",20);
+			/* completely random peek */
+			String data = peekFactory.getPeeker().getRandomPeek();
 			
-			
-			//FileWriter writer = new FileWriter(new File("rssdata/wefeelfine.rss.xml"));
 			File file = new File("/usr/local/apache2/htdocs/socialpeek/feed.rss");
 			file.delete();
 		
@@ -70,14 +126,16 @@ public class FullTests {
 			System.out.println(data);
 			
 		} catch (SocialPeekException e) {
+		
 			e.printStackTrace();
 			fail(e.getMessage());
+		
 		} catch (IOException e) {
+		
 			e.printStackTrace();
 			fail(e.getMessage());
+		
 		}
 		
-		
 	}
-	
 }

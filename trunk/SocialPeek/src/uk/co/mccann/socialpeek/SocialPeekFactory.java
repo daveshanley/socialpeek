@@ -1,5 +1,7 @@
 package uk.co.mccann.socialpeek;
 
+import java.util.Random;
+
 import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
 import uk.co.mccann.socialpeek.interfaces.Configurable;
 import uk.co.mccann.socialpeek.interfaces.PeekFactory;
@@ -53,6 +55,22 @@ public class SocialPeekFactory implements PeekFactory {
 		}
 		
 		throw new SocialPeekException("no such service registered: " + peeker.getName());
+		
+	}
+	
+	/**
+     * get a random peeker for a random service!
+   	 * 
+     * @throws SocialPeekException
+     * @see uk.co.mccann.socialpeek.service.AbstractSocialService
+     * @return random service that you want to peek into
+     */
+	public SocialService getPeeker() throws SocialPeekException {
+		
+		Random random = new Random();
+		SocialService service = this.config.getRegisteredServices().get(random.nextInt(this.config.getRegisteredServices().size()));
+		System.out.println(service.getClass());
+		return service;
 		
 	}
 	

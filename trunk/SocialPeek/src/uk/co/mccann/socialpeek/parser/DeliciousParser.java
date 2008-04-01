@@ -503,7 +503,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 		} catch(java.text.ParseException exp) {
 			
 			
-			this.deliciousDateFormat = new SimpleDateFormat("yyyy-mm-dd'T'kk:mm:ss'+00:00'");
+			this.deliciousDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			
 			/* try second publication date type */
 			pubDate.setTime(this.deliciousDateFormat.parse(rssItem.getPubDate()));
@@ -554,7 +554,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 			return this.compileDeliciousData(rssItem);
 			
 		} catch (Exception exp) {
-			
+			exp.printStackTrace();
 			throw new ParseException("unable to parse del.icio.us RSS data: " + exp.getMessage());
 			
 		}

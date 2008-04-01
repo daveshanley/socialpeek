@@ -306,8 +306,13 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 		List<Data> extractedData = this.generateFeelings(limit);
 		Collections.shuffle(extractedData);
 		
-		return extractedData;
+		List<Data> compactedData = extractedData;
+		if(limit < extractedData.size()) limit =extractedData.size();
+		for(int x = 0; x < limit; x++) {
+			compactedData.add(extractedData.get(x));
+		}
 		
+		return compactedData;
 	}
 
 	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {

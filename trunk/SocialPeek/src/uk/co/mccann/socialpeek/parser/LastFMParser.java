@@ -532,20 +532,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 		
 		List<Data> dataList = new ArrayList<Data>();
 		for(LastFMRecentTrack track : trackList) {
-			
-			Data data = new PeekData();
-			data.setHeadline(track.getName());
-			String body = "<a href=\"http://www.last.fm/user/" + userProfile.getUsername().replaceAll(" ","+") + "\">" + userProfile.getUsername() + "</a> was listening to '<a href=\"" + userProfile.getUrl() + "\">" + track.getName() + "</a>', by <a href=\"http://www.last.fm/music/" + track.getArtist().replaceAll(" ","+") + "\">" + track.getArtist() + "</a>";
-				   body += " on " + this.lastfmDateFormat.format(track.getPlayed());
-			data.setBody(body);
-			Calendar trackCal = Calendar.getInstance();
-			trackCal.setTime(track.getPlayed());
-			data.setDate(trackCal);
-			data.setLink(track.getUrl());
-			data.setUser(userProfile.getUsername());
-			data.setUserProfilePhoto(userProfile.getImage());
-			data.setLocation(userProfile.getImage());
-			dataList.add(data);
+			dataList.add(this.compileFanDataObject(track, userProfile));
 		}
 		
 		return dataList;
@@ -562,19 +549,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 		LastFMUser fan = this.getFanProfile(userId);
 		LastFMRecentTrack recentTrack = extractRecentPlayFromFan(fan);
 		
-		Data data = new PeekData();
-		data.setHeadline(recentTrack.getName());
-		String body = "<a href=\"http://www.last.fm/user/" + fan.getUsername().replaceAll(" ","+") + "\">" + fan.getUsername() + "</a> was listening to '<a href=\"" + recentTrack.getUrl() + "\">" + recentTrack.getName() + "</a>', by <a href=\"http://www.last.fm/music/" + recentTrack.getArtist().replaceAll(" ","+") + "\">" + recentTrack.getArtist() + "</a>";
-			   body += " on " + this.lastfmDateFormat.format(recentTrack.getPlayed());
-		data.setBody(body);
-		Calendar trackCal = Calendar.getInstance();
-		trackCal.setTime(recentTrack.getPlayed());
-		data.setDate(trackCal);
-		data.setLink(recentTrack.getUrl());
-		data.setUser(fan.getUsername());
-		data.setUserProfilePhoto(fan.getImage());
-		
-		return data;
+		return this.compileFanDataObject(recentTrack, fan);
 		
 	}
 
@@ -593,19 +568,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 			LastFMRecentTrack recentTrack = extractRecentPlayFromFan(fan);
 			
 			if(recentTrack!=null) {
-				Data data = new PeekData();
-				data.setHeadline(recentTrack.getName());
-				String body = "<a href=\"http://www.last.fm/user/" + fan.getUsername().replaceAll(" ","+") + "\">" + fan.getUsername() + "</a> was listening to '<a href=\"" + recentTrack.getUrl() + "\">" + recentTrack.getName() + "</a>', by <a href=\"http://www.last.fm/music/" + recentTrack.getArtist().replaceAll(" ","+") + "\">" + recentTrack.getArtist() + "</a>";
-					body += " on " + this.lastfmDateFormat.format(recentTrack.getPlayed());
-				data.setBody(body);
-				Calendar trackCal = Calendar.getInstance();
-				trackCal.setTime(recentTrack.getPlayed());
-				data.setDate(trackCal);
-				data.setLink(recentTrack.getUrl());
-				data.setUser(fan.getUsername());
-				data.setUserProfilePhoto(fan.getImage());
-				dataArray.add(data);
-			
+				dataArray.add(this.compileFanDataObject(recentTrack, fan));
 			} 
 			counter++;
 			} else { break; }
@@ -692,10 +655,20 @@ public class LastFMParser extends AbstractParser implements Parser {
 		LastFMUser fan = extractFanFromArtist(track);
 		LastFMRecentTrack recentTrack = extractRecentPlayFromFan(fan);
 		
+		while(recentTrack==null) {
+			fan = extractFanFromArtist(track);
+			recentTrack = extractRecentPlayFromFan(fan);
+		}
+		
+		return this.compileFanDataObject(recentTrack, fan);
+	}
+	
+	private Data compileFanDataObject(LastFMRecentTrack recentTrack, LastFMUser fan) {
+		
 		Data data = new PeekData();
 		data.setHeadline(recentTrack.getName());
 		String body = "<a href=\"http://www.last.fm/user/" + fan.getUsername().replaceAll(" ","+") + "\">" + fan.getUsername() + "</a> was listening to '<a href=\"" + recentTrack.getUrl() + "\">" + recentTrack.getName() + "</a>', by <a href=\"http://www.last.fm/music/" + recentTrack.getArtist().replaceAll(" ","+") + "\">" + recentTrack.getArtist() + "</a>";
-			   body += " on " + this.lastfmDateFormat.format(recentTrack.getPlayed());
+		body += " on " + this.lastfmDateFormat.format(recentTrack.getPlayed());
 		data.setBody(body);
 		Calendar trackCal = Calendar.getInstance();
 		trackCal.setTime(recentTrack.getPlayed());
@@ -705,7 +678,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 		data.setUserProfilePhoto(fan.getImage());
 		return data;
 	}
-
+		
 	public Data getSingleUserItem(int userId) throws ParseException {
 		
 		return this.getSingleUserItem(String.valueOf(userId));
@@ -719,19 +692,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 		LastFMUser fan = this.getFanProfile(userId);
 		LastFMRecentTrack recentTrack = extractRecentPlayFromFan(fan);
 		
-		Data data = new PeekData();
-		data.setHeadline(recentTrack.getName());
-		String body = "<a href=\"http://www.last.fm/user/" + fan.getUsername().replaceAll(" ","+") + "\">" + fan.getUsername() + "</a> was listening to '<a href=\"" + recentTrack.getUrl() + "\">" + recentTrack.getName() + "</a>', by <a href=\"http://www.last.fm/music/" + recentTrack.getArtist().replaceAll(" ","+") + "\">" + recentTrack.getArtist() + "</a>";
-			   body += " on " + this.lastfmDateFormat.format(recentTrack.getPlayed());
-		data.setBody(body);
-		Calendar trackCal = Calendar.getInstance();
-		trackCal.setTime(recentTrack.getPlayed());
-		data.setDate(trackCal);
-		data.setLink(recentTrack.getUrl());
-		data.setUser(fan.getUsername());
-		data.setUserProfilePhoto(fan.getImage());
-		
-		return data;
+		return this.compileFanDataObject(recentTrack, fan);
 	
 	}
 

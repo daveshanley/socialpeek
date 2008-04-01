@@ -30,7 +30,7 @@ public class LastFMDataTest {
 			SocialPeek socialPeek = new SocialPeek(config);
 			PeekFactory peekFactory = socialPeek.getPeekingFactory();
 		
-			String data = peekFactory.getPeeker(LastFMService.class).getMultiplePeekUsingTags(new String[]{"shit","crap"},20);
+			String data = peekFactory.getPeeker(LastFMService.class).getMultiplePeekUsingTags(new String[]{"proud","happy","confusing"},50);
 			
 			File file = new File("/usr/local/apache2/htdocs/socialpeek/feed.rss");
 			file.delete();

@@ -27,4 +27,13 @@ public interface PeekFactory {
      */
 	public SocialService getPeeker(Class service) throws SocialPeekException;
 	
+	/**
+     * get a random peeker for a random service!
+   	 * 
+     * @throws SocialPeekException
+     * @see uk.co.mccann.socialpeek.service.AbstractSocialService
+     * @return random service that you want to peek into
+     */
+	public SocialService getPeeker() throws SocialPeekException;
+	
 }

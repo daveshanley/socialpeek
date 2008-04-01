@@ -137,7 +137,7 @@ public abstract class AbstractSocialService implements SocialService {
 				return generator.generate(this.randomPeek);
 			
 			} catch (ParseException exp) {
-			
+				exp.printStackTrace();
 				throw new SocialPeekException("parsing exception occured : " + exp.getMessage());
 			}
 			

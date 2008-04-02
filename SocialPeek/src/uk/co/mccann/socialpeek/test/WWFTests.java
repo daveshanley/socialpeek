@@ -53,29 +53,25 @@ public class WWFTests {
 		
 		try {
 			
-			String data = peekFactory.getPeeker(WeFeelFineService.class).getMultiplePeekUsingTag("bloated",50);
+			String data = peekFactory.getPeeker(WeFeelFineService.class).getMultiplePeekUsingTags(new String[] {"erotic","drunk"},10);
 			//String data = peekFactory.getPeeker(TwitterService.class).getRandomPeek(50);
 			//String data = peekFactory.getPeeker(DeliciousService.class).getMultiplePeekUsingTag("thereformed",20);
 			
 			
 			//FileWriter writer = new FileWriter(new File("rssdata/wefeelfine.rss.xml"));
-			File file = new File("/usr/local/apache2/htdocs/socialpeek/feed.rss");
-			file.delete();
+			//File file = new File("/usr/local/apache2/htdocs/socialpeek/feed.rss");
+			//file.delete();
 		
-			OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("/usr/local/apache2/htdocs/socialpeek/feed.rss",true),"UTF-8");
+			//OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("/usr/local/apache2/htdocs/socialpeek/feed.rss",true),"UTF-8");
 			
-			osw.write(data);
-			osw.close();
+			//osw.write(data);
+			//osw.close();
 			System.out.println(data);
 			
 		} catch (SocialPeekException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		
+		} 
 		
 	}
 }

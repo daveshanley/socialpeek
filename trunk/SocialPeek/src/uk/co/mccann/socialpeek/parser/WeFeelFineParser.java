@@ -109,13 +109,41 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 	
 	private List<Data> generateFeelings(int limit, String emotion) throws ParseException {
 	
-		return this.parseXML(this.apiURL + this.limitField + limit + "&" + this.feelingField + emotion + "&" +  this.returnFields + "&" + this.extraImagesField + "&" + this.postMonthField);
-		
+		List<Data> extractedData = this.parseXML(this.apiURL + this.limitField + limit + "&" + this.feelingField + emotion + "&" +  this.returnFields + "&" + this.extraImagesField + "&" + this.postMonthField);
+		/* trim feelings */
+		List<Data> compactedData = new ArrayList<Data>();
+		Collections.shuffle(extractedData);
+		if(limit > extractedData.size()) limit = extractedData.size();
+		int counter = 0;
+		for(Data data : extractedData){
+			if(counter < limit) {
+				compactedData.add(data);
+				counter++;
+			} else {
+				break;
+			}
+		}
+		return compactedData;
 	}
 	
 	private List<Data> generateFeelings(int limit) throws ParseException {
 		
-		return this.parseXML(this.apiURL + this.limitField + limit + "&" + this.returnFields + "&" + this.extraImagesField + "&" + this.postMonthField);
+		List<Data> extractedData = this.parseXML(this.apiURL + this.limitField + limit + "&" + this.returnFields + "&" + this.extraImagesField + "&" + this.postMonthField);
+		/* trim feelings */
+		List<Data> compactedData = new ArrayList<Data>();
+		Collections.shuffle(extractedData);
+		if(limit > extractedData.size()) limit = extractedData.size();
+		int counter = 0;
+		for(Data data : extractedData){
+			if(counter < limit) {
+				compactedData.add(data);
+				counter++;
+			} else {
+				break;
+			}
+			
+		}
+		return compactedData;
 	}
 	
 	private List<Data> generateFeelings(String emotion) throws ParseException {
@@ -271,8 +299,7 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 		
 		/* shuffle it up */
 		Collections.shuffle(dataCollection);
-		
-		return compactedData.get(this.random.nextInt(compactedData.size()-1));
+		return compactedData.get(0);
 		
 		
 	}
@@ -307,7 +334,7 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 		Collections.shuffle(extractedData);
 		
 		List<Data> compactedData = extractedData;
-		if(limit < extractedData.size()) limit =extractedData.size();
+		if(limit > extractedData.size()) limit =extractedData.size();
 		for(int x = 0; x < limit; x++) {
 			compactedData.add(extractedData.get(x));
 		}
@@ -337,20 +364,25 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 		List<Data> dataCollection = new ArrayList<Data>();
 		List<Data> compactedData = new ArrayList<Data>();
 		
+		/* work out ratio of of entries to catch per keyword */
+		int ratio = limit / keywords.length;
+		
 		for(String keyword : keywords) {
 			
-			List<Data> extractedData = this.generateFeelings(limit, keyword);
+			List<Data> extractedData = this.generateFeelings(ratio, keyword);
 			Collections.shuffle(extractedData);
 			/* nested loop */
 			for(Data dataItem : extractedData) {
 				dataCollection.add(dataItem);
 			}
+			
+			
 		
 		}
 		
+		
 		/* shuffle it up */
 		Collections.shuffle(dataCollection);
-		
 		/* now trim it up */
 		if(limit > dataCollection.size()) limit = dataCollection.size(); // make sure we don't go out of bounds!
 		for(int x = 0; x < limit; x++) {

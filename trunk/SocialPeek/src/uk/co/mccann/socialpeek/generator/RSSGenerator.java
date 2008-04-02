@@ -103,6 +103,7 @@ public class RSSGenerator extends AbstractGenerator {
 			/* create a writer and tell it to format the output so it's pretty! */
 			LSSerializer writer = implLS.createLSSerializer();
 			writer.getDomConfig().setParameter("format-pretty-print", true);
+			writer.getDomConfig().setParameter("xml-declaration", false);
 			
 			/* create a serialized version of the document */ 
 			String xmlSerialized = writer.writeToString(this.document.getDocumentElement());
@@ -311,6 +312,7 @@ public class RSSGenerator extends AbstractGenerator {
 			/* create a writer and tell it to format the output so it's pretty! */
 			LSSerializer writer = implLS.createLSSerializer();
 			writer.getDomConfig().setParameter("format-pretty-print", true);
+			writer.getDomConfig().setParameter("xml-declaration", false);
 			
 			/* create a serialized version of the document */ 
 			String xmlSerialized = writer.writeToString(this.document.getDocumentElement());

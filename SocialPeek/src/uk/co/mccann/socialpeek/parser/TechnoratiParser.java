@@ -104,7 +104,7 @@ public class TechnoratiParser extends AbstractParser implements Parser {
 		try {
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/technorati.rss.key."+ keyword.toLowerCase() + ".xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "technorati.rss.key."+ keyword.toLowerCase() + ".xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			
@@ -175,7 +175,7 @@ public class TechnoratiParser extends AbstractParser implements Parser {
 			List<Data> extractedData = new ArrayList<Data>();
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/technorati.rss.recent.xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "technorati.rss.recent.xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			
@@ -236,7 +236,7 @@ public class TechnoratiParser extends AbstractParser implements Parser {
 			List<Data> extractedData = new ArrayList<Data>();
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/technorati.rss.key."+ keyword.toLowerCase() + ".xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "technorati.rss.key."+ keyword.toLowerCase() + ".xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			
@@ -301,7 +301,7 @@ public class TechnoratiParser extends AbstractParser implements Parser {
 			for(int x = 0; x < keywords.length; x++) {
 			
 				/* check cache file */
-				File cachedRSSFile = new File("rssdata/technorati.rss.key."+ keywords[x] + ".xml");
+				File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "technorati.rss.key."+ keywords[x] + ".xml");
 				
 				if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 				
@@ -374,7 +374,7 @@ public class TechnoratiParser extends AbstractParser implements Parser {
 		try {
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/technorati.rss.recent.xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "technorati.rss.recent.xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			

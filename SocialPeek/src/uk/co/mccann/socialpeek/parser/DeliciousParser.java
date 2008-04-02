@@ -81,7 +81,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 		try {
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/delicious.rss.key."+ keyword.toLowerCase() + ".xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "delicious.rss.key."+ keyword.toLowerCase() + ".xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			
@@ -128,7 +128,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 		try {
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/delicious.rss.user."+ userId.toLowerCase() + ".xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "delicious.rss.user."+ userId.toLowerCase() + ".xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			
@@ -191,7 +191,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 		try {
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/delicious.rss.user."+ userId.toLowerCase() + ".xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "delicious.rss.user."+ userId.toLowerCase() + ".xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			
@@ -233,7 +233,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 			List<Data> extractedData = new ArrayList<Data>();
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/delicious.rss.recent.xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "delicious.rss.recent.xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			
@@ -293,7 +293,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 			List<Data> extractedData = new ArrayList<Data>();
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/delicious.rss.key."+ keyword.toLowerCase() + ".xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "delicious.rss.key."+ keyword.toLowerCase() + ".xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			
@@ -358,7 +358,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 			for(int x = 0; x < keywords.length; x++) {
 			
 				/* check cache file */
-				File cachedRSSFile = new File("rssdata/delicious.rss.key."+ keywords[x] + ".xml");
+				File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "delicious.rss.key."+ keywords[x] + ".xml");
 				
 				if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 				
@@ -430,7 +430,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 			List<Data> extractedData = new ArrayList<Data>();
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/delicious.rss.user."+ userId.toLowerCase() + ".xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "delicious.rss.user."+ userId.toLowerCase() + ".xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			
@@ -523,7 +523,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 		try {
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/delicious.rss.recent.xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "delicious.rss.recent.xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			
@@ -571,7 +571,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 		try {
 			
 			/* check cache file */
-			File cachedRSSFile = new File("rssdata/delicious.rss.user."+ userId.toLowerCase() + ".xml");
+			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "delicious.rss.user."+ userId.toLowerCase() + ".xml");
 			
 			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
 			

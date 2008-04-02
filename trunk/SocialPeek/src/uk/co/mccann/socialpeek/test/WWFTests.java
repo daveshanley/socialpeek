@@ -53,7 +53,7 @@ public class WWFTests {
 		
 		try {
 			
-			String data = peekFactory.getPeeker(WeFeelFineService.class).getMultiplePeekUsingTags(new String[]{"proud","happy","confusing"},50);
+			String data = peekFactory.getPeeker(WeFeelFineService.class).getMultiplePeekUsingTag("bloated",50);
 			//String data = peekFactory.getPeeker(TwitterService.class).getRandomPeek(50);
 			//String data = peekFactory.getPeeker(DeliciousService.class).getMultiplePeekUsingTag("thereformed",20);
 			

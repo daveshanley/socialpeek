@@ -28,6 +28,7 @@ public class SocialPeekConfiguration implements Configurable {
 	private GeneratorFactory generatorFactory;
 	private Calendar historicalStartPoint;
 	private Calendar historicalEndPoint;
+	private String rssCacheLocation;
 	
 	/**
      * Create a new instance of SocialPeek with a specific configuration
@@ -43,6 +44,7 @@ public class SocialPeekConfiguration implements Configurable {
 		Calendar startPoint = Calendar.getInstance();
 		startPoint.add(Calendar.YEAR, -1);
 		this.setHistoricalStartPoint(startPoint);
+		this.rssCacheLocation = "rssdata/"; // default location.
 		
 	}
 	
@@ -148,6 +150,24 @@ public class SocialPeekConfiguration implements Configurable {
 	public void setHistoricalStartPoint(Calendar cal) {
 		this.historicalStartPoint = cal;
 		
+	}
+
+	/**
+     * Set the location of the cached RSS files
+     *
+     * @return the cached file location;
+     */
+	public String getRSSCacheLocation() {
+		return this.rssCacheLocation;
+	}
+	
+	/**
+     * get the location of the cached RSS files
+     *
+     * @param rssCacheLocation;
+     */
+	public void setRSSCacheLocation(String rssCacheLocation) {
+		this.rssCacheLocation = rssCacheLocation;
 	}
 
 }

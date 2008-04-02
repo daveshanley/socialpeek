@@ -36,6 +36,14 @@ public interface Service {
 	public void registerConfiguration(Configurable configuration);
 	
 	/**
+     * Get the object configuration
+   	 *
+   	 * @return the configuration registered for this service.
+     * @see Configurable
+     */
+	public Configurable getConfiguration();
+	
+	/**
      * Get the API key for this service (if required)
      */
 	public String getAPIKey();

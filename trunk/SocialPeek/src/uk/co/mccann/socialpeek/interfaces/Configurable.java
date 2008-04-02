@@ -32,6 +32,10 @@ public interface Configurable {
 	public void setHistoricalEndPoint(Calendar cal);
 	
 	public Calendar getHistoricalEndPoint();
+	
+	public String getRSSCacheLocation();
+	
+	public void setRSSCacheLocation(String rssCacheLocation);
 
 	public List<SocialService> getRegisteredServices();
 	

@@ -55,7 +55,7 @@ public abstract class AbstractSocialService implements SocialService {
 		this.configuration = config;
 	}
 	
-	protected Configurable getConfiguration() {
+	public Configurable getConfiguration() {
 		return this.configuration;
 	}
 	

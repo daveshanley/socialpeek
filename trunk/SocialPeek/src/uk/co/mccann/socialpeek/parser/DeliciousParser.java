@@ -488,8 +488,11 @@ public class DeliciousParser extends AbstractParser implements Parser {
 		
 		Data data = new PeekData();
 		
-		data.setBody(rssItem.getDescriptionOrSummaryText());
-		
+		if(rssItem.getDescriptionOrSummaryText()!=null || !rssItem.getDescriptionOrSummaryText().equals("null")) {
+			data.setBody(rssItem.getDescriptionOrSummaryText());
+		} else {
+			data.setBody("");
+		}
 		/* create a new calendar object */
 		Calendar pubDate = Calendar.getInstance();
 		

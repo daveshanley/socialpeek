@@ -70,6 +70,15 @@ public class JSONGenerator extends AbstractGenerator {
 			if(dataIn.getUserProfilePhoto()!=null) {
 				dataCollection.put("user_photo",dataIn.getUserProfilePhoto());
 			}
+			/* check for a user */
+			if(dataIn.getUser()!=null) {
+				dataCollection.put("user",dataIn.getUser());
+			}
+			
+			/* check for a location */
+			if(dataIn.getLocation()!=null) {
+				dataCollection.put("location",dataIn.getLocation());
+			}
 			
 			/* add to our collection */
 			jsonObject.put("post",dataCollection);

@@ -77,7 +77,7 @@ public class TwitterParser extends AbstractParser implements Parser {
 			/* convert to UTF-8*/
 		    String newBody = new String(utf8Bytes, "UTF-8");
 		        
-		    twitterUser.setBody(newBody);
+		    twitterUser.setBody("said '<strong>" + status.getUser().getScreenName() + "</strong>'");
 		    twitterUser.setHeadline(newBody);
 		    
 		    /* check to see if there is a photo attached to the user */
@@ -177,9 +177,12 @@ public class TwitterParser extends AbstractParser implements Parser {
 		}
 		
 		if(matchingData.size() > 0) {
-		
-			return matchingData.get(this.random.nextInt(matchingData.size()-1));
-		
+			int randomNum = this.random.nextInt(matchingData.size()-1);
+			if(randomNum >= 0 ) {
+				return matchingData.get(randomNum);
+			} else {
+				return matchingData.get(++randomNum);
+			}
 		} else {
 			
 			throw new ParseException("keyword was not found in peek");

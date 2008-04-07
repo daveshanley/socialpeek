@@ -245,7 +245,7 @@ public class RSSGenerator extends AbstractGenerator {
 		post.appendChild(pubdate);
 		
 		
-		if(data.getUser()!=null) {
+		if(data.getUser()!=null && data.getUser().length() > 0) {
 			author = this.document.createElement("media:credit");
 			authorText = this.document.createTextNode(data.getUser());
 			author.appendChild(authorText);

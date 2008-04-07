@@ -335,7 +335,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 	private LastFMRecentTrack extractRecentPlayFromFan(LastFMUser user) throws ParseException {
 		List<LastFMRecentTrack> tracks = this.extractRecentPlayFromFan(user, 10);
 		if(tracks.size() > 0){ 
-			return tracks.get(this.random.nextInt(tracks.size()-1)); // returns most recent play
+			return tracks.get(0); // returns most recent play
 		} else {
 			return null;
 		}

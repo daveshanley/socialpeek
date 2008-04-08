@@ -1,0 +1,56 @@
+#summary SocialPeek, Quick and dirty introduction
+
+= Introduction =
+
+SocialPeek can generate random data, or targeted data, if the service allows it, you can target specific users as well, Here is a quick guide to some of the functionality, please read the API for more information.
+
+= Details =
+
+You can use the pre-defined services (Twitter, LastFM, Del.icio.us, Technorati & WeFeelFine) or you can create your own services by extending the framework). Let's focus on using the existing services for now. All Services implement the SocialService interface, (and all of them extend the AbstractSocialService class)
+
+{{{
+
+SocialService wwfService = new WeFeelFineService();
+SocialService twitterService = new TwitterService();
+
+/* twitter service requires a username and password */
+twitterService.setUsername("twitteruser");
+twitterService.setPassword("twitterpassword");
+		
+SocialService deliciousService = new DeliciousService();
+SocialService technoratiService = new TechnoratiService();
+SocialService lastFMService = new LastFMService();
+		
+}}}
+
+Once you have set up which services you want to use for your app, you need to then set
+up your configuration and register those services with your app. Your configuration
+is used to contain your registered services, as well as define what type of data you want back (this can be JSON data, RSS data, or good old fashioned vanilla XML). You can also get the raw POJO objects back as well if you want to manipulate them further - we will look at that after this.
+
+{{{
+		
+		
+Configurable config = new SocialPeekConfiguration();
+config.setFeedType(SocialPeek.RETURN_RSS);
+config.registerService(service);
+		config.registerService(tservice);
+		config.registerService(dservice);
+		config.registerService(nservice);
+		config.registerService(gservice);
+		
+		
+		
+		
+		/* set up our main engine */
+		SocialPeek socialPeek = new SocialPeek(config);
+		PeekFactory peekFactory = socialPeek.getPeekingFactory();
+		
+		/* start peeking! */
+		
+
+first of all you will need to initialize the services you want to use.
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages

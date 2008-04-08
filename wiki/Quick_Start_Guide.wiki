@@ -6,7 +6,7 @@ SocialPeek can generate random data, or targeted data, if the service allows it,
 
 = Details =
 
-You can use the pre-defined services (Twitter, LastFM, Del.icio.us, Technorati & WeFeelFine) or you can create your own services by extending the framework). Let's focus on using the existing services for now. All Services implement the SocialService interface, (and all of them extend the AbstractSocialService class)
+You can use the pre-defined services (Twitter, LastFM, Del.icio.us, Technorati & WeFeelFine) or you can create your own services by extending the framework). Let's focus on using the existing services for now. All Services implement the `SocialService` interface, (and all of them extend the `AbstractSocialService` class)
 
 {{{
 

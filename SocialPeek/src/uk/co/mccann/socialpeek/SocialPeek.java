@@ -59,7 +59,7 @@ public class SocialPeek {
 	public final static int RETURN_RSS = 3;
 	public final static String AUTHOR = "Dave Shanley";
 	public final static String AUTHOR_EMAIL = "david.shanley@europe.mccann.com";
-	public final static String VERSION = "0.1a";
+	public final static String VERSION = "1.0b";
 	public final static String APPLICATION_NAME = "SocialPeek";
 	public final static String APPLICATION_INFO = APPLICATION_NAME + VERSION + ", take a look at the internet - right now!";
 	public final static String APPLICATION_LINK = "http://mccann.co.uk/socialpeek";

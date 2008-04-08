@@ -31,20 +31,47 @@ is used to contain your registered services, as well as define what type of data
 		
 		
 Configurable config = new SocialPeekConfiguration();
+
+/* I want RSS data (but could be RETURN_JSON or RETURN_XML */ as well.
 config.setFeedType(SocialPeek.RETURN_RSS);
-config.registerService(service);
-		config.registerService(tservice);
-		config.registerService(dservice);
-		config.registerService(nservice);
-		config.registerService(gservice);
+config.registerService(wwfService);
+config.registerService(deliciousService);
+config.registerService(twitterService);
+config.registerService(lastFMService);
+config.registerService(technoratiService);
 		
+}}}
+
+Once you have your configuration you can then create a new SocialPeek engine. The engine allows you to call a PeekFactory, this factory will then generate your 'peeker' that will look into the service you want (or a random one, again, it's your call)		
+
+{{{
 		
+/* set up our main SocialPeek object */
+SocialPeek socialPeek = new SocialPeek(config);// pass in our configuration object
+PeekFactory peekFactory = socialPeek.getPeekingFactory();
 		
-		
-		/* set up our main engine */
-		SocialPeek socialPeek = new SocialPeek(config);
-		PeekFactory peekFactory = socialPeek.getPeekingFactory();
-		
+}}} 
+
+Now we can start peeking! remember every peek throws a SocialPeekException object, so
+make sure you catch it!
+
+{{{
+
+try {
+	String data;
+
+	/* get a random peek from a random service */
+	data = peekFactory.getPeeker().getRandomPeek();
+
+	/* get a random peek from a random service using a tag */
+	data = peekFactory.getPeeker().getRandomPeekUsingTag("community")
+
+
+	/* get a random peek from a random service using multiple tags */
+	data = peekFactory.getPeeker().getRandomPeekUsingTags(new String[]{"happy","cool","feet"});
+
+ 
+
 		/* start peeking! */
 		
 

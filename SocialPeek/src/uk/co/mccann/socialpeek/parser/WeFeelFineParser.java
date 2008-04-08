@@ -278,7 +278,12 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 	public Data getKeywordItem(String keyword) throws ParseException {
 		
 		List<Data> extractedData = this.generateFeelings(keyword);
-		return extractedData.get(this.random.nextInt(extractedData.size()-1));
+		int randomNumber = this.random.nextInt(extractedData.size());
+		if(randomNumber > 0) {
+			return extractedData.get(randomNumber);
+		} else {
+			return extractedData.get(0);
+		}
 	}
 
 	public Data getKeywordItem(String[] keywords) throws ParseException {

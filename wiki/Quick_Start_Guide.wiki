@@ -70,14 +70,27 @@ try {
 	/* get a random peek from a random service using multiple tags */
 	data = peekFactory.getPeeker().getRandomPeekUsingTags(new String[]{"happy","cool","feet"});
 
- 
+	/* get multiple peeks from a random service using a tag, */
+	data = peekFactory.getPeeker().getRandomPeekUsingTag("community", 10);
 
-		/* start peeking! */
-		
+	/* get multiple peeks from twitter */
+	data = peekFactory.getPeeker(TwitterService.class).getRandomPeekUsingTag("community", 10);
 
-first of all you will need to initialize the services you want to use.
+ 	/* get a random peek by a user from del.icio.us */
+	data = peekFactory.getPeeker(DeliciousService.class).getUserPeek("someuser");
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+
+ 	/* get multiple peeks by a user from del.icio.us */
+	data = peekFactory.getPeeker(DeliciousService.class).getUserPeek("someuser",10);
+
+}}}
+
+There are many more options, please check the API for all of them. As I mentioned above, the factory will generate your output format of choice (JSON, RSS or XML). However if you want the raw POJO to work with, then there are methods like `getRawDataRandomPeek()` or `getRawMultiplePeekUsingTag()` available. They will return either a single `Data` object or a `List<Data>` filled with objects. You can then use as you wish.
+
+That should get you going, if you need any help please email me (Dave) and I will help you out. If you find a bug, why not join the project and check out the source!.
+
+Happy Peeking.
+
+- Dave Shanley
+(theshanman@gmail.com)
+http://www.socialpeek.com

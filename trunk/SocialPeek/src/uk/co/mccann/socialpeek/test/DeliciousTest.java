@@ -86,7 +86,7 @@ public class DeliciousTest {
 	
 	}
 	*/
-	
+	/*
 	@Test public void randomPeek() {
 		
 		SocialService twitterService = new TwitterService();
@@ -116,8 +116,7 @@ public class DeliciousTest {
 		}
 		
 	}
-	
-	/*
+	*/
 	@Test public void userPeek() {
 		
 		SocialService twitterService = new TwitterService();
@@ -148,7 +147,6 @@ public class DeliciousTest {
 		}
 		
 	}
-	*/
 	
 	
 }

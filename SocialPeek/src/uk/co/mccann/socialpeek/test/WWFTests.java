@@ -29,8 +29,8 @@ public class WWFTests {
 		
 		
 		SocialService tservice = new TwitterService();
-		tservice.setUsername("shanmantest");
-		tservice.setPassword("fofcowb");
+		tservice.setUsername("");
+		tservice.setPassword("");
 		
 		SocialService dservice = new DeliciousService();
 		dservice.setUsername("test");

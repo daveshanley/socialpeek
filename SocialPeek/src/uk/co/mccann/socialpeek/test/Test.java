@@ -31,8 +31,8 @@ public class Test {
 		
 		/*
 		SocialService service = new TwitterService();
-		service.setUsername("shanmantest");
-		service.setPassword("fofcowb");
+		service.setUsername("");
+		service.setPassword("");
 		
 		SocialPeekConfiguration config = new SocialPeekConfiguration();
 		config.setFeedType(SocialPeek.RETURN_XML);

@@ -113,8 +113,8 @@ public class JSONParserTest {
 	@Test public void fullTestSingle() {
 		
 		SocialService service = new TwitterService();
-		service.setUsername("shanmantest");
-		service.setPassword("fofcowb");
+		service.setUsername("");
+		service.setPassword("");
 		
 		SocialPeekConfiguration config = new SocialPeekConfiguration();
 		config.setFeedType(SocialPeek.RETURN_JSON);

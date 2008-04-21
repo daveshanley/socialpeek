@@ -19,8 +19,6 @@ public class TwitterTests {
 	@Test public void singlePeek() {
 		
 		SocialService service = new TwitterService();
-		service.setUsername("shanmantest");
-		service.setPassword("fofcowb");
 		
 		SocialPeekConfiguration config = new SocialPeekConfiguration();
 		config.setFeedType(SocialPeek.RETURN_RSS);
@@ -46,8 +44,8 @@ public class TwitterTests {
 	@Test public void userPeek() {
 		
 		SocialService service = new TwitterService();
-		service.setUsername("shanmantest");
-		service.setPassword("fofcowb");
+		service.setUsername("");
+		service.setPassword("");
 		
 		SocialPeekConfiguration config = new SocialPeekConfiguration();
 		config.setFeedType(SocialPeek.RETURN_RSS);

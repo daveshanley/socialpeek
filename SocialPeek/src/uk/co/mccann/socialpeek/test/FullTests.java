@@ -29,8 +29,8 @@ public class FullTests {
 //		
 //		
 //		SocialService tservice = new TwitterService();
-//		tservice.setUsername("shanmantest");
-//		tservice.setPassword("fofcowb");
+//		tservice.setUsername("");
+//		tservice.setPassword("");
 //		
 //		SocialService dservice = new DeliciousService();
 //		
@@ -85,8 +85,8 @@ public class FullTests {
 		
 		
 		SocialService tservice = new TwitterService();
-		tservice.setUsername("shanmantest");
-		tservice.setPassword("fofcowb");
+		tservice.setUsername("");
+		tservice.setPassword("");
 		
 		SocialService dservice = new DeliciousService();
 		SocialService nservice = new TechnoratiService();

@@ -17,8 +17,8 @@ public class CongifurationTests {
 	@Test public void config() {
 		
 		SocialService service = new TwitterService();
-		service.setUsername("shanmantest");
-		service.setPassword("fofcowb");
+		service.setUsername("");
+		service.setPassword("");
 		
 		SocialPeekConfiguration config = new SocialPeekConfiguration();
 		config.setFeedType(SocialPeek.RETURN_XML);

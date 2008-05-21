@@ -69,7 +69,6 @@ public class SocialPeekFactory implements PeekFactory {
 		
 		Random random = new Random();
 		SocialService service = this.config.getRegisteredServices().get(random.nextInt(this.config.getRegisteredServices().size()));
-		System.out.println(service.getClass());
 		return service;
 		
 	}

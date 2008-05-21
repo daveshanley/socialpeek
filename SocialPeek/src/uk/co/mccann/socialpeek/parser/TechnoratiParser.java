@@ -132,7 +132,6 @@ public class TechnoratiParser extends AbstractParser implements Parser {
 			
 			
 		} catch (Exception exp) {
-			exp.printStackTrace();
 			throw new ParseException("unable to parse technorati RSS data: " + exp.getMessage());
 			
 		}
@@ -280,7 +279,6 @@ public class TechnoratiParser extends AbstractParser implements Parser {
 			
 			
 		} catch (Exception exp) {
-			exp.printStackTrace();
 			throw new ParseException("unable to parse technorati RSS data: " + exp.getMessage());
 			
 		}

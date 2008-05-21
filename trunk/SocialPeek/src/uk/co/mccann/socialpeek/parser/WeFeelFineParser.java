@@ -269,7 +269,6 @@ public class WeFeelFineParser extends AbstractParser implements Parser {
 			return dataArray;
 
 		} catch (Exception exp) {
-			exp.printStackTrace();
 			throw new ParseException("unable to parse WeFeelFine XML: " + exp.getMessage());
 		}
 

@@ -138,7 +138,6 @@ public class LastFMParser extends AbstractParser implements Parser {
 			
 		
 		} catch (Exception exp) {
-			exp.printStackTrace();
 			throw new ParseException("unable to parse LastFM XML: " + exp.getMessage());
 		}
 	}
@@ -230,7 +229,6 @@ public class LastFMParser extends AbstractParser implements Parser {
 			
 		
 		} catch (Exception exp) {
-			exp.printStackTrace();
 			throw new ParseException("unable to parse LastFM XML: " + exp.getMessage());
 		}
 	}
@@ -325,7 +323,6 @@ public class LastFMParser extends AbstractParser implements Parser {
 			
 		
 		} catch (Exception exp) {
-			exp.printStackTrace();
 			throw new ParseException("unable to parse LastFM XML: " + exp.getMessage());
 		}
 		
@@ -427,7 +424,6 @@ public class LastFMParser extends AbstractParser implements Parser {
 			
 		
 		} catch (Exception exp) {
-			exp.printStackTrace();
 			throw new ParseException("unable to parse LastFM XML: " + exp.getMessage());
 		}
 		
@@ -476,7 +472,6 @@ public class LastFMParser extends AbstractParser implements Parser {
 			return userObject;
 			
 		} catch (Exception exp) {
-			exp.printStackTrace();
 			throw new ParseException("unable to parse LastFM XML: " + exp.getMessage());
 		}
 	}

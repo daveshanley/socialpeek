@@ -89,7 +89,6 @@ public class XMLGenerator extends AbstractGenerator {
 			return xmlSerialized;
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new SocialPeekException("unable to perform XML generation: " + e);
 		} 
 		

@@ -125,7 +125,6 @@ public class DeliciousParser extends AbstractParser implements Parser {
 			
 			
 		} catch (Exception exp) {
-			exp.printStackTrace();
 			throw new ParseException("unable to parse del.icio.us RSS data: " + exp.getMessage());
 			
 		}
@@ -585,7 +584,6 @@ public class DeliciousParser extends AbstractParser implements Parser {
 			return this.compileDeliciousData(rssItem);
 			
 		} catch (Exception exp) {
-			exp.printStackTrace();
 			throw new ParseException("unable to parse del.icio.us RSS data: " + exp.getMessage());
 			
 		}

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -501,7 +502,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 		
 		Data data = new PeekData();
 		
-		if(rssItem.getDescriptionOrSummaryText()!=null || !rssItem.getDescriptionOrSummaryText().equals("null")) {
+		if(rssItem.getDescriptionOrSummaryText()!=null && !rssItem.getDescriptionOrSummaryText().equals("null")) {
 			data.setBody(rssItem.getDescriptionOrSummaryText());
 		} else {
 			data.setBody("");
@@ -524,12 +525,26 @@ public class DeliciousParser extends AbstractParser implements Parser {
 			/* try second publication date type */
 			pubDate.setTime(this.deliciousDateFormat.parse(rssItem.getPubDate()));
 		}
-		
-		data.setDate(pubDate);
-		data.setHeadline(rssItem.getTitleText());
-		data.setLink(rssItem.getLinks().get(0).getHref()); // only take the first link
-		data.setUser(rssItem.getAuthorOrCreator().get(0).getEmailOrText()); // only take the first creator
-		
+		if(pubDate!=null) {
+			data.setDate(pubDate);
+		} else {
+			data.setDate(Calendar.getInstance());
+		}
+		if(rssItem.getTitleText()!=null) {
+			data.setHeadline(rssItem.getTitleText());
+		} else {
+			data.setHeadline("not available");
+		}
+		if(rssItem.getLinks()!= null && rssItem.getLinks().get(0).getHref()!=null) {
+			data.setLink(rssItem.getLinks().get(0).getHref()); // only take the first link
+		} else {
+			data.setLink("http://socialpeek.com");
+		}
+		if(rssItem.getAuthorOrCreator()!=null && rssItem.getAuthorOrCreator().get(0).getEmailOrText()!=null) {
+			data.setUser(rssItem.getAuthorOrCreator().get(0).getEmailOrText()); // only take the first creator
+		} else {
+			data.setUser("not available");
+		}
 		return data;
 		
 	}

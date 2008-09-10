@@ -1,5 +1,7 @@
 package uk.co.mccann.socialpeek;
 
+import org.apache.log4j.Logger;
+
 import uk.co.mccann.socialpeek.interfaces.Configurable;
 import uk.co.mccann.socialpeek.interfaces.PeekFactory;
 
@@ -66,6 +68,8 @@ public class SocialPeek {
 	public final static String APPLICATION_LOGO ="http://showreel.mccanndev.co.uk/socialpeek-logo.gif";
 	public final static String APPLICATION_LOGO_WIDTH ="120";
 	public final static String APPLICATION_LOGO_HEIGHT ="64";
+	public static boolean logging = false;
+	
 	private Configurable config;
 	
 	/**
@@ -87,6 +91,13 @@ public class SocialPeek {
 		
 		return new SocialPeekFactory(this.config);
 		
+	}
+
+	/**
+	 * Set Logging;
+	 * @param logging
+	 */public static void setLogging(boolean logging) {
+		SocialPeek.logging = logging;
 	}
 	
 

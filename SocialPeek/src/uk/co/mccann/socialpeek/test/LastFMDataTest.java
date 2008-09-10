@@ -28,19 +28,13 @@ public class LastFMDataTest {
 			config.registerService(service);
 			
 			SocialPeek socialPeek = new SocialPeek(config);
+			socialPeek.logging = true;
+			
 			PeekFactory peekFactory = socialPeek.getPeekingFactory();
 		
-			String data = peekFactory.getPeeker(LastFMService.class).getMultiplePeekUsingTags(new String[]{"proud","happy","confusing"},50);
-			
-			File file = new File("/usr/local/apache2/htdocs/socialpeek/feed.rss");
-			file.delete();
-		
-			OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("/usr/local/apache2/htdocs/socialpeek/feed.rss",true),"UTF-8");
+			String data = peekFactory.getPeeker(LastFMService.class).getRandomPeek();
 			
 			System.out.print(data);
-			
-			osw.write(data);
-			osw.close();
 			
 			
 		} catch (Exception exp) {

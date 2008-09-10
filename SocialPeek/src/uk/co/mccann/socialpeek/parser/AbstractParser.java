@@ -2,6 +2,8 @@ package uk.co.mccann.socialpeek.parser;
 
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 import uk.co.mccann.socialpeek.model.SocialService;
 
 /**
@@ -21,8 +23,10 @@ public abstract class AbstractParser {
 	
 	protected SocialService service;
 	protected Random random;
+	protected Logger logger;
 	
-	public AbstractParser() { }
+
+	public AbstractParser() {}
 	
 	/**
      * Called by subclasses to set the SocialService for the parser

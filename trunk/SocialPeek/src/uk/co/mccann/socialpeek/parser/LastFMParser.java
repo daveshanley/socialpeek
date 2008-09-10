@@ -7,12 +7,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
 import org.apache.xerces.parsers.DOMParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.interfaces.Parser;
@@ -56,6 +58,11 @@ public class LastFMParser extends AbstractParser implements Parser {
 		
 		try {
 			DOMParser parser = new DOMParser();
+			
+			if(SocialPeek.logging) {
+				this.logger.info("loading xml from LastFM : " + LastFMService.TAG_API + tag.replace(" ", "+") + "/toptracks.xml");
+			}
+			
 			/* parse the data! after all that formatting */
 			parser.parse(LastFMService.TAG_API + tag.replace(" ", "+") + "/toptracks.xml");
 			
@@ -83,7 +90,11 @@ public class LastFMParser extends AbstractParser implements Parser {
 						/* attributes */
 						NamedNodeMap map = track.getAttributes();
 						if(map !=null) {
-							//System.out.println("Track Name: " + map.getNamedItem("name").getTextContent());
+							
+							if(SocialPeek.logging) {
+								this.logger.info("track name '" + map.getNamedItem("name").getTextContent() + "'");
+							}
+							
 							trackObject.setName(map.getNamedItem("name").getTextContent());
 						}
 						
@@ -97,18 +108,8 @@ public class LastFMParser extends AbstractParser implements Parser {
 								Node trackItem = trackNodes.item(y);
 								if(!trackItem.getNodeName().equals("#text")) {
 									
-									if(trackItem.getNodeName().equals("artist")) {
-										NamedNodeMap artistmap = trackItem.getAttributes();
-										//System.out.println(" - Artist: " + artistmap.getNamedItem("name").getTextContent());
-										trackObject.setArtist(artistmap.getNamedItem("name").getTextContent());
-									} else {
-										if(trackItem.getNodeName().equals("url")) trackObject.setUrl(trackItem.getChildNodes().item(0).getNodeValue());
-										if(trackItem.getNodeName().equals("thumbnail")) trackObject.setThumbnail(trackItem.getChildNodes().item(0).getNodeValue());
-										if(trackItem.getNodeName().equals("image")) trackObject.setImage(trackItem.getChildNodes().item(0).getNodeValue());
-										//System.out.println(" - " + trackItem.getNodeName() + " = " + trackItem.getChildNodes().item(0).getNodeValue());
-									}
-									
-									trackArray.add(trackObject);
+									parseTrackItem(trackArray, trackObject, trackNodes, y);
+								
 								}
 							}
 						}
@@ -138,6 +139,9 @@ public class LastFMParser extends AbstractParser implements Parser {
 			
 		
 		} catch (Exception exp) {
+			if(SocialPeek.logging) {
+				this.logger.error("error parsing xml from LastFM : " + exp.getLocalizedMessage());
+			}
 			throw new ParseException("unable to parse LastFM XML: " + exp.getMessage());
 		}
 	}
@@ -148,6 +152,11 @@ public class LastFMParser extends AbstractParser implements Parser {
 		try {
 			DOMParser parser = new DOMParser();
 			/* parse the data! after all that formatting */
+			
+			if(SocialPeek.logging) {
+				this.logger.info("[loading xml from LastFM : " + LastFMService.CURRENT_CHART);
+			}
+			
 			parser.parse(LastFMService.CURRENT_CHART);
 			
 			List<LastFMTrack> trackArray = new ArrayList<LastFMTrack>();
@@ -175,6 +184,11 @@ public class LastFMParser extends AbstractParser implements Parser {
 						NamedNodeMap map = track.getAttributes();
 						if(map !=null) {
 							//System.out.println("Track Name: " + map.getNamedItem("name").getTextContent());
+							
+							if(SocialPeek.logging) {
+								this.logger.info("track name '" + map.getNamedItem("name").getTextContent() + "'");
+							}
+							
 							trackObject.setName(map.getNamedItem("name").getTextContent());
 						}
 						
@@ -185,22 +199,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 							
 							for (int y = 0; y < trackNodes.getLength(); y++) {
 								
-								Node trackItem = trackNodes.item(y);
-								if(!trackItem.getNodeName().equals("#text")) {
-									
-									if(trackItem.getNodeName().equals("artist")) {
-										NamedNodeMap artistmap = trackItem.getAttributes();
-										//System.out.println(" - Artist: " + artistmap.getNamedItem("name").getTextContent());
-										trackObject.setArtist(artistmap.getNamedItem("name").getTextContent());
-									} else {
-										if(trackItem.getNodeName().equals("url")) trackObject.setUrl(trackItem.getChildNodes().item(0).getNodeValue());
-										if(trackItem.getNodeName().equals("thumbnail")) trackObject.setThumbnail(trackItem.getChildNodes().item(0).getNodeValue());
-										if(trackItem.getNodeName().equals("image")) trackObject.setImage(trackItem.getChildNodes().item(0).getNodeValue());
-										//System.out.println(" - " + trackItem.getNodeName() + " = " + trackItem.getChildNodes().item(0).getNodeValue());
-									}
-									
-									trackArray.add(trackObject);
-								}
+								parseTrackItem(trackArray, trackObject, trackNodes, y);
 							}
 						}
 						
@@ -225,11 +224,62 @@ public class LastFMParser extends AbstractParser implements Parser {
 					break;
 				}
 			}
+			
+			if(SocialPeek.logging) {
+				this.logger.info("[compiled '" + compactedTrackList.size() + "' tracks]");
+			}
+			
 			return compactedTrackList;
 			
 		
 		} catch (Exception exp) {
+			if(SocialPeek.logging) {
+				this.logger.error("error parsing xml from LastFM : " + exp.getStackTrace()[0]);
+			}
 			throw new ParseException("unable to parse LastFM XML: " + exp.getMessage());
+		}
+	}
+
+	private void parseTrackItem(List<LastFMTrack> trackArray, LastFMTrack trackObject, NodeList trackNodes, int y) {
+		
+		Node trackItem = trackNodes.item(y);
+		if(!trackItem.getNodeName().equals("#text")) {
+			
+			if(trackItem.getNodeName().equals("artist")) {
+				NamedNodeMap artistmap = trackItem.getAttributes();
+				trackObject.setArtist(artistmap.getNamedItem("name").getTextContent());
+				
+				if(SocialPeek.logging) {
+					this.logger.info("\t artist: " + artistmap.getNamedItem("name").getTextContent());
+				}
+		
+			} else {
+				if(trackItem.getNodeName().equals("url")) { 
+					if(trackItem.getChildNodes().item(0)!=null) {
+						trackObject.setUrl(trackItem.getChildNodes().item(0).getNodeValue());
+						if(SocialPeek.logging) {
+							this.logger.info("\t url: " + trackItem.getChildNodes().item(0).getNodeValue());
+						}
+					}
+				}
+				if(trackItem.getNodeName().equals("thumbnail")) {
+					if(trackItem.getChildNodes().item(0)!=null) {
+						trackObject.setThumbnail(trackItem.getChildNodes().item(0).getNodeValue());
+						if(SocialPeek.logging) {
+							this.logger.info("\t thumbnail: " + trackItem.getChildNodes().item(0).getNodeValue());
+						}
+					}
+				}
+				if(trackItem.getNodeName().equals("image")) {
+					if(trackItem.getChildNodes().item(0)!=null) {
+						trackObject.setImage(trackItem.getChildNodes().item(0).getNodeValue());
+						if(SocialPeek.logging) {
+							this.logger.info("\t image: " + trackItem.getChildNodes().item(0).getNodeValue());
+						}
+					}
+				}
+			}
+			trackArray.add(trackObject);
 		}
 	}
 	
@@ -250,6 +300,8 @@ public class LastFMParser extends AbstractParser implements Parser {
 		try {
 			
 			DOMParser parser = new DOMParser();
+			
+			
 			/* parse the data! after all that formatting */
 			parser.parse(LastFMService.ARTIST_API + track.getArtist().replace(" ", "+") + "/fans.xml");
 			
@@ -290,8 +342,10 @@ public class LastFMParser extends AbstractParser implements Parser {
 								
 								Node userItem = userNodes.item(y);
 								if(!userItem.getNodeName().equals("#text")) {
-									if(userItem.getNodeName().equals("image")) userObject.setImage(userItem.getChildNodes().item(0).getNodeValue());
-									//System.out.println(" - " + userItem.getNodeName() + " = " + userItem.getChildNodes().item(0).getNodeValue());
+									if(userItem.getNodeName().equals("image")) 
+										if(userItem.getChildNodes().item(0)!=null) {
+											userObject.setImage(userItem.getChildNodes().item(0).getNodeValue());
+										}
 									userArray.add(userObject);
 								}
 							}
@@ -323,6 +377,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 			
 		
 		} catch (Exception exp) {
+			exp.printStackTrace();
 			throw new ParseException("unable to parse LastFM XML: " + exp.getMessage());
 		}
 		
@@ -345,6 +400,11 @@ public class LastFMParser extends AbstractParser implements Parser {
 		try {
 			
 			DOMParser parser = new DOMParser();
+			
+			if(SocialPeek.logging) {
+				this.logger.info("[loading xml from LastFM : " + LastFMService.USER_API + user.getUsername().replace(" ", "+") + "/recenttracks.xml");
+			}
+			
 			/* parse the data! after all that formatting */
 			parser.parse(LastFMService.USER_API + user.getUsername().replace(" ", "+") + "/recenttracks.xml");
 			
@@ -372,7 +432,6 @@ public class LastFMParser extends AbstractParser implements Parser {
 						
 						LastFMRecentTrack trackObject = new LastFMRecentTrack();
 						if(mainmap !=null) {
-							//System.out.println("User Name: " + mainmap.getNamedItem("user").getTextContent());
 							trackObject.setUsername(mainmap.getNamedItem("user").getTextContent());
 						}
 						
@@ -394,7 +453,6 @@ public class LastFMParser extends AbstractParser implements Parser {
 									if(trackItem.getNodeName().equals("url")) trackObject.setUrl(trackItem.getChildNodes().item(0).getNodeValue());
 									if(trackItem.getNodeName().equals("album")) trackObject.setAlbum(trackItem.getChildNodes().item(0).getNodeValue());
 									if(trackItem.getNodeName().equals("date")) trackObject.setPlayed(this.lastfmDateFormat.parse(trackItem.getChildNodes().item(0).getNodeValue()));
-									//System.out.println(" - " + trackItem.getNodeName() + " = " + trackItem.getChildNodes().item(0).getNodeValue());
 									
 									}
 								}
@@ -654,7 +712,6 @@ public class LastFMParser extends AbstractParser implements Parser {
 			fan = extractFanFromArtist(track);
 			recentTrack = extractRecentPlayFromFan(fan);
 		}
-		
 		return this.compileFanDataObject(recentTrack, fan);
 	}
 	
@@ -693,6 +750,7 @@ public class LastFMParser extends AbstractParser implements Parser {
 
 	public void setUpParser() {
 		
+		this.logger = Logger.getLogger(LastFMParser.class);
 		this.random = new Random();
 		this.lastfmDateFormat = new SimpleDateFormat("dd MMM yyyy',' kk:mm");
 	

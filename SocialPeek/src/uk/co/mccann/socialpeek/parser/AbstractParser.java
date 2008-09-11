@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
+import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.model.SocialService;
 
 /**
@@ -19,12 +20,18 @@ import uk.co.mccann.socialpeek.model.SocialService;
 *
 * @author Dave Shanley <david.shanley@europe.mccann.com>
 */
-public abstract class AbstractParser {
+public abstract class AbstractParser implements Parser {
 	
 	protected SocialService service;
 	protected Random random;
 	protected Logger logger;
 	
+
+	public void setUpParser() {
+		
+		this.random = new Random();
+		
+	}
 
 	public AbstractParser() {}
 	

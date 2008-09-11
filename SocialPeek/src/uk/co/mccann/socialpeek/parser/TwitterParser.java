@@ -6,17 +6,18 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-import java.util.Random;
 
-import thinktank.twitter.Twitter;
-import thinktank.twitter.TwitterException;
-import thinktank.twitter.Twitter.Status;
-import thinktank.twitter.Twitter.User;
+
+import org.apache.log4j.Logger;
+import winterwell.jtwitter.TwitterException;
+import winterwell.jtwitter.Status;
+import winterwell.jtwitter.User;
+import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.model.PeekData;
 import uk.co.mccann.socialpeek.model.SocialService;
+import uk.co.mccann.socialpeek.service.EnhancedTwitter;
 import uk.co.mccann.socialpeek.service.TwitterService;
 
 
@@ -33,9 +34,9 @@ import uk.co.mccann.socialpeek.service.TwitterService;
  *
  * @author Dave Shanley <david.shanley@europe.mccann.com>
  */
-public class TwitterParser extends AbstractParser implements Parser {
+public class TwitterParser extends AbstractParser  {
 	
-	Twitter twitter;
+	EnhancedTwitter twitter;
 	
 	/**
      *  Default constructor, calls super constructor from AbstractParser
@@ -52,10 +53,11 @@ public class TwitterParser extends AbstractParser implements Parser {
      *  
      */
 	public void setUpParser() {
+		super.setUpParser();
 		
 		/* create a new twitter engine, using thinktank's jTwitter lib */
-		this.twitter = new Twitter(this.getSocialService().getUsername(),this.getSocialService().getPassword());
-		
+		this.twitter = new EnhancedTwitter(this.getSocialService().getUsername(),this.getSocialService().getPassword());
+		this.logger = Logger.getLogger(TwitterParser.class);
 	}
 	
 	private Data compileTwitterData(Status status) {
@@ -100,7 +102,7 @@ public class TwitterParser extends AbstractParser implements Parser {
 	
 	public List<Data> getMultipleItems(int limit) throws ParseException {
 		
-		this.random = new Random();
+		
 		
 		/* implementation code! */
 		try {
@@ -154,74 +156,93 @@ public class TwitterParser extends AbstractParser implements Parser {
 	public Data getSingleItem() throws ParseException {
 		
 		List<Data> extractedData = this.getMultipleItems(20);
-		this.random = new Random();
+		
 		return extractedData.get(this.random.nextInt(extractedData.size()-1));
 	}
 
+	
 	public Data getKeywordItem(String keyword) throws ParseException {
 		
-		List<Data> extractedData = this.getMultipleItems(50);
-		this.random = new Random();
-		
-		/* look through extracted data and search for a particular keyword */
-		List<Data> matchingData = new ArrayList<Data>();
-		
-		for(Data data : extractedData) {
-			boolean add = false;
-			if(data.getHeadline().contains(keyword)) add = true;
-			if(data.getBody().contains(keyword)) add = true;
-			if(data.getUser().contains(keyword)) add = true;
-			if(add) {
-				if(!matchingData.contains(data)) matchingData.add(data);
-			}
+		if(SocialPeek.logging) {
+			this.logger.info("searching twitter with keyword: " + keyword);
 		}
 		
-		if(matchingData.size() > 0) {
-			int randomNum = this.random.nextInt(matchingData.size()-1);
-			if(randomNum >= 0 ) {
-				return matchingData.get(randomNum);
-			} else {
-				return matchingData.get(++randomNum);
-			}
-		} else {
-			
-			throw new ParseException("keyword was not found in peek");
+		List<Status> searchResults = this.twitter.searchTwitter(keyword);
+		
+		if(SocialPeek.logging) {
+			this.logger.info("search results : " + searchResults.size());
 		}
+		
+		Data userItem = this.compileTwitterData(searchResults.get(this.random.nextInt(searchResults.size()-1)));
+		return userItem;
+		
 	}
-
+	
+	
 	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {
-		/* not supported in this parser */
-		return null;	
+		
+		if(SocialPeek.logging) {
+			this.logger.info("searching twitter with keyword: " + keyword);
+		}
+		
+		if(SocialPeek.logging) {
+			this.logger.info("searching twitter with keyword: " + keyword);
+		}
+		
+		List<Status> searchResults = this.twitter.searchTwitter(keyword);
+		
+		if(SocialPeek.logging) {
+			this.logger.info("search results : " + searchResults.size());
+		}
+		
+		/* shuffle it up for some randomness */
+		Collections.shuffle(searchResults);
+		
+		List<Data> compactedData = new ArrayList<Data>();
+		
+		/* now trim it up */
+		if(limit > searchResults.size()) limit = searchResults.size(); // make sure we don't go out of bounds!
+		for(int x = 0; x < limit; x++) {
+			compactedData.add(this.compileTwitterData(searchResults.get(x)));
+		}
+		return compactedData;
+		
 	}
 
 	public List<Data> getMultipleKeywordItems(String[] keywords, int limit) throws ParseException {
-		List<Data> extractedData = this.getMultipleItems(limit);
-		this.random = new Random();
 		
-		/* look through extracted data and search for a particular keyword */
-		List<Data> matchingData = new ArrayList<Data>();
-		
-		for(Data data : extractedData) {
-			
-			for(String keyword : keywords) {
-				boolean add = false;
-				if(data.getHeadline().contains(keyword)) add = true;
-				if(data.getBody().contains(keyword)) add = true;
-				if(data.getUser().contains(keyword)) add = true;
-				if(add) {
-					if(!matchingData.contains(data)) matchingData.add(data);
-				}
-			}
+		if(SocialPeek.logging) {
+			for(String keyword: keywords)
+				this.logger.info("searching twitter with keyword: " + keyword);
 		}
 		
-		if(matchingData.size() > 0) {
-		
-			return matchingData;
-		
-		} else {
-			
-			throw new ParseException("keyword was not found in peek");
+		if(SocialPeek.logging) {
+			for(String keyword: keywords)
+				this.logger.info("searching twitter with keyword: " + keyword);
 		}
+		
+		List<Status> resultArray = new ArrayList<Status>();
+		
+		for(String keyword : keywords) {
+			List<Status> searchResults = this.twitter.searchTwitter(keyword);
+			resultArray.addAll(searchResults);
+		}
+			
+		if(SocialPeek.logging) {
+			this.logger.info("search results : " + resultArray.size());
+		}
+		
+		/* shuffle it up for some randomness */
+		Collections.shuffle(resultArray);
+		
+		List<Data> compactedData = new ArrayList<Data>();
+		
+		/* now trim it up */
+		if(limit > resultArray.size()) limit = resultArray.size(); // make sure we don't go out of bounds!
+		for(int x = 0; x < limit; x++) {
+			compactedData.add(this.compileTwitterData(resultArray.get(x)));
+		}
+		return compactedData;
 	}
 
 	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
@@ -267,13 +288,13 @@ public class TwitterParser extends AbstractParser implements Parser {
 
 	public Data getSingleUserItem(int userId) throws ParseException {
 		List<Data> extractedData = this.getMultipleUserItems(String.valueOf(userId), 20);
-		this.random = new Random();
+		
 		return extractedData.get(this.random.nextInt(extractedData.size()-1));
 	}
 
 	public Data getSingleUserItem(String userId) throws ParseException {
 		List<Data> extractedData = this.getMultipleUserItems(userId, 20);
-		this.random = new Random();
+		
 		return extractedData.get(this.random.nextInt(extractedData.size()-1));
 	}
 
@@ -310,32 +331,33 @@ public class TwitterParser extends AbstractParser implements Parser {
 
 	public Data getKeywordItem(String[] keywords) throws ParseException {
 		
-		List<Data> extractedData = this.getMultipleItems(50);
-		this.random = new Random();
-		
-		/* look through extracted data and search for a particular keyword */
-		List<Data> matchingData = new ArrayList<Data>();
-		
-		for(Data data : extractedData) {
-			
-			for(String keyword : keywords) {
-				boolean add = false;
-				if(data.getHeadline().contains(keyword)) add = true;
-				if(data.getBody().contains(keyword)) add = true;
-				if(data.getUser().contains(keyword)) add = true;
-				if(add) {
-					if(!matchingData.contains(data)) matchingData.add(data);
-				}
-			}
+		if(SocialPeek.logging) {
+			for(String keyword: keywords)
+				this.logger.info("searching twitter with keyword: " + keyword);
 		}
 		
-		if(matchingData.size() > 0) {
-			return matchingData.get(this.random.nextInt(matchingData.size()-1));
-		
-		} else {
-			
-			throw new ParseException("keyword was not found in peek");
+		if(SocialPeek.logging) {
+			for(String keyword: keywords)
+				this.logger.info("searching twitter with keyword: " + keyword);
 		}
+		
+		List<Status> resultArray = new ArrayList<Status>();
+		
+		for(String keyword : keywords) {
+			List<Status> searchResults = this.twitter.searchTwitter(keyword);
+			resultArray.addAll(searchResults);
+		}
+			
+		if(SocialPeek.logging) {
+			this.logger.info("search results : " + resultArray.size());
+		}
+		
+		/* shuffle it up for some randomness */
+		Collections.shuffle(resultArray);
+		
+		Data userItem = this.compileTwitterData(resultArray.get(this.random.nextInt(resultArray.size()-1)));
+		return userItem;
+		
 		
 	}
 

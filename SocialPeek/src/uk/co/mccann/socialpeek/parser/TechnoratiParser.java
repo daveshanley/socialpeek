@@ -12,7 +12,6 @@ import org.apache.commons.httpclient.HttpURL;
 
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.model.PeekData;
 import uk.co.mccann.socialpeek.service.TechnoratiService;
 import yarfraw.core.datamodel.ChannelFeed;
@@ -33,7 +32,7 @@ import yarfraw.io.FeedWriter;
 * for license details. This code comes with no warranty or support.
 * @author Dave Shanley <david.shanley@europe.mccann.com>
 */
-public class TechnoratiParser extends AbstractParser implements Parser {
+public class TechnoratiParser extends AbstractParser {
 	
 	private SimpleDateFormat technoratiDateFormat;
 	private FeedReader reader;

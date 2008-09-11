@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.apache.xerces.parsers.DOMParser;
@@ -17,7 +16,6 @@ import org.w3c.dom.NodeList;
 import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.model.LastFMRecentTrack;
 import uk.co.mccann.socialpeek.model.LastFMTrack;
 import uk.co.mccann.socialpeek.model.LastFMUser;
@@ -38,7 +36,7 @@ import uk.co.mccann.socialpeek.service.LastFMService;
 *
 * @author Dave Shanley <david.shanley@europe.mccann.com>
 */
-public class LastFMParser extends AbstractParser implements Parser {
+public class LastFMParser extends AbstractParser {
 	
 	private SimpleDateFormat lastfmDateFormat;
 	
@@ -749,9 +747,8 @@ public class LastFMParser extends AbstractParser implements Parser {
 	}
 
 	public void setUpParser() {
-		
+		super.setUpParser();
 		this.logger = Logger.getLogger(LastFMParser.class);
-		this.random = new Random();
 		this.lastfmDateFormat = new SimpleDateFormat("dd MMM yyyy',' kk:mm");
 	
 	}

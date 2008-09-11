@@ -25,7 +25,6 @@ import org.xml.sax.InputSource;
 
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.model.PeekData;
 import uk.co.mccann.socialpeek.service.WeFeelFineService;
 
@@ -42,7 +41,7 @@ import uk.co.mccann.socialpeek.service.WeFeelFineService;
  *
  * @author Dave Shanley <david.shanley@europe.mccann.com>
  */
-public class WeFeelFineParser extends AbstractParser implements Parser {
+public class WeFeelFineParser extends AbstractParser {
 
 	private String apiURL = WeFeelFineService.API_URL + "ShowFeelings?";
 	private String returnFields = "display=xml&returnfields=feeling,gender,sentence,imageid,posturl,posttime,postdate,country,state,city,born";

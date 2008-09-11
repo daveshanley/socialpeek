@@ -40,7 +40,6 @@ public class TwitterTests {
 		
 		
 	}
-	*/
 	@Test public void userPeek() {
 		
 		SocialService service = new TwitterService();
@@ -58,6 +57,34 @@ public class TwitterTests {
 		try {
 		
 			System.out.println(peekFactory.getPeeker(TwitterService.class).getRandomPeek(5));
+		
+		} catch (SocialPeekException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+	}
+	*/
+	
+	@Test public void search() {
+		
+		SocialService service = new TwitterService();
+		service.setUsername("");
+		service.setPassword("");
+		SocialPeek.logging = true;
+		
+		SocialPeekConfiguration config = new SocialPeekConfiguration();
+		config.setFeedType(SocialPeek.RETURN_RSS);
+		config.registerService(service);
+		
+		SocialPeek socialPeek = new SocialPeek(config);
+		
+		PeekFactory peekFactory = socialPeek.getPeekingFactory();
+		
+		
+		try {
+		
+			System.out.println(peekFactory.getPeeker(TwitterService.class).getRandomPeekUsingTag("puppy"));
 		
 		} catch (SocialPeekException e) {
 			e.printStackTrace();

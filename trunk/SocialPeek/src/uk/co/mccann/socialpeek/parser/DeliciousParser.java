@@ -5,14 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
+
 
 import org.apache.commons.httpclient.HttpURL;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.model.PeekData;
 import uk.co.mccann.socialpeek.model.SocialService;
 import uk.co.mccann.socialpeek.service.DeliciousService;
@@ -35,7 +33,7 @@ import yarfraw.io.FeedWriter;
 *
 * @author Dave Shanley <david.shanley@europe.mccann.com>
 */
-public class DeliciousParser extends AbstractParser implements Parser {
+public class DeliciousParser extends AbstractParser  {
 	
 	private FeedReader reader;
 	private ChannelFeed channel;
@@ -639,7 +637,7 @@ public class DeliciousParser extends AbstractParser implements Parser {
 	}
 
 	public void setUpParser() {
-		this.random = new Random();
+		
 		this.deliciousDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss'Z'");
 	}
 

@@ -120,8 +120,10 @@ public class DeliciousTest {
 	@Test public void userPeek() {
 		
 		SocialService twitterService = new TwitterService();
-		twitterService.setUsername("shanmantest");
-		twitterService.setPassword("fofcowb");
+		twitterService.setUsername("");
+		twitterService.setPassword("");
+		
+		SocialPeek.logging  = true;
 		
 		SocialService deliciousService = new DeliciousService();
 		deliciousService.setUsername("test");
@@ -139,7 +141,7 @@ public class DeliciousTest {
 		
 		try {
 		
-			System.out.println(peekFactory.getPeeker(DeliciousService.class).getUserPeek("theshanman"));
+			System.out.println(peekFactory.getPeeker(DeliciousService.class).getRandomPeek());
 		
 		} catch (SocialPeekException e) {
 			e.printStackTrace();

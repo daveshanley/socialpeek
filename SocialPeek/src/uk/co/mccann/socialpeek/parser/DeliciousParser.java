@@ -9,11 +9,15 @@ import java.util.List;
 
 
 import org.apache.commons.httpclient.HttpURL;
+import org.apache.log4j.Logger;
+
+import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.model.PeekData;
 import uk.co.mccann.socialpeek.model.SocialService;
 import uk.co.mccann.socialpeek.service.DeliciousService;
+import uk.co.mccann.socialpeek.service.LastFMService;
 import yarfraw.core.datamodel.ChannelFeed;
 import yarfraw.core.datamodel.ItemEntry;
 import yarfraw.core.datamodel.YarfrawException;
@@ -231,7 +235,7 @@ public class DeliciousParser extends AbstractParser  {
 			return this.compileDeliciousData(rssItem);
 			
 		} catch (Exception exp) {
-			
+			exp.printStackTrace();
 			throw new ParseException("unable to parse del.icio.us RSS data: " + exp.getMessage());
 			
 		}
@@ -582,6 +586,7 @@ public class DeliciousParser extends AbstractParser  {
 			return this.compileDeliciousData(rssItem);
 			
 		} catch (Exception exp) {
+			exp.printStackTrace();
 			throw new ParseException("unable to parse del.icio.us RSS data: " + exp.getMessage());
 			
 		}
@@ -596,6 +601,11 @@ public class DeliciousParser extends AbstractParser  {
 
 	public Data getSingleUserItem(String userId) throws ParseException {
 		try {
+			
+			if(SocialPeek.logging) {
+				this.logger.info("[loading RSS data : " + DeliciousService.DELICIOUS_URL + "rss/" + userId);
+			}
+			
 			
 			/* check cache file */
 			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "delicious.rss.user."+ userId.toLowerCase() + ".xml");
@@ -623,13 +633,14 @@ public class DeliciousParser extends AbstractParser  {
 			/* shuffle up the items */
 			Collections.shuffle(items);
 			
+			
 			/* get a random item back from the shuffled list */
 			ItemEntry rssItem = items.get(this.random.nextInt(items.size()-1));
 			
 			return this.compileDeliciousData(rssItem);
 			
 		} catch (Exception exp) {
-			
+			exp.printStackTrace();
 			throw new ParseException("unable to parse del.icio.us RSS data: " + exp.getMessage());
 			
 		}
@@ -638,6 +649,8 @@ public class DeliciousParser extends AbstractParser  {
 
 	public void setUpParser() {
 		
+		super.setUpParser();
+		this.logger = Logger.getLogger(DeliciousParser.class);
 		this.deliciousDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss'Z'");
 	}
 

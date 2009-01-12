@@ -79,7 +79,7 @@ public class TwitterParser extends AbstractParser  {
 			/* convert to UTF-8*/
 		    String newBody = new String(utf8Bytes, "UTF-8");
 		        
-		    twitterUser.setBody("said '<strong>" + status.getUser().getScreenName() + "</strong>'");
+		    twitterUser.setBody("said '<a href=\"" + twitterUser.getLink() + "\"><strong>" + status.getUser().getScreenName() + "</strong></a>'");
 		    twitterUser.setHeadline(newBody);
 		    
 		    /* check to see if there is a photo attached to the user */

@@ -6,12 +6,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
 import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.SocialPeekConfiguration;
 import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
+import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.interfaces.PeekFactory;
 import uk.co.mccann.socialpeek.model.SocialService;
 import uk.co.mccann.socialpeek.service.DeliciousService;
@@ -85,8 +88,8 @@ public class FullTests {
 		
 		
 		SocialService tservice = new TwitterService();
-		tservice.setUsername("");
-		tservice.setPassword("");
+		tservice.setUsername("shanmantest");
+		tservice.setPassword("fofcowb");
 		
 		SocialService dservice = new DeliciousService();
 		SocialService nservice = new TechnoratiService();
@@ -96,15 +99,15 @@ public class FullTests {
 		
 		SocialPeekConfiguration config = new SocialPeekConfiguration();
 		config.setFeedType(SocialPeek.RETURN_RSS);
-		config.registerService(service);
+		//config.registerService(service);
 		config.registerService(tservice);
-		config.registerService(dservice);
-		config.registerService(nservice);
-		config.registerService(gservice);
+		//config.registerService(dservice);
+		//config.registerService(nservice);
+		//config.registerService(gservice);
 		
 		
 		
-		
+	
 		/* set up our main engine */
 		SocialPeek socialPeek = new SocialPeek(config);
 		PeekFactory peekFactory = socialPeek.getPeekingFactory();
@@ -114,7 +117,11 @@ public class FullTests {
 		try {
 			
 			/* completely random peek */
-			String data = peekFactory.getPeeker().getRandomPeek();
+			
+			String data = peekFactory.getPeeker().getMultiplePeekUsingTags(new String[] { "rotten"}, 5);
+			List<Data> dataList = peekFactory.getPeeker().getRawMultiplePeekUsingTags(new String[]{"disgust"}, 5);
+			
+			
 			
 			File file = new File("/usr/local/apache2/htdocs/socialpeek/feed.rss");
 			file.delete();
@@ -123,7 +130,7 @@ public class FullTests {
 			
 			osw.write(data);
 			osw.close();
-			System.out.println(data);
+			System.out.println(dataList);
 			
 		} catch (SocialPeekException e) {
 		

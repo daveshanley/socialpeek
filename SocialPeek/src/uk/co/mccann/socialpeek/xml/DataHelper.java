@@ -82,5 +82,9 @@ public class DataHelper {
 	public void setDateFormat(String dateFormat){
 		this.dateFormat =  new SimpleDateFormat(dateFormat);
 	}
+	
+	public void setDateFormat(SimpleDateFormat dateFormat){
+		this.dateFormat = dateFormat;
+	}
 
 }

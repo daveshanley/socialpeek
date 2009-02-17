@@ -46,8 +46,6 @@ public class RSSReader {
 	    		
 	    RssParser parser = RssParserFactory.createDefault();
 	    Rss rss = parser.parse(url);
-
-	    System.out.println(rss.getChannel().toString());
 	 
 	    return rss.getChannel();
 	}

@@ -1,7 +1,7 @@
 package uk.co.mccann.socialpeek.service;
 
 import uk.co.mccann.socialpeek.interfaces.Parser;
-import uk.co.mccann.socialpeek.parser.BloggerParser;
+import uk.co.mccann.socialpeek.parser.FlickrParser;
 
 /**
  * <b>DeliciousService</b><br/>
@@ -16,15 +16,15 @@ import uk.co.mccann.socialpeek.parser.BloggerParser;
  *
  * @author Lewis Taylor <lewis.taylory@europe.mccann.com>
  */
-public class BloggerService extends AbstractSocialService {
+public class FlickrService extends AbstractSocialService {
 
 	
 	/**
      *  Set up service and configure parser.
      */
-	public BloggerService() {
+	public FlickrService() {
 		
-		this(new BloggerParser());
+		this(new FlickrParser());
 		this.parser.setSocialService(this);
 		this.parser.setUpParser();
 		
@@ -33,10 +33,11 @@ public class BloggerService extends AbstractSocialService {
 	
 	}
 	
-	public BloggerService(Parser parser) {
+	public FlickrService(Parser parser) {
 		super(parser);
 	}
 	
 	/* override anything that needs it */
 	
 }
+

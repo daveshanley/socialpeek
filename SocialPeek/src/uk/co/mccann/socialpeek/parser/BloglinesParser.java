@@ -136,7 +136,7 @@ public class BloglinesParser extends AbstractParser {
 
 					//get the employee element
 					Element result =  (Element) results.item(i);
-
+					
 					// Extract fields from XML
 					String headline, body, link, user, date;
 					
@@ -309,7 +309,7 @@ public class BloglinesParser extends AbstractParser {
 		// Fri, 20 Oct 2006 20:46:00 GMT
 		this.dateFormat = new SimpleDateFormat("EEE, d MMM yyyy H:mm:ss z");
 		
-		this.dataHelp.setDateFormat(dateFormat);
+		dataHelp.setDateFormat(dateFormat);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import uk.co.mccann.socialpeek.exceptions.KeywordLimitException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.rss.RSSHelper;
@@ -27,13 +28,16 @@ import com.sun.cnpi.rss.elements.Item;
  *
  * @author Lewis Taylor <lewis.taylor@europe.mccann.com>
  */
-public class LiveParser extends AbstractParser {
+public class FlickrParser extends AbstractParser {
 
-	// Other Parameters
-	// scope=news		provides only news feedback
-	private final String BASE_URL = "http://search.live.com/results.aspx?format=rss&q=";
+	// Query URL Strings
+	private final String BASE_URL = "http://api.flickr.com/services/feeds/photos_public.gne?format=rss2";
+	private final String KEYWORD_SUFFIX = "&tags=";
+	private final String USER_SUFFIX = "&id=";
+	private final String LIMIT_SUFFIX = null;
 
-	private final String dateFormat = null;
+	// Date format - Dates parsed to calendar objects
+	private final String dateFormat = "EEE, d MMM yyyy H:mm:ss z";
 
 
 	public void setUpParser(){
@@ -68,29 +72,47 @@ public class LiveParser extends AbstractParser {
 		if (items==null)
 			return new ArrayList<Data>();
 
-		return rssHelper.convertToData(items);
+		return rssHelper.convertToFlickrData(items);
 		
 	}
 
 
 	public Data getSingleItem() throws ParseException {
 
-		/* not implemented */
-		return null;
+		String query = BASE_URL;
+
+		List<Data> extractedData = getData(query);
+		
+		if (extractedData==null || extractedData.size()==0)
+			return null;
+		
+		// Shuffle Result
+		Collections.shuffle(extractedData);
+		return extractedData.get(0);
 
 	}
 
 
 	public List<Data> getMultipleItems(int limit) throws ParseException {
 
-		/* not implemented */
-		return null;
+		String query = BASE_URL;
+		
+		List<Data> extractedData = this.getData(query);
+
+		/* shuffle it up for some randomness */
+		if (extractedData==null || extractedData.size()==0)
+			return null;
+		
+		if (extractedData.size() > limit)
+			return extractedData.subList(0,limit);
+		else
+			return extractedData;
 	}
 
 
 	public Data getKeywordItem(String keyword) throws ParseException {
 
-		String query = BASE_URL;
+		String query = BASE_URL + KEYWORD_SUFFIX;
 		query += keyword;
 
 		List<Data> extractedData = getData(query);
@@ -110,16 +132,15 @@ public class LiveParser extends AbstractParser {
 		String query = keywords[0];
 
 		for (int i = 1; i < keywords.length; i++)
-			query += "+" + keywords[i];
+			query += "," + keywords[i];
 
 		return getKeywordItem(query);
 	}
 
 	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {
 
-		String query = BASE_URL;
+		String query = BASE_URL + KEYWORD_SUFFIX;
 		query += keyword;
-		query += "&count=" + limit;
 		
 		List<Data> extractedData = this.getData(query);
 
@@ -140,7 +161,7 @@ public class LiveParser extends AbstractParser {
 		String query = keywords[0];
 
 		for (int i = 1; i < keywords.length; i++)
-			query += "+" + keywords[i];
+			query += "," + keywords[i];
 
 		return getMultipleKeywordItems(query, limit);
 
@@ -149,28 +170,44 @@ public class LiveParser extends AbstractParser {
 
 	public Data getLatestSingleUserItem(int userId) throws ParseException {
 
-		/* not implemented */
-		return null;
+		return getLatestSingleUserItem(String.valueOf(userId));
 	}
 
 
 	public Data getLatestSingleUserItem(String userId) throws ParseException {
 
-		/* not implemented */
-		return null;
+		String query = BASE_URL + USER_SUFFIX;
+		query += userId;
+
+		List<Data> extractedData = getData(query);
+		
+		if (extractedData==null || extractedData.size()==0)
+			return null;
+		
+		return extractedData.get(0);
 	}
 
 
 	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException {
 
-		/* not implemented */
-		return null;
+		return getLatestMultipleUserItems(String.valueOf(userId), limit);
 	}
 
 	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException {
 
-		/* not implemented */
-		return null;
+		String query = BASE_URL + USER_SUFFIX;
+		query += userId;
+		
+		List<Data> extractedData = this.getData(query);
+
+		/* shuffle it up for some randomness */
+		if (extractedData==null || extractedData.size()==0)
+			return null;
+		
+		if (extractedData.size() > limit)
+			return extractedData.subList(0,limit);
+		else
+			return extractedData;
 	}
 
 	public Data getSingleUserItem(int userId) throws ParseException {
@@ -180,23 +217,47 @@ public class LiveParser extends AbstractParser {
 
 	public Data getSingleUserItem(String userId) throws ParseException {
 
-		/* not implemented */
-		return null;
+		String query = BASE_URL + USER_SUFFIX;
+		query += userId;
+
+		List<Data> extractedData = getData(query);
+		
+		if (extractedData==null || extractedData.size()==0)
+			return null;
+		
+		Collections.shuffle(extractedData);
+		return extractedData.get(0);
 	}
 
 	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
 
-		/* not implemented */
-		return null;
-
+		return getMultipleUserItems(String.valueOf(userId), limit);
 	}
 
 
 	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
 
-		/* not implemented */
-		return null;
+		String query = BASE_URL + USER_SUFFIX;
+		query += userId;
+		
+		List<Data> extractedData = this.getData(query);
 
+		/* shuffle it up for some randomness */
+		if (extractedData==null || extractedData.size()==0)
+			return null;
+		
+		Collections.shuffle(extractedData);
+		
+		if (extractedData.size() > limit)
+			return extractedData.subList(0,limit);
+		else
+			return extractedData;
+
+	}
+	
+	public void checkLimit(int limit) throws KeywordLimitException{
+		if (limit>20)
+			throw new KeywordLimitException();
 	}
 
 }

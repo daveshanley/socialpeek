@@ -6,18 +6,19 @@ import org.junit.Test;
 
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.parser.LiveParser;
+import uk.co.mccann.socialpeek.model.FlickrData;
+import uk.co.mccann.socialpeek.parser.FlickrParser;
 
-public class LiveTest {
+public class FlickrTest {
 
 	@Test public void search() {
 		
-		LiveParser bp = new LiveParser();
+		FlickrParser bp = new FlickrParser();
 		
-		String[] john = {"john"};
+		String[] john = {"john","cock","arse"};
 		
 		try {
-			Data t = bp.getKeywordItem(john);
+			FlickrData t =  (FlickrData) bp.getKeywordItem(john);
 			
 			
 				
@@ -25,6 +26,7 @@ public class LiveTest {
 				System.out.println("Description: " + t.getBody());
 				System.out.println("Link: " + t.getLink());
 				System.out.println("User: " + t.getUser());
+				System.out.println("Photo: " + t.getPhoto());
 				System.out.println("Date: " + t.getDate().get(Calendar.DATE));
 				System.out.println();
 				System.out.println();

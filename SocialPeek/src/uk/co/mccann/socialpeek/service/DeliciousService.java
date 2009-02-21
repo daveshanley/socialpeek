@@ -17,8 +17,6 @@ import uk.co.mccann.socialpeek.parser.DeliciousParser;
  * @author Dave Shanley <david.shanley@europe.mccann.com>
  */
 public class DeliciousService extends AbstractSocialService {
-
-public static final String DELICIOUS_URL ="http://del.icio.us/";
 	
 	/**
      *  Set up service and configure parser.

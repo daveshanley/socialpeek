@@ -10,79 +10,64 @@ import uk.co.mccann.socialpeek.model.PeekData;
 
 // Helper Class to allow conversion from Strings to Data Formats
 
-public class DataHelper {
+public class XMLDataHelper {
 
 	private SimpleDateFormat dateFormat;
 
-	public DataHelper(){
+	public XMLDataHelper(){
 		dateFormat = null;
 	}
 
 	public void setHeadline(Data data, String headline) throws ParseException{
 
 		if (headline == null || data == null)
-			return;
-
-		data.setHeadline(headline);
+			data.setHeadline("not available");
+		else
+			data.setHeadline(headline);
 	}
-	
+
 	public void setBody(Data data, String body) throws ParseException{
 
 		if (body == null || data == null)
-			return;
-		
-	
-		data.setBody(body);
+			data.setHeadline("");
+		else
+			data.setBody(body);
 	}
-	
+
 	public void setLink(Data data, String link) throws ParseException{
 
 		if (link == null || data == null)
-			return;
-	
-
-		data.setLink(link);
+			data.setLink("http://socialpeek.com");
+		else
+			data.setLink(link);
 	}
-	
+
 	public void setUser(Data data, String user) throws ParseException{
 
 		if (user == null || data == null)
-			return;
-	
+			data.setLink("not available");
+		else
 		data.setUser(user);
 	}
-	
-	
+
+
 	public void setDate(Data data, String date) throws ParseException{
 
 		if (date == null || data == null)
 			return;
-		
+
 		Calendar cal =  Calendar.getInstance();
-		
+
 		if (dateFormat!=null)
 			cal.setTime(dateFormat.parse(date));
 
 		data.setDate(cal);
 	}
 
-	public static void main(String[] args){
-
-		DataHelper xmlc = new DataHelper();
-		xmlc.setDateFormat("EEE, d MMM yyyy H:mm:ss z");
-		try {
-			xmlc.setDate(new PeekData(), "MON, 11 Feb 2009 20:46:02 GMT");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 	public void setDateFormat(String dateFormat){
 		this.dateFormat =  new SimpleDateFormat(dateFormat);
 	}
-	
+
 	public void setDateFormat(SimpleDateFormat dateFormat){
 		this.dateFormat = dateFormat;
 	}

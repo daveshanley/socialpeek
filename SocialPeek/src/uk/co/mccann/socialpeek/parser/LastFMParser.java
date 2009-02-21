@@ -548,7 +548,7 @@ public class LastFMParser extends AbstractParser {
 				Calendar trackCal = Calendar.getInstance();
 				data.setDate(trackCal);
 				data.setLink(track.getUrl());
-				data.setUserProfilePhoto(track.getThumbnail());
+				data.setThumbnail(track.getThumbnail());
 				dataArray.add(data);
 			
 		}
@@ -644,7 +644,7 @@ public class LastFMParser extends AbstractParser {
 				Calendar trackCal = Calendar.getInstance();
 				data.setDate(trackCal);
 				data.setLink(track.getUrl());
-				data.setUserProfilePhoto(track.getThumbnail());
+				data.setThumbnail(track.getThumbnail());
 				dataArray.add(data);
 			
 		}
@@ -675,7 +675,7 @@ public class LastFMParser extends AbstractParser {
 				Calendar trackCal = Calendar.getInstance();
 				data.setDate(trackCal);
 				data.setLink(track.getUrl());
-				data.setUserProfilePhoto(track.getThumbnail());
+				data.setThumbnail(track.getThumbnail());
 				dataArray.add(data);
 			
 			}
@@ -725,7 +725,7 @@ public class LastFMParser extends AbstractParser {
 		data.setDate(trackCal);
 		data.setLink(recentTrack.getUrl());
 		data.setUser(fan.getUsername());
-		data.setUserProfilePhoto(fan.getImage());
+		data.setThumbnail(fan.getImage());
 		return data;
 	}
 		

@@ -5,21 +5,22 @@ import java.util.List;
 
 import org.junit.Test;
 
+import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.parser.BloglinesParser;
+import uk.co.mccann.socialpeek.parser.DiggParser;
 
-public class BloglinesTest {
+public class DiggTest {
 
 	@Test public void search() {
 		
-		BloglinesParser bp = new BloglinesParser();
+		DiggParser bp = new DiggParser();
 		
-		String[] john = {"sexy"};
+		String[] john = {"smells"};
 		
 		try {
-			List<Data> d =   bp.getMultipleKeywordItems(john,10);
-			
+			List<Data> d = bp.getLatestMultipleUserItems("HabsChick", 12);
+		
 			for(Data t : d){
 				
 				System.out.println("Headline: " + t.getHeadline());
@@ -34,6 +35,9 @@ public class BloglinesTest {
 			}
 				
 		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoResultsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -24,7 +24,7 @@ public class RSSTest extends TestCase{
 			data.setHeadline("mincer");
 			data.setLink("http://www.google.com");
 			data.setUser("some guy");
-			data.setUserProfilePhoto("http://www.yahoo.com/");
+			data.setThumbnail("http://www.yahoo.com/");
 			Generator generator = new RSSGenerator();	
 			System.out.println(generator.generate(data));
 		} catch (SocialPeekException e) {

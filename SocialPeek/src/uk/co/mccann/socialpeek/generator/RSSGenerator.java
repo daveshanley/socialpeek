@@ -211,7 +211,7 @@ public class RSSGenerator extends AbstractGenerator {
 			
 			/* summary */
 			StringWriter writer = new StringWriter();
-			if(data.getUserProfilePhoto()!=null) writer.append("<img align=\"right\" src=\"" + data.getUserProfilePhoto() + "\" alt=\"thumbnail\" /><br/>");
+			if(data.getThumbnail()!=null) writer.append("<img align=\"right\" src=\"" + data.getThumbnail() + "\" alt=\"thumbnail\" /><br/>");
 			writer.append("<p>" + data.getBody() + "</p>");
 			if(data.getUser()!=null) writer.append("<p>Author: <strong>" + data.getUser() +"</strong><br/>");
 			if(data.getLocation() != null && data.getLocation().length() > 0) {
@@ -251,9 +251,9 @@ public class RSSGenerator extends AbstractGenerator {
 			post.appendChild(author);
 		}
 		
-		if(data.getUserProfilePhoto()!=null) {
+		if(data.getThumbnail()!=null) {
 			thumbnail = this.document.createElement("media:thumbnail");
-			thumbnail.setAttribute("url", data.getUserProfilePhoto());
+			thumbnail.setAttribute("url", data.getThumbnail());
 			thumbnail.setAttribute("width", "90");
 			thumbnail.setAttribute("height", "120");
 			post.appendChild(thumbnail);

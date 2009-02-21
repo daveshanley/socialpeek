@@ -15,7 +15,7 @@ import com.sun.cnpi.rss.elements.Channel;
 import com.sun.cnpi.rss.elements.Item;
 
 /**
- * <b>WeFeelFineParser</b><br/>
+ * <b>LiveParser</b><br/>
  * Use the WWF API to read and parse feelings and thoughts from around the web
  *
  * <h4>Copyright and License</h4>

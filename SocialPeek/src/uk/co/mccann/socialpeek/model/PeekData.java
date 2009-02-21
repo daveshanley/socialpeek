@@ -20,8 +20,21 @@ import uk.co.mccann.socialpeek.interfaces.Data;
  */
 public class PeekData implements Data {
 	
-	private String headline,body,link,user,userProfilePhoto,location;
+	private String headline,body,link,thumbnail,user,location;
 	private Calendar date;
+	
+	
+	public PeekData(){
+		
+//		headline = "not available";
+//		body = "";
+//		link = "";
+//		thumbnail = "";
+//		user = "";
+//		location = "";
+//		date = Calendar.getInstance();
+		
+	}
 	
 	/**
      *  @see uk.co.mccann.socialpeek.interfaces.Data#getBody()
@@ -59,10 +72,10 @@ public class PeekData implements Data {
 	}
 	
 	/**
-     *  @see uk.co.mccann.socialpeek.interfaces.Data#getUserProfilePhoto()
+     *  @see uk.co.mccann.socialpeek.interfaces.Data#getThumbnail()
     */
-	public String getUserProfilePhoto() {
-		return this.userProfilePhoto;
+	public String getThumbnail() {
+		return this.thumbnail;
 	}
 	
 	/**
@@ -110,10 +123,10 @@ public class PeekData implements Data {
 	}
 	
 	/**
-     *  @see uk.co.mccann.socialpeek.interfaces.Data#setUserProfilePhoto(String photo)
+     *  @see uk.co.mccann.socialpeek.interfaces.Data#setThumbnail(String photo)
     */
-	public void setUserProfilePhoto(String photo) {
-		this.userProfilePhoto = photo;
+	public void setThumbnail(String photo) {
+		this.thumbnail = photo;
 
 	}
 	
@@ -132,7 +145,7 @@ public class PeekData implements Data {
 		writer.append("\n_link : " + this.getLink());
 		writer.append("\n_user : " + this.getUser());
 		writer.append("\n_date : " + this.getDate().getTime());
-		writer.append("\n_userPhoto : " + this.getUserProfilePhoto());
+		writer.append("\n_Thumbnail : " + this.getThumbnail());
 		writer.append("\n_body : " + this.getBody());
 		writer.append("\n_location : " + this.getLocation());
 		

@@ -7,23 +7,23 @@ import org.junit.Test;
 
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.parser.BloglinesParser;
+import uk.co.mccann.socialpeek.parser.TruveoParser;
 
-public class BloglinesTest {
+public class TruveoTest {
 
-	@Test public void search() {
+@Test public void search() {
 		
-		BloglinesParser bp = new BloglinesParser();
+		TruveoParser bp = new TruveoParser();
 		
-		String[] john = {"sexy"};
+		String[] john = {"robert","chocolate","cake"};
 		
 		try {
-			List<Data> d =   bp.getMultipleKeywordItems(john,10);
+			List<Data> d =   bp.getMultipleKeywordItems(john,6);
 			
 			for(Data t : d){
 				
 				System.out.println("Headline: " + t.getHeadline());
-				System.out.println("Description: " + t.getBody());
+				//System.out.println("Description: " + t.getBody());
 				System.out.println("Link: " + t.getLink());
 				System.out.println("User: " + t.getUser());
 				System.out.println("Date: " + t.getDate().get(Calendar.DATE));
@@ -31,6 +31,7 @@ public class BloglinesTest {
 				System.out.println("Thumbnail URL: " + t.getThumbnail());
 				System.out.println();
 				System.out.println();
+				
 			}
 				
 		} catch (ParseException e) {

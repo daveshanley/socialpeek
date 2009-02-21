@@ -67,8 +67,8 @@ public class JSONGenerator extends AbstractGenerator {
 			dataCollection.put("date",this.sdf.format(dataIn.getDate().getTime()));
 			
 			/* check for a photo, if so, add it as an attribute*/
-			if(dataIn.getUserProfilePhoto()!=null) {
-				dataCollection.put("user_photo",dataIn.getUserProfilePhoto());
+			if(dataIn.getThumbnail()!=null) {
+				dataCollection.put("user_photo",dataIn.getThumbnail());
 			}
 			/* check for a user */
 			if(dataIn.getUser()!=null) {
@@ -134,8 +134,8 @@ public class JSONGenerator extends AbstractGenerator {
 					dataCollection.put("date",this.sdf.format(data.getDate().getTime()));
 				}
 				/* check for a photo, if so, add it as an attribute*/
-				if(data.getUserProfilePhoto()!=null) {
-					dataCollection.put("user_photo",data.getUserProfilePhoto());
+				if(data.getThumbnail()!=null) {
+					dataCollection.put("user_photo",data.getThumbnail());
 				}
 			
 				/* add to our collection */

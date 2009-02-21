@@ -1,7 +1,7 @@
 package uk.co.mccann.socialpeek.service;
 
 import uk.co.mccann.socialpeek.interfaces.Parser;
-import uk.co.mccann.socialpeek.parser.LiveParser;
+import uk.co.mccann.socialpeek.parser.YouTubeParser;
 
 /**
  * <b>DeliciousService</b><br/>
@@ -16,15 +16,15 @@ import uk.co.mccann.socialpeek.parser.LiveParser;
  *
  * @author Lewis Taylor <lewis.taylory@europe.mccann.com>
  */
-public class LiveService extends AbstractSocialService {
+public class YouTubeService extends AbstractSocialService {
 
 	
 	/**
      *  Set up service and configure parser.
      */
-	public LiveService() {
+	public YouTubeService() {
 		
-		this(new LiveParser());
+		this(new YouTubeParser());
 		this.parser.setSocialService(this);
 		this.parser.setUpParser();
 		
@@ -33,7 +33,7 @@ public class LiveService extends AbstractSocialService {
 	
 	}
 	
-	public LiveService(Parser parser) {
+	public YouTubeService(Parser parser) {
 		super(parser);
 	}
 	

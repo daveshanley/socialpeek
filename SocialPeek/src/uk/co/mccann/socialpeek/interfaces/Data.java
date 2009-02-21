@@ -43,9 +43,9 @@ public interface Data {
 	public void setUser(String user);
 	
 	/**
-     *  Set the http URL of a photo of the user who posted the link.
+     *  Set URL of image related to data object - user photo, flickr image etc..
      */
-	public void setUserProfilePhoto(String photo);
+	public void setThumbnail(String photo);
 	
 	/**
      *  Set the location of the user / place of the post
@@ -80,7 +80,7 @@ public interface Data {
 	/**
      * Get the http URL of a photo of the user who posted the link.
      */
-	public String getUserProfilePhoto();
+	public String getThumbnail();
 	
 	/**
      *  Get the location of the user / place of the post

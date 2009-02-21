@@ -7,18 +7,19 @@ import org.junit.Test;
 
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.parser.BloglinesParser;
+import uk.co.mccann.socialpeek.parser.BlinkxParser;
+import uk.co.mccann.socialpeek.parser.WordPressParser;
 
-public class BloglinesTest {
+public class BlinkxTest {
 
 	@Test public void search() {
 		
-		BloglinesParser bp = new BloglinesParser();
+		BlinkxParser bp = new BlinkxParser();
 		
-		String[] john = {"sexy"};
+		String[] john = {"lewis","super"};
 		
 		try {
-			List<Data> d =   bp.getMultipleKeywordItems(john,10);
+			List<Data> d =   bp.getMultipleKeywordItems(john,6);
 			
 			for(Data t : d){
 				
@@ -31,6 +32,7 @@ public class BloglinesTest {
 				System.out.println("Thumbnail URL: " + t.getThumbnail());
 				System.out.println();
 				System.out.println();
+				
 			}
 				
 		} catch (ParseException e) {

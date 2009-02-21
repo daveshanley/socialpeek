@@ -2,6 +2,7 @@ package uk.co.mccann.socialpeek.interfaces;
 
 import java.util.List;
 
+import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.model.SocialService;
 
@@ -41,7 +42,7 @@ public interface Parser {
      * @return single Data object 
      * @throws ParseException
    	 */
-	public Data getSingleItem() throws ParseException;
+	public Data getSingleItem() throws ParseException, NoResultsException;
 	
 	/**
      * Get a multiple PeekData Objects
@@ -50,7 +51,7 @@ public interface Parser {
      * @throws ParseException
      * @param limit integer limit of the number of results you want back.
    	 */
-	public List<Data> getMultipleItems(int limit) throws ParseException;
+	public List<Data> getMultipleItems(int limit) throws ParseException, NoResultsException;
 	
 	/**
      * Get a single PeekData object from a service user
@@ -61,7 +62,7 @@ public interface Parser {
      * @return Data object 
      * @throws ParseException
    	 */
-	public Data getSingleUserItem(int userId) throws ParseException;
+	public Data getSingleUserItem(int userId)  throws ParseException, NoResultsException;
 	
 	/**
      * Get a single PeekData object from a service user
@@ -72,7 +73,7 @@ public interface Parser {
      * @return Data object 
      * @throws ParseException
    	 */
-	public Data getSingleUserItem(String userId) throws ParseException;
+	public Data getSingleUserItem(String userId)  throws ParseException, NoResultsException;
 	
 	/**
      * Get latest single PeekData object from a service user
@@ -83,7 +84,7 @@ public interface Parser {
      * @return Data object 
      * @throws ParseException
    	 */
-	public Data getLatestSingleUserItem(int userId) throws ParseException;
+	public Data getLatestSingleUserItem(int userId)  throws ParseException, NoResultsException;
 	
 	/**
      * Get latest single PeekData object from a service user
@@ -94,7 +95,7 @@ public interface Parser {
      * @return Data object 
      * @throws ParseException
    	 */
-	public Data getLatestSingleUserItem(String userId) throws ParseException;	
+	public Data getLatestSingleUserItem(String userId)  throws ParseException, NoResultsException;	
 	
 	/**
      * Get multiple PeekData objects from a service user
@@ -106,7 +107,7 @@ public interface Parser {
      * @return Single Data Object
      * @throws ParseException
    	 */
-	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException;
+	public List<Data> getMultipleUserItems(int userId, int limit)  throws ParseException, NoResultsException;
 	
 	/**
      * Get multiple PeekData objects from a service user
@@ -118,7 +119,7 @@ public interface Parser {
      * @return List of Data objects 
      * @throws ParseException
    	 */
-	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException;
+	public List<Data> getMultipleUserItems(String userId, int limit)  throws ParseException, NoResultsException;
 	
 	/**
      * Get latest multiple PeekData objects from a service user 
@@ -130,7 +131,7 @@ public interface Parser {
      * @return List of Data objects 
      * @throws ParseException
    	 */
-	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException;
+	public List<Data> getLatestMultipleUserItems(int userId, int limit)  throws ParseException, NoResultsException;
 	
 	/**
      * Get latest multiple PeekData objects from a service user
@@ -142,7 +143,7 @@ public interface Parser {
      * @return List of Data objects 
      * @throws ParseException
    	 */
-	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException;
+	public List<Data> getLatestMultipleUserItems(String userId, int limit)  throws ParseException, NoResultsException;
 	
 	/**
      * Get a single PeekData object from a service user depending on a tag or a keyword
@@ -153,7 +154,7 @@ public interface Parser {
      * @return Single Data Object
      * @throws ParseException
    	 */
-	public Data getKeywordItem(String keyword) throws ParseException;
+	public Data getKeywordItem(String keyword)  throws ParseException, NoResultsException;
 	
 	/**
      * Get a single PeekData object from a service user depending multiple tags or keywords
@@ -164,7 +165,7 @@ public interface Parser {
      * @return Single Data Object
      * @throws ParseException
    	 */
-	public Data getKeywordItem(String[] keywords) throws ParseException;
+	public Data getKeywordItem(String[] keywords)  throws ParseException, NoResultsException;
 	
 	/**
      * Get multiple PeekData object from a service filtered by a tag or a keyword
@@ -176,7 +177,7 @@ public interface Parser {
      * @return List of Data objects 
      * @throws ParseException
    	 */
-	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException;
+	public List<Data> getMultipleKeywordItems(String keyword, int limit)  throws ParseException, NoResultsException;
 	
 	/**
      * Get multiple PeekData object from a service filtered by multiple tags or keywords
@@ -188,6 +189,6 @@ public interface Parser {
      * @return List of Data objects 
      * @throws ParseException
    	 */
-	public List<Data> getMultipleKeywordItems(String[] keywords, int limit) throws ParseException;
+	public List<Data> getMultipleKeywordItems(String[] keywords, int limit)  throws ParseException, NoResultsException;
 		
 }

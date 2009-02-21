@@ -16,7 +16,7 @@ import com.sun.cnpi.rss.elements.Channel;
 import com.sun.cnpi.rss.elements.Item;
 
 /**
- * <b>WeFeelFineParser</b><br/>
+ * <b>WordPressParser</b><br/>
  * Use the WWF API to read and parse feelings and thoughts from around the web
  *
  * <h4>Copyright and License</h4>
@@ -26,14 +26,19 @@ import com.sun.cnpi.rss.elements.Item;
  * <a href="http://creativecommons.org/licenses/by-nc-sa/2.5/">http://creativecommons.org/licenses/by-nc-sa/2.5/</a>
  * for license details. This code comes with no warranty or support.
  *
+ *	NOTES:
+ *	MAX_RESULTS = 10
+ *
+ *
  * @author Lewis Taylor <lewis.taylor@europe.mccann.com>
  */
-public class FlickrParser extends AbstractParser {
+public class WordPressParser extends AbstractParser {
 
 	// Query URL Strings
-	private final String BASE_URL = "http://api.flickr.com/services/feeds/photos_public.gne?format=rss2";
-	private final String KEYWORD_SUFFIX = "&tags=";
-	private final String USER_SUFFIX = "&id=";
+	private final String BASE_URL = "http://en.search.wordpress.com/?f=feed";
+	private final String RECENT_URL = "http://en.blog.wordpress.com/feed/";
+	private final String KEYWORD_SUFFIX = "&q=";
+	private final String USER_SUFFIX = null;
 	private final String LIMIT_SUFFIX = null;
 
 	// Date format - Dates parsed to calendar objects
@@ -63,7 +68,7 @@ public class FlickrParser extends AbstractParser {
 		try {
 			channel = parser.parseFeed();
 		} catch (Exception e) {
-			throw new ParseException("Unable to parse Flickr RSS data:" + e.getStackTrace());
+			throw new ParseException("Unable to parse WordPress RSS data:" + e.getStackTrace());
 		}
 
 		/* get a list of RSS items and then shuffle them up for a random peek! */
@@ -72,14 +77,14 @@ public class FlickrParser extends AbstractParser {
 		if (items==null)
 			return new ArrayList<Data>();
 
-		return rssHelper.convertFlickrToData(items);
+		return rssHelper.convertToData(items);
 		
 	}
 
 
 	public Data getSingleItem() throws ParseException {
 
-		String query = BASE_URL;
+		String query = RECENT_URL;
 
 		List<Data> extractedData = getData(query);
 		
@@ -95,7 +100,7 @@ public class FlickrParser extends AbstractParser {
 
 	public List<Data> getMultipleItems(int limit) throws ParseException {
 
-		String query = BASE_URL;
+		String query = RECENT_URL;
 		
 		List<Data> extractedData = this.getData(query);
 
@@ -132,7 +137,7 @@ public class FlickrParser extends AbstractParser {
 		String query = keywords[0];
 
 		for (int i = 1; i < keywords.length; i++)
-			query += "," + keywords[i];
+			query += "+" + keywords[i];
 
 		return getKeywordItem(query);
 	}
@@ -161,7 +166,7 @@ public class FlickrParser extends AbstractParser {
 		String query = keywords[0];
 
 		for (int i = 1; i < keywords.length; i++)
-			query += "," + keywords[i];
+			query += "+" + keywords[i];
 
 		return getMultipleKeywordItems(query, limit);
 
@@ -176,15 +181,17 @@ public class FlickrParser extends AbstractParser {
 
 	public Data getLatestSingleUserItem(String userId) throws ParseException {
 
-		String query = BASE_URL + USER_SUFFIX;
-		query += userId;
-
-		List<Data> extractedData = getData(query);
+//		String query = BASE_URL + USER_SUFFIX;
+//		query += userId;
+//
+//		List<Data> extractedData = getData(query);
+//		
+//		if (extractedData==null || extractedData.size()==0)
+//			return null;
+//		
+//		return extractedData.get(0);
 		
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		return extractedData.get(0);
+		return null;
 	}
 
 
@@ -195,19 +202,21 @@ public class FlickrParser extends AbstractParser {
 
 	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException {
 
-		String query = BASE_URL + USER_SUFFIX;
-		query += userId;
+//		String query = BASE_URL + USER_SUFFIX;
+//		query += userId;
+//		
+//		List<Data> extractedData = this.getData(query);
+//
+//		/* shuffle it up for some randomness */
+//		if (extractedData==null || extractedData.size()==0)
+//			return null;
+//		
+//		if (extractedData.size() > limit)
+//			return extractedData.subList(0,limit);
+//		else
+//			return extractedData;
 		
-		List<Data> extractedData = this.getData(query);
-
-		/* shuffle it up for some randomness */
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		if (extractedData.size() > limit)
-			return extractedData.subList(0,limit);
-		else
-			return extractedData;
+		return null;
 	}
 
 	public Data getSingleUserItem(int userId) throws ParseException {
@@ -217,16 +226,18 @@ public class FlickrParser extends AbstractParser {
 
 	public Data getSingleUserItem(String userId) throws ParseException {
 
-		String query = BASE_URL + USER_SUFFIX;
-		query += userId;
-
-		List<Data> extractedData = getData(query);
+//		String query = BASE_URL + USER_SUFFIX;
+//		query += userId;
+//
+//		List<Data> extractedData = getData(query);
+//		
+//		if (extractedData==null || extractedData.size()==0)
+//			return null;
+//		
+//		Collections.shuffle(extractedData);
+//		return extractedData.get(0);
 		
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		Collections.shuffle(extractedData);
-		return extractedData.get(0);
+		return null;
 	}
 
 	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
@@ -237,21 +248,23 @@ public class FlickrParser extends AbstractParser {
 
 	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
 
-		String query = BASE_URL + USER_SUFFIX;
-		query += userId;
+//		String query = BASE_URL + USER_SUFFIX;
+//		query += userId;
+//		
+//		List<Data> extractedData = this.getData(query);
+//
+//		/* shuffle it up for some randomness */
+//		if (extractedData==null || extractedData.size()==0)
+//			return null;
+//		
+//		Collections.shuffle(extractedData);
+//		
+//		if (extractedData.size() > limit)
+//			return extractedData.subList(0,limit);
+//		else
+//			return extractedData;
 		
-		List<Data> extractedData = this.getData(query);
-
-		/* shuffle it up for some randomness */
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		Collections.shuffle(extractedData);
-		
-		if (extractedData.size() > limit)
-			return extractedData.subList(0,limit);
-		else
-			return extractedData;
+		return null;
 
 	}
 	

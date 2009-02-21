@@ -172,9 +172,9 @@ public class XMLGenerator extends AbstractGenerator {
 			post.appendChild(location);
 		}
 		
-		if(data.getUserProfilePhoto()!=null && data.getUserProfilePhoto().length() > 0) {
+		if(data.getThumbnail()!=null && data.getThumbnail().length() > 0) {
 			photo = this.document.createElement("user_photo");
-			photoText = this.document.createTextNode(data.getUserProfilePhoto());
+			photoText = this.document.createTextNode(data.getThumbnail());
 			photo.appendChild(photoText);
 			post.appendChild(photo);
 		}

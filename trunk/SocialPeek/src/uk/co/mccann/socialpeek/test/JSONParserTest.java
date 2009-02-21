@@ -63,7 +63,7 @@ public class JSONParserTest {
 		data.setHeadline("headline");
 		data.setLink("http://www.google.com");
 		data.setUser("some guy");
-		data.setUserProfilePhoto("http://www.yahoo.com/");
+		data.setThumbnail("http://www.yahoo.com/");
 		
 		
 		
@@ -93,7 +93,7 @@ public class JSONParserTest {
 			data.setHeadline("headline-" + x);
 			data.setLink("http://www.google.com-" + x);
 			data.setUser("some guy-" + x);
-			data.setUserProfilePhoto("http://www.yahoo.com/-" + x);
+			data.setThumbnail("http://www.yahoo.com/-" + x);
 			dataArray.add(data);
 		}
 		

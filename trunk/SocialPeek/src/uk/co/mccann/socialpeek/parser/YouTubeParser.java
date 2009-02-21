@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import uk.co.mccann.socialpeek.exceptions.KeywordLimitException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.rss.RSSHelper;
@@ -16,7 +15,7 @@ import com.sun.cnpi.rss.elements.Channel;
 import com.sun.cnpi.rss.elements.Item;
 
 /**
- * <b>WeFeelFineParser</b><br/>
+ * <b>YouTubeParser</b><br/>
  * Use the WWF API to read and parse feelings and thoughts from around the web
  *
  * <h4>Copyright and License</h4>
@@ -26,17 +25,21 @@ import com.sun.cnpi.rss.elements.Item;
  * <a href="http://creativecommons.org/licenses/by-nc-sa/2.5/">http://creativecommons.org/licenses/by-nc-sa/2.5/</a>
  * for license details. This code comes with no warranty or support.
  *
+ *	Limit parameter not known
+ *
+ *
  * @author Lewis Taylor <lewis.taylor@europe.mccann.com>
  */
-public class FlickrParser extends AbstractParser {
+public class YouTubeParser extends AbstractParser {
 
-	// Query URL Strings
-	private final String BASE_URL = "http://api.flickr.com/services/feeds/photos_public.gne?format=rss2";
-	private final String KEYWORD_SUFFIX = "&tags=";
-	private final String USER_SUFFIX = "&id=";
-	private final String LIMIT_SUFFIX = null;
+	// &sa=N 						provides less relevant results
+	// q=query+inpostauthor:john	provides author search
+	private final String BASE_URL = "http://gdata.youtube.com/feeds/base/videos?alt=rss&v=2&q=";
 
-	// Date format - Dates parsed to calendar objects
+	private final String KEYWORD_SUFFIX = null;
+	private final String USER_SUFFIX = null;
+	private final String LIMIT_SUFFIX = "&num=";
+	
 	private final String dateFormat = "EEE, d MMM yyyy H:mm:ss z";
 
 
@@ -44,7 +47,11 @@ public class FlickrParser extends AbstractParser {
 		this.random = new Random();
 	}
 
+	
+	// Fetch Items from an RSS feed and return a list of Data objects
+	// with an agreed limit (maybe added in future - limit parameter.
 	public List<Data> getData(String query) throws ParseException {
+
 
 		// RSS Helper object to map RSS Items
 		// to Data objects
@@ -63,7 +70,7 @@ public class FlickrParser extends AbstractParser {
 		try {
 			channel = parser.parseFeed();
 		} catch (Exception e) {
-			throw new ParseException("Unable to parse Flickr RSS data:" + e.getStackTrace());
+			throw new ParseException("Unable to parse Blogger RSS data:" + e.getStackTrace());
 		}
 
 		/* get a list of RSS items and then shuffle them up for a random peek! */
@@ -72,47 +79,29 @@ public class FlickrParser extends AbstractParser {
 		if (items==null)
 			return new ArrayList<Data>();
 
-		return rssHelper.convertFlickrToData(items);
+		return rssHelper.convertYouTubeToData(items);
 		
 	}
 
 
 	public Data getSingleItem() throws ParseException {
 
-		String query = BASE_URL;
-
-		List<Data> extractedData = getData(query);
-		
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		// Shuffle Result
-		Collections.shuffle(extractedData);
-		return extractedData.get(0);
+		/* not implemented */
+		return null;
 
 	}
 
 
 	public List<Data> getMultipleItems(int limit) throws ParseException {
 
-		String query = BASE_URL;
-		
-		List<Data> extractedData = this.getData(query);
-
-		/* shuffle it up for some randomness */
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		if (extractedData.size() > limit)
-			return extractedData.subList(0,limit);
-		else
-			return extractedData;
+		/* not implemented */
+		return null;
 	}
 
 
 	public Data getKeywordItem(String keyword) throws ParseException {
 
-		String query = BASE_URL + KEYWORD_SUFFIX;
+		String query = BASE_URL;
 		query += keyword;
 
 		List<Data> extractedData = getData(query);
@@ -123,7 +112,6 @@ public class FlickrParser extends AbstractParser {
 		// Shuffle Result
 		Collections.shuffle(extractedData);
 		return extractedData.get(0);
-		
 	}
 
 	public Data getKeywordItem(String[] keywords) throws ParseException {
@@ -132,22 +120,19 @@ public class FlickrParser extends AbstractParser {
 		String query = keywords[0];
 
 		for (int i = 1; i < keywords.length; i++)
-			query += "," + keywords[i];
+			query += "+" + keywords[i];
 
 		return getKeywordItem(query);
 	}
 
 	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {
 
-		String query = BASE_URL + KEYWORD_SUFFIX;
+		String query = BASE_URL;
 		query += keyword;
+		query += LIMIT_SUFFIX + limit;
 		
 		List<Data> extractedData = this.getData(query);
 
-		/* shuffle it up for some randomness */
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
 		if (extractedData.size() > limit)
 			return extractedData.subList(0,limit);
 		else
@@ -161,7 +146,7 @@ public class FlickrParser extends AbstractParser {
 		String query = keywords[0];
 
 		for (int i = 1; i < keywords.length; i++)
-			query += "," + keywords[i];
+			query += "+" + keywords[i];
 
 		return getMultipleKeywordItems(query, limit);
 
@@ -170,44 +155,28 @@ public class FlickrParser extends AbstractParser {
 
 	public Data getLatestSingleUserItem(int userId) throws ParseException {
 
-		return getLatestSingleUserItem(String.valueOf(userId));
+		/* not implemented */
+		return null;
 	}
 
 
 	public Data getLatestSingleUserItem(String userId) throws ParseException {
 
-		String query = BASE_URL + USER_SUFFIX;
-		query += userId;
-
-		List<Data> extractedData = getData(query);
-		
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		return extractedData.get(0);
+		/* not implemented */
+		return null;
 	}
 
 
 	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException {
 
-		return getLatestMultipleUserItems(String.valueOf(userId), limit);
+		/* not implemented */
+		return null;
 	}
 
 	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException {
 
-		String query = BASE_URL + USER_SUFFIX;
-		query += userId;
-		
-		List<Data> extractedData = this.getData(query);
-
-		/* shuffle it up for some randomness */
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		if (extractedData.size() > limit)
-			return extractedData.subList(0,limit);
-		else
-			return extractedData;
+		/* not implemented */
+		return null;
 	}
 
 	public Data getSingleUserItem(int userId) throws ParseException {
@@ -217,47 +186,24 @@ public class FlickrParser extends AbstractParser {
 
 	public Data getSingleUserItem(String userId) throws ParseException {
 
-		String query = BASE_URL + USER_SUFFIX;
-		query += userId;
-
-		List<Data> extractedData = getData(query);
-		
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		Collections.shuffle(extractedData);
-		return extractedData.get(0);
+		/* not implemented */
+		return null;
 	}
 
 	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
 
-		return getMultipleUserItems(String.valueOf(userId), limit);
+		/* not implemented */
+		return null;
+
 	}
 
 
 	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
 
-		String query = BASE_URL + USER_SUFFIX;
-		query += userId;
-		
-		List<Data> extractedData = this.getData(query);
+		/* not implemented */
+		return null;
 
-		/* shuffle it up for some randomness */
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		Collections.shuffle(extractedData);
-		
-		if (extractedData.size() > limit)
-			return extractedData.subList(0,limit);
-		else
-			return extractedData;
-
-	}
-	
-	public void checkLimit(int limit) throws KeywordLimitException{
-		if (limit>20)
-			throw new KeywordLimitException();
 	}
 
 }
+

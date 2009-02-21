@@ -32,7 +32,7 @@ public class XMLTest {
 		data.setHeadline("頼れる仲間はみんな目が死んでる");
 		data.setLink("http://www.google.com");
 		data.setUser("some guy");
-		data.setUserProfilePhoto("http://www.yahoo.com/");
+		data.setThumbnail("http://www.yahoo.com/");
 		Generator generator = new XMLGenerator();
 		
 		try {

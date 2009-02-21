@@ -1,154 +1,48 @@
 package uk.co.mccann.socialpeek.test;
 
-
+import java.util.Calendar;
+import java.util.List;
 
 import org.junit.Test;
 
-
-import uk.co.mccann.socialpeek.SocialPeek;
-import uk.co.mccann.socialpeek.SocialPeekConfiguration;
-import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
-
-import uk.co.mccann.socialpeek.interfaces.PeekFactory;
-
-import uk.co.mccann.socialpeek.model.SocialService;
-import uk.co.mccann.socialpeek.service.DeliciousService;
-import uk.co.mccann.socialpeek.service.TwitterService;
-
-import static org.junit.Assert.fail;
+import uk.co.mccann.socialpeek.exceptions.NoResultsException;
+import uk.co.mccann.socialpeek.exceptions.ParseException;
+import uk.co.mccann.socialpeek.interfaces.Data;
+import uk.co.mccann.socialpeek.parser.BloglinesParser;
+import uk.co.mccann.socialpeek.parser.DeliciousParser;
 
 public class DeliciousTest {
-	/*
-	@Test public void rssFeedTest() {
-	
+
+	@Test public void search() {
+		
+		DeliciousParser bp = new DeliciousParser();
+		
+		String[] john = {"smells"};
+		
 		try {
-	
-		FeedReader r = new FeedReader(new HttpURL("http://del.icio.us/rss/tag/fear"));
-		r.setFormat(FeedFormat.RSS10);
-		ChannelFeed c = r.readChannel();   
+			List<Data> d = bp.getMultipleItems(1);
 		
-		Data data = new PeekData();
-		
-		
-		
-		//System.out.println(c);
-		int counter = 0;
-		for(ItemEntry entry : c.getItems()){
-			if(counter < 1 ) {
-			//System.out.println("Title: " + entry.getTitleText());
-			//System.out.println("Link: " +entry.getLinks().get(0).getHref());
-			//System.out.println("Author: " +entry.getAuthorOrCreator().get(0).getEmailOrText());
-			//System.out.println("Description: " +entry.getDescriptionOrSummaryText());
-			
-			data.setBody(entry.getDescriptionOrSummaryText());
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd'T'kk:mm:ss'Z'");
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(sdf.parse(entry.getPubDate()));
-			
-			data.setDate(cal);
-			data.setHeadline(entry.getTitleText());
-			data.setLink(entry.getLinks().get(0).getHref());
-			data.setUser(entry.getAuthorOrCreator().get(0).getEmailOrText());
-			//data.setUserProfilePhoto("http://www.yahoo.com/");
-			
-			
-			//Set<CategorySubject> subjects = entry.getCategorySubjects();
-			
-			//for(CategorySubject subject : subjects) {
-			//	System.out.println("Tags: " +subject.getCategoryOrSubjectOrTerm());
-			//}
-			//System.out.println("Published: " + entry.getPubDate());
-			//System.out.println("-----------------------------------------------------------");
-			
-			
-			//Element thumnail = entry.getElementByNS("http://purl.org/rss/1.0/", "creator");
-			 //	System.out.println(thumnail);
-		       // System.out.println(thumnail.getAttribute("width"));
-		        //System.out.println(thumnail.getAttribute("height")); 
-		       
-			//System.out.println(entry.getAttributeValueByLocalName("creator"));
-			} else {
-				break;
+			for(Data t : d){
+				
+				System.out.println("Headline: " + t.getHeadline());
+				System.out.println("Description: " + t.getBody());
+				System.out.println("Link: " + t.getLink());
+				System.out.println("User: " + t.getUser());
+				System.out.println("Date: " + t.getDate().get(Calendar.DATE));
+				System.out.println("Location: " + t.getLocation());
+				System.out.println("Thumbnail URL: " + t.getThumbnail());
+				System.out.println();
+				System.out.println();
 			}
-			counter++;
-			
-		}
-		
-		Generator generator = new RSSGenerator();	
-		System.out.println(generator.generate(data));
-	
-		} catch (Exception exp) {
-		exp.printStackTrace();
-		fail("failed"  + exp.getMessage());
-		
-		}
-	
-	}
-	*/
-	/*
-	@Test public void randomPeek() {
-		
-		SocialService twitterService = new TwitterService();
-		twitterService.setUsername("shanmantest");
-		twitterService.setPassword("fofcowb");
-		
-		SocialService deliciousService = new DeliciousService();
-		deliciousService.setUsername("test");
-		deliciousService.setPassword("test");
-		
-		SocialPeekConfiguration config = new SocialPeekConfiguration();
-		config.setFeedType(SocialPeek.RETURN_XML);
-		
-		config.registerService(twitterService);
-		config.registerService(deliciousService);
-		
-		SocialPeek socialPeek = new SocialPeek(config);
-		PeekFactory peekFactory = socialPeek.getPeekingFactory();
-		
-		try {
-		
-			System.out.println(peekFactory.getPeeker(DeliciousService.class).getRandomPeek());
-		
-		} catch (SocialPeekException e) {
+				
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		
-	}
-	*/
-	@Test public void userPeek() {
-		
-		SocialService twitterService = new TwitterService();
-		twitterService.setUsername("");
-		twitterService.setPassword("");
-		
-		SocialPeek.logging  = true;
-		
-		SocialService deliciousService = new DeliciousService();
-		deliciousService.setUsername("test");
-		deliciousService.setPassword("test");
-		
-		SocialPeekConfiguration config = new SocialPeekConfiguration();
-		config.setFeedType(SocialPeek.RETURN_XML);
-		
-		config.registerService(twitterService);
-		config.registerService(deliciousService);
-		
-		SocialPeek socialPeek = new SocialPeek(config);
-		PeekFactory peekFactory = socialPeek.getPeekingFactory();
-		
-		
-		try {
-		
-			System.out.println(peekFactory.getPeeker(DeliciousService.class).getRandomPeek());
-		
-		} catch (SocialPeekException e) {
+		} catch (NoResultsException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			fail(e.getMessage());
 		}
 		
 	}
-	
 	
 }

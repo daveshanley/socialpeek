@@ -205,7 +205,7 @@ public class WeFeelFineParser extends AbstractParser {
 							
 							if(map.getNamedItem("imageid")!=null) {
 								String imageId = map.getNamedItem("imageid").getTextContent();
-								data.setUserProfilePhoto(this.getImgPath(postDate, imageId, "thumb"));
+								data.setThumbnail(this.getImgPath(postDate, imageId, "thumb"));
 								
 							}
 							

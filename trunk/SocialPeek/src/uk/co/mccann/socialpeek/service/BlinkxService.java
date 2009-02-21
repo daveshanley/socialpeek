@@ -1,7 +1,7 @@
 package uk.co.mccann.socialpeek.service;
 
 import uk.co.mccann.socialpeek.interfaces.Parser;
-import uk.co.mccann.socialpeek.parser.LiveParser;
+import uk.co.mccann.socialpeek.parser.BlinkxParser;
 
 /**
  * <b>DeliciousService</b><br/>
@@ -16,15 +16,15 @@ import uk.co.mccann.socialpeek.parser.LiveParser;
  *
  * @author Lewis Taylor <lewis.taylory@europe.mccann.com>
  */
-public class LiveService extends AbstractSocialService {
+public class BlinkxService extends AbstractSocialService {
 
 	
 	/**
      *  Set up service and configure parser.
      */
-	public LiveService() {
+	public BlinkxService() {
 		
-		this(new LiveParser());
+		this(new BlinkxParser());
 		this.parser.setSocialService(this);
 		this.parser.setUpParser();
 		
@@ -33,10 +33,11 @@ public class LiveService extends AbstractSocialService {
 	
 	}
 	
-	public LiveService(Parser parser) {
+	public BlinkxService(Parser parser) {
 		super(parser);
 	}
 	
 	/* override anything that needs it */
 	
 }
+

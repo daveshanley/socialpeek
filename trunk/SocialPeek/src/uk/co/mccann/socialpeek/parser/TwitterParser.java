@@ -84,7 +84,7 @@ public class TwitterParser extends AbstractParser  {
 		    
 		    /* check to see if there is a photo attached to the user */
 			if(status.getUser().getProfileImageUrl()!=null) {
-				twitterUser.setUserProfilePhoto(status.getUser().getProfileImageUrl().toString());
+				twitterUser.setThumbnail(status.getUser().getProfileImageUrl().toString());
 			}
 			if(status.getUser().getLocation()!=null) {
 				twitterUser.setLocation(status.getUser().getLocation());

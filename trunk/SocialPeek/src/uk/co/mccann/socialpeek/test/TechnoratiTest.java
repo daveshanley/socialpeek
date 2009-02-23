@@ -8,14 +8,15 @@ import org.junit.Test;
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.parser.BloggerParser;
+import uk.co.mccann.socialpeek.parser.TechnoratiParser;
+import uk.co.mccann.socialpeek.parser.TruveoParser;
 
-public class BloggerTest {
+public class TechnoratiTest {
 
-	@Test public void search() {
-
-		BloggerParser bp = new BloggerParser();
-
+@Test public void search() {
+		
+		TechnoratiParser bp = new TechnoratiParser();
+		
 		String[] john = {"smell"};
 
 		try {

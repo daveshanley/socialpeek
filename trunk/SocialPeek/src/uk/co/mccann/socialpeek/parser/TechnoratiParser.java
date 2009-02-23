@@ -1,24 +1,17 @@
 package uk.co.mccann.socialpeek.parser;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.httpclient.HttpURL;
-
+import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.model.PeekData;
-import uk.co.mccann.socialpeek.service.TechnoratiService;
-import yarfraw.core.datamodel.ChannelFeed;
-import yarfraw.core.datamodel.ItemEntry;
-import yarfraw.core.datamodel.YarfrawException;
-import yarfraw.io.FeedReader;
-import yarfraw.io.FeedWriter;
+import uk.co.mccann.socialpeek.rss.RSSHelper;
+import uk.co.mccann.socialpeek.rss.RSSReader;
+
+import com.sun.cnpi.rss.elements.Channel;
+import com.sun.cnpi.rss.elements.Item;
 
 /**
 * <b>TechnoratiParser</b><br/>
@@ -30,399 +23,215 @@ import yarfraw.io.FeedWriter;
 * open-source under the Creative Commons NC-SA license. See
 * <a href="http://creativecommons.org/licenses/by-nc-sa/2.5/">http://creativecommons.org/licenses/by-nc-sa/2.5/</a>
 * for license details. This code comes with no warranty or support.
+* 
+* Query Notes:
+* 
+* Limit cannot be set
+* Users don't exist
+* 
 * @author Dave Shanley <david.shanley@europe.mccann.com>
 */
 public class TechnoratiParser extends AbstractParser {
 	
-	private SimpleDateFormat technoratiDateFormat;
-	private FeedReader reader;
-	private ChannelFeed channel;
-	private long expireLengthMillis = 1800000; // 30  minutes;.
+	// RSS Caching variables
+	private final String xmlKey = "delicious.rss.";
+	private final long expireLengthMillis = 1800000; // 30  minutes
 	
-	private boolean checkRSSCachedFileValid(File file) {
-		
-		if(file.exists()) {
-			
-			long time = System.currentTimeMillis();
-			if(file.lastModified() > (time - this.expireLengthMillis)) {
-				
-				return true;
-				
-			} else {
-				
-				return false;
-			}
-			
-		} else {
-			
-			return false;
-		}
-		
-	}
+	// Query URLs
 	
-	private void createRSSCachedFile(File file, ChannelFeed feed) throws ParseException {
+	// b888a12e033abe371165e7605ffd1642
 	
-		try {
-			
-			FeedWriter w = new FeedWriter(file);
-			w.writeChannel(feed);
-		
-		} catch (YarfrawException e) {
-		
-			throw new ParseException("unable to write file: " + e.getMessage());
-		}
-		
-		
-	}
+	private final String BASE_URL = "http://feeds.technorati.com/?language=en";
+	private final String KEYWORD_URL = "http://feeds.technorati.com/search/{keyword}?language=en&count={limit}";
+	private final String USER_URL = "http://feeds.delicious.com/v2/rss/{user}?language=en&count={limit}";	
 	
-	private Data compileTechnoratiData(ItemEntry rssItem) throws java.text.ParseException {
-		
-		this.setUpParser(); // re-set things!
-		
-		Data data = new PeekData();
-		
-		data.setBody(rssItem.getDescriptionOrSummaryText());
-		
-		/* create a new calendar object */
-		Calendar pubDate = Calendar.getInstance();
-		pubDate.setTime(this.technoratiDateFormat.parse(rssItem.getPubDate()));
-		
-		data.setDate(pubDate);
-		data.setHeadline(rssItem.getTitleText());
-		data.setLink(rssItem.getLinks().get(0).getHref()); // only take the first link
-		//data.setUser(rssItem.getAuthorOrCreator().get(0).getEmailOrText()); // only take the first creator
-		data.setBody(rssItem.getDescriptionOrSummaryText());
-		
-		return data;
-		
-	}
+	private final int DEFAULT_LIMIT = 10;
+
+	private final String dateFormat = "EEE, d MMM yyyy H:mm:ss z";
+
 	
-	
-	public Data getKeywordItem(String keyword) throws ParseException {
-		try {
-			
-			/* check cache file */
-			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "technorati.rss.key."+ keyword.toLowerCase() + ".xml");
-			
-			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
-			
-				/* set up a new RSS reader from source */
-				this.reader = new FeedReader(new HttpURL(TechnoratiService.TECHNORATI_URL + "tag/" + keyword));
-				this.channel = this.reader.readChannel();   
-				
-				/* write file to cache */
-				this.createRSSCachedFile(cachedRSSFile, this.channel);
-			
-			} else {
-				
-				/* set up a new RSS reader from file */
-				this.reader = new FeedReader(cachedRSSFile);
-				this.channel = this.reader.readChannel();   
-				
-			}
-				
-			/* get a list of RSS items and then shuffle them up for a random peek! */
-			List<ItemEntry> items = this.channel.getItems();
-			
-			/* shuffle it up for some randomness */
-			Collections.shuffle(items);
-			
-			return this.compileTechnoratiData(items.get(this.random.nextInt(items.size()-1)));
-			
-			
-		} catch (Exception exp) {
-			throw new ParseException("unable to parse technorati RSS data: " + exp.getMessage());
-			
-		}
-		
-	}
-	
-
-	public Data getKeywordItem(String[] keywords) throws ParseException {
-
-		List<Data> data = this.getMultipleKeywordItems(keywords, 20);
-		return data.get(this.random.nextInt(data.size()-1));
-	}
-
-	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException {
-		/* not implemented */
-		return null;
-	}
-
-	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException {
-		/* not implemented */
-		return null;
-	}
-
-	public Data getLatestSingleUserItem(int userId) throws ParseException {
-		/* not implemented */
-		return null;
-	}
-
-	public Data getLatestSingleUserItem(String userId) throws ParseException {
-		
-		/* not implemented */
-		return null;
-	}
-
-	public List<Data> getMultipleItems(int limit) throws ParseException {
-		
-		try {
-			
-			List<Data> extractedData = new ArrayList<Data>();
-			
-			/* check cache file */
-			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "technorati.rss.recent.xml");
-			
-			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
-			
-				/* set up a new RSS reader from source */
-				this.reader = new FeedReader(new HttpURL(TechnoratiService.TECHNORATI_URL + "frontpage"));
-				this.channel = this.reader.readChannel();   
-				
-				/* write file to cache */
-				this.createRSSCachedFile(cachedRSSFile, this.channel);
-			
-			} else {
-				
-				/* set up a new RSS reader from file */
-				this.reader = new FeedReader(cachedRSSFile);
-				this.channel = this.reader.readChannel();   
-				
-			}
-			
-		
-			/* get a list of RSS items and then shuffle them up for a random peek! */
-			List<ItemEntry> items = this.channel.getItems();
-			
-			for(ItemEntry item : items) {
-			
-				/* compile item */
-				extractedData.add(this.compileTechnoratiData(item));
-		
-			}
-			
-			/* shuffle it up for some randomness */
-			Collections.shuffle(extractedData);
-			
-			List<Data> compactedData = new ArrayList<Data>();
-			
-			/* now trim it up */
-			if(limit > extractedData.size()) limit = extractedData.size(); // make sure we don't go out of bounds!
-			for(int x = 0; x < limit; x++) {
-				compactedData.add(extractedData.get(x));
-			}
-			
-			return compactedData;
-			
-			
-		} catch (Exception exp) {
-			
-			throw new ParseException("unable to parse technorati RSS data: " + exp.getMessage());
-			
-		}
-		
-		
-	}
-
-	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {
-		
-
-		try {
-			
-			List<Data> extractedData = new ArrayList<Data>();
-			
-			/* check cache file */
-			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "technorati.rss.key."+ keyword.toLowerCase() + ".xml");
-			
-			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
-			
-				/* set up a new RSS reader from source */
-				this.reader = new FeedReader(new HttpURL(TechnoratiService.TECHNORATI_URL + "tag/" + keyword));
-				this.channel = this.reader.readChannel();   
-				
-				/* write file to cache */
-				this.createRSSCachedFile(cachedRSSFile, this.channel);
-			
-			} else {
-				
-				/* set up a new RSS reader from file */
-				this.reader = new FeedReader(cachedRSSFile);
-				this.channel = this.reader.readChannel();   
-				
-			}
-			
-			
-			/* get a list of RSS items and then shuffle them up for a random peek! */
-			List<ItemEntry> items = this.channel.getItems();
-			
-			for(ItemEntry item : items) {
-			
-				/* compile item */
-				extractedData.add(this.compileTechnoratiData(item));
-		
-			}
-			
-			/* shuffle it up for some randomness */
-			Collections.shuffle(extractedData);
-			
-			List<Data> compactedData = new ArrayList<Data>();
-			
-			/* now trim it up */
-			if(limit > extractedData.size()) limit = extractedData.size(); // make sure we don't go out of bounds!
-			for(int x = 0; x < limit; x++) {
-				compactedData.add(extractedData.get(x));
-			}
-			
-			return compactedData;
-			
-			
-		} catch (Exception exp) {
-			throw new ParseException("unable to parse technorati RSS data: " + exp.getMessage());
-			
-		}
-		
-		
-	}
-
-	public List<Data> getMultipleKeywordItems(String[] keywords, int limit) throws ParseException {
-		
-		try {
-			
-			/* first we need to work out the ratio of keywords to limited returns */
-			int ratio = limit  / keywords.length;
-			
-			List<Data> extractedData = new ArrayList<Data>();
-			
-			for(int x = 0; x < keywords.length; x++) {
-			
-				/* check cache file */
-				File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "technorati.rss.key."+ keywords[x] + ".xml");
-				
-				if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
-				
-					/* set up a new RSS reader from source */
-					this.reader = new FeedReader(new HttpURL(TechnoratiService.TECHNORATI_URL + "tag/" + keywords[x]));
-					this.channel = this.reader.readChannel();   
-					
-					/* write file to cache */
-					this.createRSSCachedFile(cachedRSSFile, this.channel);
-				
-				} else {
-					
-					/* set up a new RSS reader from file */
-					this.reader = new FeedReader(cachedRSSFile);
-					this.channel = this.reader.readChannel();   
-					
-				}
-				
-				/* get a list of RSS items and then shuffle them up for a random peek! */
-				List<ItemEntry> items = this.channel.getItems();
-				
-				/* shuffle them all up for good measure! */
-				Collections.shuffle(items);
-				
-				int counter = 0;
-				for(ItemEntry item : items) {
-					if(counter < ratio) {
-						/* compile item */
-						extractedData.add(this.compileTechnoratiData(item));
-					} else {
-						break;
-					}
-					counter++;
-				}
-			}
-			
-			Collections.shuffle(extractedData);
-			
-			List<Data> compactedData = new ArrayList<Data>();
-			
-			/* now trim it up */
-			if(limit > extractedData.size()) limit = extractedData.size(); // make sure we don't go out of bounds!
-			for(int x = 0; x < limit; x++) {
-				compactedData.add(extractedData.get(x));
-			}
-			
-			return compactedData;
-			
-			
-		} catch (Exception exp) {
-			
-			throw new ParseException("unable to parse technorati RSS data: " + exp.getMessage());
-			
-		}
-		
-	}
-
-	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
-		/* not implemented */
-		return null;
-	}
-
-	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
-		/* not implemented */
-		return null;
-	}
-
-	public Data getSingleItem() throws ParseException {
-		
-		try {
-			
-			/* check cache file */
-			File cachedRSSFile = new File(getSocialService().getConfiguration().getRSSCacheLocation() + "technorati.rss.recent.xml");
-			
-			if(!this.checkRSSCachedFileValid(cachedRSSFile)) {
-			
-				/* set up a new RSS reader from source */
-				this.reader = new FeedReader(new HttpURL(TechnoratiService.TECHNORATI_URL + "frontpage"));
-				this.channel = this.reader.readChannel();   
-				
-				/* write file to cache */
-				this.createRSSCachedFile(cachedRSSFile, this.channel);
-			
-			} else {
-				
-				/* set up a new RSS reader from file */
-				this.reader = new FeedReader(cachedRSSFile);
-				this.channel = this.reader.readChannel();   
-				
-			}
-		
-			/* get a list of RSS items and then shuffle them up for a random peek! */
-			List<ItemEntry> items = this.channel.getItems();
-			
-			/* shuffle up the items */
-			Collections.shuffle(items);
-			
-			/* get a random item back from the shuffled list */
-			ItemEntry rssItem = items.get(this.random.nextInt(items.size()-1));
-			
-			return this.compileTechnoratiData(rssItem);
-			
-		} catch (Exception exp) {
-			
-			throw new ParseException("unable to parse technorati RSS data: " + exp.getMessage());
-			
-		}
-		
-	}
-
-	public Data getSingleUserItem(int userId) throws ParseException {
-		/* not implemented */
-		return null;
-	}
-
-	public Data getSingleUserItem(String userId) throws ParseException {
-		/* not implemented */
-		return null;
-	}
-
-	public void setUpParser() {
-		
+	public void setUpParser(){
 		this.random = new Random();
-		this.technoratiDateFormat = new SimpleDateFormat("EEE',' dd MMM yyyy kk:mm:ss z");
+	}
+
+
+	public Data getItem() throws ParseException, NoResultsException {
+
+		return getItems(1).get(0);
+
+	}
+
+
+	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
+
+		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
+		String query = BASE_URL.replace("{limit}", String.valueOf(itemLimit));
+
+		List<Data> extractedData = this.getData(query);
+
+		// return 'limit' items of shuffled data
+		return extractData(extractedData, limit, true);
+	}
+
+
+	public Data getKeywordItem(String keyword) throws ParseException, NoResultsException {
+
+		return getKeywordItems(keyword, 1).get(0);
+	}
+
+
+	public Data getKeywordItem(String[] keywords) throws ParseException, NoResultsException {
+
+		// Construct query in form: term1+term2+term3
+		String query = keywords[0];
+
+		for (int i = 1; i < keywords.length; i++)
+			query += "+" + keywords[i];
+
+		return getKeywordItem(query);
+	}
+
+
+	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
+
+		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
+
+		String query = KEYWORD_URL.replace("{keyword}", keyword);
+		query = query.replace("{limit}", String.valueOf(itemLimit));
+
+		List<Data> extractedData = this.getData(query);
+
+		// return 'limit' items of shuffled data
+		return extractData(extractedData, limit, true);
+	}
+
+
+	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
+
+		// Construct query in form: term1+term2+term3
+		String query = keywords[0];
+
+		for (int i = 1; i < keywords.length; i++)
+			query += "+" + keywords[i];
+
+		return getKeywordItems(query, limit);
+	}
+
+
+	public Data getUserItem(int userId) throws ParseException, NoResultsException {
 	
+		return getUserItem(String.valueOf(userId));
+	}
+
+
+	public Data getUserItem(String userId) throws ParseException, NoResultsException {
+	
+		return getUserItems(userId, 1).get(0);
+	}
+
+
+	public List<Data> getUserItems(int userId, int limit) throws ParseException, NoResultsException {
+		return getUserItems(String.valueOf(userId), limit);
+	
+	}
+
+
+	public List<Data> getUserItems(String userId, int limit) throws ParseException, NoResultsException {
+	
+		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
+	
+		String query = USER_URL.replace("{user}", userId);
+		query = query.replace("{limit}", String.valueOf(itemLimit));
+	
+		List<Data> extractedData = this.getData(query);
+	
+		return extractData(extractedData, limit, true);
+	}
+
+
+	public Data getLatestUserItem(int userId) throws ParseException, NoResultsException {
+
+		return getLatestUserItem(String.valueOf(userId));
+	}
+
+
+	public Data getLatestUserItem(String userId) throws ParseException, NoResultsException {
+
+		return getLatestUserItems(userId, 1).get(0);
+	}
+
+
+	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException, NoResultsException {
+
+		return getLatestUserItems(String.valueOf(userId), limit);
+	}
+
+
+	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException, NoResultsException {
+
+		String query = USER_URL.replace("{user}", userId);
+		query = query.replace("{limit}", String.valueOf(limit));
+
+		List<Data> extractedData = this.getData(query);
+
+		return extractData(extractedData, limit, false);
+	}
+
+
+	// Fetch Items from an RSS feed and return a list of Data objects
+	// with an agreed limit (maybe added in future - limit parameter.
+	private List<Data> getData(String query) throws ParseException, NoResultsException {
+		
+		// RSS Helper object to map RSS Items
+		// to Data objects
+		RSSHelper rssHelper = new RSSHelper();
+	
+		// Set up date format
+		rssHelper.setDateFormat(dateFormat);
+	
+		RSSReader parser = new RSSReader();
+	
+		// Set the URL for the RSS reader to point to
+		parser.setURL(query);
+	
+		// Parse the Feed and get the feed's channel
+		Channel channel = null;
+		try {
+			channel = parser.parseFeed();
+		} catch (Exception e) {
+			throw new ParseException("Unable to parse Deilicious RSS data:" + e.getStackTrace());
+		}
+		
+		
+		/* get a list of RSS items and then shuffle them up for a random peek! */
+		List<Item> items = (List<Item>) channel.getItems();
+	
+		if (items==null || items.size()==0)
+			throw new NoResultsException();
+	
+		return rssHelper.convertToData(items);
+	}
+
+	
+	/**
+	 * 
+	 * Receives a list of data and extracts the amount required
+	 * If a random element is to be selected, shuffle is set to true
+	 * 
+	 * @param data
+	 * @param limit
+	 * @param shuffle
+	 * @return
+	 */
+	private List<Data> extractData(List<Data> data, int limit, boolean shuffle){
+
+		if (shuffle)
+			Collections.shuffle(data);
+
+		if (data.size() > limit)
+			return data.subList(0,limit);
+		else
+			return data;
 	}
 
 }

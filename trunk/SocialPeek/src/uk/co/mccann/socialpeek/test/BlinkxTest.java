@@ -19,7 +19,7 @@ public class BlinkxTest {
 		String[] john = {"lewis","super"};
 		
 		try {
-			List<Data> d =   bp.getMultipleKeywordItems(john,6);
+			List<Data> d =   bp.getKeywordItems(john,6);
 			
 			for(Data t : d){
 				

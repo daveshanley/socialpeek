@@ -43,21 +43,20 @@ public class RSSReader {
 	}
 	
 	public Channel parseFeed() throws Exception {
-	    		
-		System.out.println();
-		System.out.println();
+
+	    
+	    if (url==null)
+	    	return new Channel();
+		
 		System.out.println();
 		System.out.println();
 		System.out.println("URL to Query: " + url);
 		System.out.println();
 		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		
-		
-		
+	
+
 	    RssParser parser = RssParserFactory.createDefault();
+	    	
 	    Rss rss = parser.parse(url);
 	 
 	    return rss.getChannel();

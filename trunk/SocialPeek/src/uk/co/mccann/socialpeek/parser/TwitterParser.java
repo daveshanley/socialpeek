@@ -100,7 +100,7 @@ public class TwitterParser extends AbstractParser  {
 	
 	}
 	
-	public List<Data> getMultipleItems(int limit) throws ParseException {
+	public List<Data> getItems(int limit) throws ParseException {
 		
 		
 		
@@ -153,9 +153,9 @@ public class TwitterParser extends AbstractParser  {
 		}
 	}
 
-	public Data getSingleItem() throws ParseException {
+	public Data getItem() throws ParseException {
 		
-		List<Data> extractedData = this.getMultipleItems(20);
+		List<Data> extractedData = this.getItems(20);
 		
 		return extractedData.get(this.random.nextInt(extractedData.size()-1));
 	}
@@ -179,7 +179,7 @@ public class TwitterParser extends AbstractParser  {
 	}
 	
 	
-	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {
+	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException {
 		
 		if(SocialPeek.logging) {
 			this.logger.info("searching twitter with keyword: " + keyword);
@@ -209,7 +209,7 @@ public class TwitterParser extends AbstractParser  {
 		
 	}
 
-	public List<Data> getMultipleKeywordItems(String[] keywords, int limit) throws ParseException {
+	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException {
 		
 		if(SocialPeek.logging) {
 			for(String keyword: keywords)
@@ -245,14 +245,14 @@ public class TwitterParser extends AbstractParser  {
 		return compactedData;
 	}
 
-	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
+	public List<Data> getUserItems(int userId, int limit) throws ParseException {
 		
 		/* use string based overloaded method */
-		return this.getMultipleUserItems(String.valueOf(userId), limit);
+		return this.getUserItems(String.valueOf(userId), limit);
 		
 	}
 
-	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
+	public List<Data> getUserItems(String userId, int limit) throws ParseException {
 		
 		
 		/* implementation code! */
@@ -286,34 +286,34 @@ public class TwitterParser extends AbstractParser  {
 		
 	}
 
-	public Data getSingleUserItem(int userId) throws ParseException {
-		List<Data> extractedData = this.getMultipleUserItems(String.valueOf(userId), 20);
+	public Data getUserItem(int userId) throws ParseException {
+		List<Data> extractedData = this.getUserItems(String.valueOf(userId), 20);
 		
 		return extractedData.get(this.random.nextInt(extractedData.size()-1));
 	}
 
-	public Data getSingleUserItem(String userId) throws ParseException {
-		List<Data> extractedData = this.getMultipleUserItems(userId, 20);
+	public Data getUserItem(String userId) throws ParseException {
+		List<Data> extractedData = this.getUserItems(userId, 20);
 		
 		return extractedData.get(this.random.nextInt(extractedData.size()-1));
 	}
 
-	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException {
-		return this.getMultipleUserItems(String.valueOf(userId), limit);
+	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException {
+		return this.getUserItems(String.valueOf(userId), limit);
 	}
 
-	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException {
-		return this.getMultipleUserItems(String.valueOf(userId), limit);
+	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException {
+		return this.getUserItems(String.valueOf(userId), limit);
 	}
 
-	public Data getLatestSingleUserItem(int userId) throws ParseException {
+	public Data getLatestUserItem(int userId) throws ParseException {
 		
 		String user = String.valueOf(userId);	
-		return this.getSingleUserItem(user);
+		return this.getUserItem(user);
 		
 	}
 
-	public Data getLatestSingleUserItem(String userId) throws ParseException {
+	public Data getLatestUserItem(String userId) throws ParseException {
 		/* implementation code! */
 		
 		try {

@@ -307,31 +307,31 @@ public class WeFeelFineParser extends AbstractParser {
 		
 	}
 
-	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException {
+	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException {
 		
 		/* not implemented */
 		return null;
 	}
 
-	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException {
+	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException {
 		
 		/* not implemented */
 		return null;
 	}
 
-	public Data getLatestSingleUserItem(int userId) throws ParseException {
+	public Data getLatestUserItem(int userId) throws ParseException {
 		
 		/* not implemented */
 		return null;
 	}
 
-	public Data getLatestSingleUserItem(String userId) throws ParseException {
+	public Data getLatestUserItem(String userId) throws ParseException {
 		
 		/* not implemented */
 		return null;
 	}
 
-	public List<Data> getMultipleItems(int limit) throws ParseException {
+	public List<Data> getItems(int limit) throws ParseException {
 		
 		List<Data> extractedData = this.generateFeelings(limit);
 		Collections.shuffle(extractedData);
@@ -345,7 +345,7 @@ public class WeFeelFineParser extends AbstractParser {
 		return compactedData;
 	}
 
-	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {
+	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException {
 		
 		List<Data> extractedData = this.generateFeelings(limit, keyword);
 		Collections.shuffle(extractedData);
@@ -362,7 +362,7 @@ public class WeFeelFineParser extends AbstractParser {
 		
 	}
 
-	public List<Data> getMultipleKeywordItems(String[] keywords, int limit) throws ParseException {
+	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException {
 		
 		List<Data> dataCollection = new ArrayList<Data>();
 		List<Data> compactedData = new ArrayList<Data>();
@@ -396,34 +396,34 @@ public class WeFeelFineParser extends AbstractParser {
 		
 	}
 
-	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
+	public List<Data> getUserItems(int userId, int limit) throws ParseException {
 		
 		/* not implemented */
 		return null;
 		
 	}
 
-	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
+	public List<Data> getUserItems(String userId, int limit) throws ParseException {
 		
 		/* not implemented */
 		return null;
 		
 	}
 
-	public Data getSingleItem() throws ParseException {
+	public Data getItem() throws ParseException {
 	
 		List<Data> extractedData = this.generateFeelings();
 		return extractedData.get(this.random.nextInt(extractedData.size()-1));
 	
 	}
 
-	public Data getSingleUserItem(int userId) throws ParseException {
+	public Data getUserItem(int userId) throws ParseException {
 		
 		/* not implemented */
 		return null;
 	}
 
-	public Data getSingleUserItem(String userId) throws ParseException {
+	public Data getUserItem(String userId) throws ParseException {
 		
 		/* not implemented */
 		return null;

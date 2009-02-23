@@ -70,7 +70,6 @@ public class RSSHelper {
 
 			Data data = new PeekData();
 
-
 			// Set Title
 			if(rssItem.getTitle()!=null) 
 				data.setHeadline(rssItem.getTitle().getText());
@@ -101,6 +100,7 @@ public class RSSHelper {
 			// Set Date
 			Calendar cal = Calendar.getInstance();
 
+			
 			try {
 				if (dateFormat!=null && rssItem.getPubDate()!=null)
 					cal.setTime(dateFormat.parse(rssItem.getPubDate().getText()));

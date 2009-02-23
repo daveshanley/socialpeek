@@ -38,7 +38,7 @@ public class TechnoratiParser extends AbstractParser {
 	private final long expireLengthMillis = 1800000; // 30  minutes
 	
 	// Query URLs
-	
+	// http://api.technorati.com/search?key=b888a12e033abe371165e7605ffd1642&query=hello+john&format=rss&limit=1&claim=1
 	// b888a12e033abe371165e7605ffd1642
 	
 	private final String BASE_URL = "http://feeds.technorati.com/?language=en";

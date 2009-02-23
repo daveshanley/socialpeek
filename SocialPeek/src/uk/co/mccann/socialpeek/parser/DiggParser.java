@@ -69,14 +69,14 @@ public class DiggParser extends AbstractParser {
 	}
 
 
-	public Data getSingleItem() throws ParseException, NoResultsException {
+	public Data getItem() throws ParseException, NoResultsException {
 
-		return getMultipleItems(1).get(0);
+		return getItems(1).get(0);
 
 	}
 
 
-	public List<Data> getMultipleItems(int limit) throws ParseException, NoResultsException {
+	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
 
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
 		String query = BASE_URL.replace("{limit}", String.valueOf(itemLimit));
@@ -90,7 +90,7 @@ public class DiggParser extends AbstractParser {
 
 	public Data getKeywordItem(String keyword) throws ParseException, NoResultsException {
 
-		return getMultipleKeywordItems(keyword, 1).get(0);
+		return getKeywordItems(keyword, 1).get(0);
 	}
 
 
@@ -106,7 +106,7 @@ public class DiggParser extends AbstractParser {
 	}
 
 
-	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
+	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
 
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
 
@@ -120,7 +120,7 @@ public class DiggParser extends AbstractParser {
 	}
 
 
-	public List<Data> getMultipleKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
+	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
 		String query = keywords[0];
@@ -128,29 +128,29 @@ public class DiggParser extends AbstractParser {
 		for (int i = 1; i < keywords.length; i++)
 			query += "+" + keywords[i];
 
-		return getMultipleKeywordItems(query, limit);
+		return getKeywordItems(query, limit);
 	}
 
 
-	public Data getLatestSingleUserItem(int userId) throws ParseException, NoResultsException {
+	public Data getLatestUserItem(int userId) throws ParseException, NoResultsException {
 
-		return getLatestSingleUserItem(String.valueOf(userId));
+		return getLatestUserItem(String.valueOf(userId));
 	}
 
 
-	public Data getLatestSingleUserItem(String userId) throws ParseException, NoResultsException {
+	public Data getLatestUserItem(String userId) throws ParseException, NoResultsException {
 
-		return getLatestMultipleUserItems(userId, 1).get(0);
+		return getLatestUserItems(userId, 1).get(0);
 	}
 
 
-	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException, NoResultsException {
+	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException, NoResultsException {
 
-		return getLatestMultipleUserItems(String.valueOf(userId), limit);
+		return getLatestUserItems(String.valueOf(userId), limit);
 	}
 
 
-	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException, NoResultsException {
+	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
 		String query = USER_URL.replace("{user}", userId);
 		query = query.replace("{limit}", String.valueOf(limit));
@@ -161,25 +161,25 @@ public class DiggParser extends AbstractParser {
 	}
 
 
-	public Data getSingleUserItem(int userId) throws ParseException, NoResultsException {
+	public Data getUserItem(int userId) throws ParseException, NoResultsException {
 
-		return getSingleUserItem(String.valueOf(userId));
+		return getUserItem(String.valueOf(userId));
 	}
 
 
-	public Data getSingleUserItem(String userId) throws ParseException, NoResultsException {
+	public Data getUserItem(String userId) throws ParseException, NoResultsException {
 
-		return getMultipleUserItems(userId, 1).get(0);
+		return getUserItems(userId, 1).get(0);
 	}
 
 
-	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException, NoResultsException {
-		return getMultipleUserItems(String.valueOf(userId), limit);
+	public List<Data> getUserItems(int userId, int limit) throws ParseException, NoResultsException {
+		return getUserItems(String.valueOf(userId), limit);
 
 	}
 
 
-	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException, NoResultsException {
+	public List<Data> getUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
 

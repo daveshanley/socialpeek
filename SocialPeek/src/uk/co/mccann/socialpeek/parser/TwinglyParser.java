@@ -77,7 +77,7 @@ public class TwinglyParser extends AbstractParser {
 	}
 
 
-	public Data getSingleItem() throws ParseException {
+	public Data getItem() throws ParseException {
 
 		String query = BASE_URL;
 
@@ -93,7 +93,7 @@ public class TwinglyParser extends AbstractParser {
 	}
 
 
-	public List<Data> getMultipleItems(int limit) throws ParseException {
+	public List<Data> getItems(int limit) throws ParseException {
 
 		String query = BASE_URL;
 		query += LIMIT_SUFFIX;
@@ -139,7 +139,7 @@ public class TwinglyParser extends AbstractParser {
 		return getKeywordItem(query);
 	}
 
-	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {
+	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException {
 
 		String query = BASE_URL;
 		query += keyword;
@@ -159,7 +159,7 @@ public class TwinglyParser extends AbstractParser {
 	}
 
 
-	public List<Data> getMultipleKeywordItems(String[] keywords, int limit) throws ParseException {
+	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException {
 
 		// Construct query in form: term1+term2+term3
 		String query = keywords[0];
@@ -167,18 +167,18 @@ public class TwinglyParser extends AbstractParser {
 		for (int i = 1; i < keywords.length; i++)
 			query += "+" + keywords[i];
 
-		return getMultipleKeywordItems(query, limit);
+		return getKeywordItems(query, limit);
 
 	}
 
 
-	public Data getLatestSingleUserItem(int userId) throws ParseException {
+	public Data getLatestUserItem(int userId) throws ParseException {
 
-		return getLatestSingleUserItem(String.valueOf(userId));
+		return getLatestUserItem(String.valueOf(userId));
 	}
 
 
-	public Data getLatestSingleUserItem(String userId) throws ParseException {
+	public Data getLatestUserItem(String userId) throws ParseException {
 
 //		String query = BASE_URL + USER_SUFFIX;
 //		query += userId;
@@ -194,12 +194,12 @@ public class TwinglyParser extends AbstractParser {
 	}
 
 
-	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException {
+	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException {
 
-		return getLatestMultipleUserItems(String.valueOf(userId), limit);
+		return getLatestUserItems(String.valueOf(userId), limit);
 	}
 
-	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException {
+	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException {
 
 //		String query = BASE_URL + USER_SUFFIX;
 //		query += userId;
@@ -218,12 +218,12 @@ public class TwinglyParser extends AbstractParser {
 		return null;
 	}
 
-	public Data getSingleUserItem(int userId) throws ParseException {
+	public Data getUserItem(int userId) throws ParseException {
 
-		return getSingleUserItem(String.valueOf(userId));
+		return getUserItem(String.valueOf(userId));
 	}
 
-	public Data getSingleUserItem(String userId) throws ParseException {
+	public Data getUserItem(String userId) throws ParseException {
 
 //		String query = BASE_URL + USER_SUFFIX;
 //		query += userId;
@@ -239,13 +239,13 @@ public class TwinglyParser extends AbstractParser {
 		return null;
 	}
 
-	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
+	public List<Data> getUserItems(int userId, int limit) throws ParseException {
 
-		return getMultipleUserItems(String.valueOf(userId), limit);
+		return getUserItems(String.valueOf(userId), limit);
 	}
 
 
-	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
+	public List<Data> getUserItems(String userId, int limit) throws ParseException {
 
 //		String query = BASE_URL + USER_SUFFIX;
 //		query += userId;

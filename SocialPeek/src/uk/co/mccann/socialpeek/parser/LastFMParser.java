@@ -559,7 +559,7 @@ public class LastFMParser extends AbstractParser {
 
 	public Data getKeywordItem(String[] keywords) throws ParseException {
 		
-		List<Data> keywordData = this.getMultipleKeywordItems(keywords, 50);
+		List<Data> keywordData = this.getKeywordItems(keywords, 50);
 		if(keywordData.size() > 0) {
 			return keywordData.get(this.random.nextInt(keywordData.size()-1));
 		} else {
@@ -568,12 +568,12 @@ public class LastFMParser extends AbstractParser {
 		
 	}
 
-	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException {
+	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException {
 		
-		return this.getLatestMultipleUserItems(String.valueOf(userId), limit);
+		return this.getLatestUserItems(String.valueOf(userId), limit);
 	}
 
-	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException {
+	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException {
 		
 		/* get user profile */
 		LastFMUser userProfile = this.getFanProfile(userId);
@@ -589,12 +589,12 @@ public class LastFMParser extends AbstractParser {
 		return dataList;
 	}
 
-	public Data getLatestSingleUserItem(int userId) throws ParseException {
+	public Data getLatestUserItem(int userId) throws ParseException {
 		
-		return this.getLatestSingleUserItem(String.valueOf(userId));
+		return this.getLatestUserItem(String.valueOf(userId));
 	}
 
-	public Data getLatestSingleUserItem(String userId) throws ParseException {
+	public Data getLatestUserItem(String userId) throws ParseException {
 		
 		/* get a single track from the charts */
 		LastFMUser fan = this.getFanProfile(userId);
@@ -604,7 +604,7 @@ public class LastFMParser extends AbstractParser {
 		
 	}
 
-	public List<Data> getMultipleItems(int limit) throws ParseException {
+	public List<Data> getItems(int limit) throws ParseException {
 		
 		/* get a single track from the charts */
 		List<LastFMTrack> tracks = extractTrackFromChart(limit);
@@ -628,7 +628,7 @@ public class LastFMParser extends AbstractParser {
 		
 	}
 
-	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException {
+	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException {
 		
 		/* get a single track from the charts */
 		List<LastFMTrack> tracks = extractTrackFromTag(keyword, limit);
@@ -652,7 +652,7 @@ public class LastFMParser extends AbstractParser {
 		
 	}
 
-	public List<Data> getMultipleKeywordItems(String[] keywords, int limit) throws ParseException {
+	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException {
 		
 		/* get a single track from the charts */
 		List<Data> dataArray = new ArrayList<Data>();
@@ -688,18 +688,18 @@ public class LastFMParser extends AbstractParser {
 		
 	}
 
-	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException {
-		return this.getLatestMultipleUserItems(String.valueOf(userId), limit);
+	public List<Data> getUserItems(int userId, int limit) throws ParseException {
+		return this.getLatestUserItems(String.valueOf(userId), limit);
 	}
 
-	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException {
+	public List<Data> getUserItems(String userId, int limit) throws ParseException {
 		
-		List<Data> dataArray = this.getLatestMultipleUserItems(userId, limit);
+		List<Data> dataArray = this.getLatestUserItems(userId, limit);
 		Collections.shuffle(dataArray);
 		return dataArray;
 	}
 
-	public Data getSingleItem() throws ParseException {
+	public Data getItem() throws ParseException {
 		
 		/* get a single track from the charts */
 		LastFMTrack track = extractTrackFromChart();
@@ -729,13 +729,13 @@ public class LastFMParser extends AbstractParser {
 		return data;
 	}
 		
-	public Data getSingleUserItem(int userId) throws ParseException {
+	public Data getUserItem(int userId) throws ParseException {
 		
-		return this.getSingleUserItem(String.valueOf(userId));
+		return this.getUserItem(String.valueOf(userId));
 		
 	}
 
-	public Data getSingleUserItem(String userId) throws ParseException {
+	public Data getUserItem(String userId) throws ParseException {
 		
 		/* get a single track from the charts */
 		

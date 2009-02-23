@@ -13,27 +13,77 @@ import uk.co.mccann.socialpeek.parser.DiggParser;
 public class DiggTest {
 
 	@Test public void search() {
-		
+
 		DiggParser bp = new DiggParser();
-		
-		String[] john = {"smells"};
-		
+
+		String[] john = {"smell"};
+
 		try {
-			List<Data> d = bp.getLatestMultipleUserItems("HabsChick", 12);
-		
-			for(Data t : d){
-				
-				System.out.println("Headline: " + t.getHeadline());
-				System.out.println("Description: " + t.getBody());
-				System.out.println("Link: " + t.getLink());
-				System.out.println("User: " + t.getUser());
-				System.out.println("Date: " + t.getDate().get(Calendar.DATE));
-				System.out.println("Location: " + t.getLocation());
-				System.out.println("Thumbnail URL: " + t.getThumbnail());
-				System.out.println();
-				System.out.println();
+
+			System.out.println("Getting user items : 13");
+
+			List<Data> d = bp.getUserItems("jim", 13);
+			
+			if (d!=null){
+				for(Data t : d){
+
+					System.out.println("Headline: " + t.getHeadline());
+					System.out.println("Description: " + t.getBody());
+					System.out.println("Link: " + t.getLink());
+					System.out.println("User: " + t.getUser());
+					System.out.println("Date: " + t.getDate().get(Calendar.DATE));
+					System.out.println("Location: " + t.getLocation());
+					System.out.println("Thumbnail URL: " + t.getThumbnail());
+					System.out.println();
+					System.out.println();
+				}
 			}
-				
+			
+			System.out.println();
+			System.out.println();
+
+			System.out.println("Getting keyword items : 13\n");
+
+			d = bp.getKeywordItems(john, 13);
+			
+			if (d!=null){
+				for(Data t : d){
+
+					System.out.println("Headline: " + t.getHeadline());
+					System.out.println("Description: " + t.getBody());
+					System.out.println("Link: " + t.getLink());
+					System.out.println("User: " + t.getUser());
+					System.out.println("Date: " + t.getDate().get(Calendar.DATE));
+					System.out.println("Location: " + t.getLocation());
+					System.out.println("Thumbnail URL: " + t.getThumbnail());
+					System.out.println();
+					System.out.println();
+				}
+			}
+			
+			System.out.println();
+			System.out.println();
+
+			System.out.println("Getting recent items : 3\n");
+
+			d = bp.getItems(3);
+
+			if (d!=null){
+				for(Data t : d){
+
+					System.out.println("Headline: " + t.getHeadline());
+					System.out.println("Description: " + t.getBody());
+					System.out.println("Link: " + t.getLink());
+					System.out.println("User: " + t.getUser());
+					System.out.println("Date: " + t.getDate().get(Calendar.DATE));
+					System.out.println("Location: " + t.getLocation());
+					System.out.println("Thumbnail URL: " + t.getThumbnail());
+					System.out.println();
+					System.out.println();
+				}
+			}
+
+
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,7 +91,7 @@ public class DiggTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 }

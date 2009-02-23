@@ -37,32 +37,32 @@ public class DeliciousParser extends AbstractParser {
 	private final String xmlKey = "delicious.rss.";
 	private final long expireLengthMillis = 1800000; // 30  minutes
 	
-	
-	// &sa=N 						provides less relevant results
-	// q=query+inpostauthor:john	provides author search
-	private final String BASE_URL = "http://feeds.delicious.com/v2/rss/";
+	// Query URLs
+	private final String BASE_URL = "http://feeds.delicious.com/v2/rss?count={limit}";
+	private final String KEYWORD_URL = "http://feeds.delicious.com/v2/rss/tag/{keyword}?count={limit}";
+	private final String USER_URL = "http://feeds.delicious.com/v2/rss/{user}?count={limit}";
 
-	private final String KEYWORD_SUFFIX = "tag/";
-	private final String LIMIT_SUFFIX = "?count=";
 	private final int DEFAULT_LIMIT = 10;
 
 	private final String dateFormat = "EEE, d MMM yyyy H:mm:ss z";
+
 	
 	public void setUpParser(){
 		this.random = new Random();
 	}
 
 
-	public Data getSingleItem() throws ParseException, NoResultsException {
+	public Data getItem() throws ParseException, NoResultsException {
 
-		return getMultipleItems(1).get(0);
+		return getItems(1).get(0);
 
 	}
 
 
-	public List<Data> getMultipleItems(int limit) throws ParseException, NoResultsException {
+	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
 
-		String query = BASE_URL + LIMIT_SUFFIX + DEFAULT_LIMIT;
+		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
+		String query = BASE_URL.replace("{limit}", String.valueOf(itemLimit));
 
 		List<Data> extractedData = this.getData(query);
 
@@ -73,10 +73,10 @@ public class DeliciousParser extends AbstractParser {
 
 	public Data getKeywordItem(String keyword) throws ParseException, NoResultsException {
 
-		return getMultipleKeywordItems(keyword, 1).get(0);
+		return getKeywordItems(keyword, 1).get(0);
 	}
 
-	
+
 	public Data getKeywordItem(String[] keywords) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -88,10 +88,13 @@ public class DeliciousParser extends AbstractParser {
 		return getKeywordItem(query);
 	}
 
-	
-	public List<Data> getMultipleKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
 
-		String query = BASE_URL + KEYWORD_SUFFIX + keyword + LIMIT_SUFFIX + DEFAULT_LIMIT;
+	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
+
+		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
+
+		String query = KEYWORD_URL.replace("{keyword}", keyword);
+		query = query.replace("{limit}", String.valueOf(itemLimit));
 
 		List<Data> extractedData = this.getData(query);
 
@@ -100,7 +103,7 @@ public class DeliciousParser extends AbstractParser {
 	}
 
 
-	public List<Data> getMultipleKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
+	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
 		String query = keywords[0];
@@ -108,84 +111,70 @@ public class DeliciousParser extends AbstractParser {
 		for (int i = 1; i < keywords.length; i++)
 			query += "+" + keywords[i];
 
-		return getMultipleKeywordItems(query, limit);
+		return getKeywordItems(query, limit);
 	}
 
+
+	public Data getUserItem(int userId) throws ParseException, NoResultsException {
 	
-	public Data getLatestSingleUserItem(int userId) throws ParseException, NoResultsException {
-
-		return getLatestSingleUserItem(String.valueOf(userId));
+		return getUserItem(String.valueOf(userId));
 	}
 
 
-	public Data getLatestSingleUserItem(String userId) throws ParseException, NoResultsException {
-
-		return getLatestMultipleUserItems(userId, 1).get(0);
-	}
-
-
-	public List<Data> getLatestMultipleUserItems(int userId, int limit) throws ParseException, NoResultsException {
-
-		return getLatestMultipleUserItems(String.valueOf(userId), limit);
-	}
-
+	public Data getUserItem(String userId) throws ParseException, NoResultsException {
 	
-	public List<Data> getLatestMultipleUserItems(String userId, int limit) throws ParseException, NoResultsException {
+		return getUserItems(userId, 1).get(0);
+	}
 
-		String query = BASE_URL + userId + LIMIT_SUFFIX + DEFAULT_LIMIT;
-		
+
+	public List<Data> getUserItems(int userId, int limit) throws ParseException, NoResultsException {
+		return getUserItems(String.valueOf(userId), limit);
+	
+	}
+
+
+	public List<Data> getUserItems(String userId, int limit) throws ParseException, NoResultsException {
+	
+		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
+	
+		String query = USER_URL.replace("{user}", userId);
+		query = query.replace("{limit}", String.valueOf(itemLimit));
+	
+		List<Data> extractedData = this.getData(query);
+	
+		return extractData(extractedData, limit, true);
+	}
+
+
+	public Data getLatestUserItem(int userId) throws ParseException, NoResultsException {
+
+		return getLatestUserItem(String.valueOf(userId));
+	}
+
+
+	public Data getLatestUserItem(String userId) throws ParseException, NoResultsException {
+
+		return getLatestUserItems(userId, 1).get(0);
+	}
+
+
+	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException, NoResultsException {
+
+		return getLatestUserItems(String.valueOf(userId), limit);
+	}
+
+
+	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException, NoResultsException {
+
+		String query = USER_URL.replace("{user}", userId);
+		query = query.replace("{limit}", String.valueOf(limit));
+
 		List<Data> extractedData = this.getData(query);
 
 		return extractData(extractedData, limit, false);
 	}
 
-	
-	public Data getSingleUserItem(int userId) throws ParseException, NoResultsException {
 
-		return getSingleUserItem(String.valueOf(userId));
-	}
-
-	
-	public Data getSingleUserItem(String userId) throws ParseException, NoResultsException {
-
-		return getMultipleUserItems(userId, 1).get(0);
-	}
-
-	
-	public List<Data> getMultipleUserItems(int userId, int limit) throws ParseException, NoResultsException {
-		return getMultipleUserItems(String.valueOf(userId), limit);
-
-	}
-
-
-	public List<Data> getMultipleUserItems(String userId, int limit) throws ParseException, NoResultsException {
-
-		String query = BASE_URL + userId + LIMIT_SUFFIX + DEFAULT_LIMIT;
-
-		List<Data> extractedData = this.getData(query);
-
-		return extractData(extractedData, limit, true);
-	}
-
-	
-	private String doCacheInspection(String suffix){
-		
-		File file = new File(getSocialService().getConfiguration().getRSSCacheLocation() + xmlKey + suffix + ".xml");
-		
-		if(file.exists()) {
-
-			long time = System.currentTimeMillis();
-			
-			if(file.lastModified() > (time - expireLengthMillis)) 
-				return file.getAbsolutePath();
-			else 
-				return null;
-		} else {
-			return null;
-		}
-		
-	}
-	
 	// Fetch Items from an RSS feed and return a list of Data objects
 	// with an agreed limit (maybe added in future - limit parameter.
 	private List<Data> getData(String query) throws ParseException, NoResultsException {
@@ -207,14 +196,14 @@ public class DeliciousParser extends AbstractParser {
 		try {
 			channel = parser.parseFeed();
 		} catch (Exception e) {
-			throw new ParseException("Unable to parse Blogger RSS data:" + e.getStackTrace());
+			throw new ParseException("Unable to parse Deilicious RSS data:" + e.getStackTrace());
 		}
 		
 		
 		/* get a list of RSS items and then shuffle them up for a random peek! */
 		List<Item> items = (List<Item>) channel.getItems();
 	
-		if (items==null && items.size()==0)
+		if (items==null || items.size()==0)
 			throw new NoResultsException();
 	
 		return rssHelper.convertToData(items);

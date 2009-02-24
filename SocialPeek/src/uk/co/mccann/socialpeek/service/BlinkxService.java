@@ -4,7 +4,7 @@ import uk.co.mccann.socialpeek.interfaces.Parser;
 import uk.co.mccann.socialpeek.parser.BlinkxParser;
 
 /**
- * <b>DeliciousService</b><br/>
+ * <b>BlinkxService</b><br/>
  * All services should subclass this class.
  *
  * <h4>Copyright and License</h4>

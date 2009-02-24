@@ -200,8 +200,10 @@ public class DeliciousParser extends AbstractParser {
 		}
 		
 		
-		/* get a list of RSS items and then shuffle them up for a random peek! */
-		List<Item> items = (List<Item>) channel.getItems();
+		List<Item> items = null;
+
+		if (channel!=null)
+			items = (List<Item>) channel.getItems();
 	
 		if (items==null || items.size()==0)
 			throw new NoResultsException();

@@ -5,14 +5,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import quicktime.std.movies.media.TweenMedia;
-
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.parser.TwinglyParser;
-import uk.co.mccann.socialpeek.parser.WordPressParser;
-import uk.co.mccann.socialpeek.parser.YahooSearchParser;
 
 public class TwinglyTest {
 
@@ -20,7 +16,7 @@ public class TwinglyTest {
 		
 		TwinglyParser bp = new TwinglyParser();
 		
-		String[] john = {"smell"};
+		String[] john = {"testing"};
 
 		try {
 

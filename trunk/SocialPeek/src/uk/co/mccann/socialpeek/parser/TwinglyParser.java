@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import uk.co.mccann.socialpeek.exceptions.KeywordLimitException;
+import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.rss.RSSHelper;
@@ -33,10 +34,11 @@ import com.sun.cnpi.rss.elements.Item;
 public class TwinglyParser extends AbstractParser {
 
 	// Query URL Strings
-	private final String BASE_URL = "http://www.twingly.com/search.rss?q=";
-	private final String LIMIT_SUFFIX = "&size=";
+	private final String BASE_URL = "http://www.twingly.com/search.rss?lang=en&size={limit}&q=";
+	private final String KEYWORD_URL = "http://www.twingly.com/search.rss?lang=en&size={limit}&q={keyword}";
 
-	// Date format - Dates parsed to calendar objects
+	private final int DEFAULT_LIMIT = 10;
+
 	private final String dateFormat = "EEE, d MMM yyyy H:mm:ss z";
 
 
@@ -44,7 +46,120 @@ public class TwinglyParser extends AbstractParser {
 		this.random = new Random();
 	}
 
-	public List<Data> getData(String query) throws ParseException {
+
+	public Data getItem() throws ParseException, NoResultsException {
+
+		return getItems(1).get(0);
+	}
+
+
+	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
+
+		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
+		String query = BASE_URL.replace("{limit}", String.valueOf(itemLimit));
+
+		List<Data> extractedData = this.getData(query);
+
+		// return 'limit' items of shuffled data
+		return extractData(extractedData, limit, true);
+	}
+
+
+	public Data getKeywordItem(String keyword) throws ParseException, NoResultsException {
+
+		return getKeywordItems(keyword, 1).get(0);
+	}
+
+
+	public Data getKeywordItem(String[] keywords) throws ParseException, NoResultsException {
+
+		// Construct query in form: term1+term2+term3
+		String query = keywords[0];
+
+		for (int i = 1; i < keywords.length; i++)
+			query += "+" + keywords[i];
+
+		return getKeywordItem(query);
+	}
+
+
+	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
+
+		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
+
+		String query = KEYWORD_URL.replace("{keyword}", keyword);
+		query = query.replace("{limit}", String.valueOf(itemLimit));
+
+		List<Data> extractedData = this.getData(query);
+
+		// return 'limit' items of shuffled data
+		return extractData(extractedData, limit, true);
+	}
+
+
+	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
+
+		// Construct query in form: term1+term2+term3
+		String query = keywords[0];
+
+		for (int i = 1; i < keywords.length; i++)
+			query += "+" + keywords[i];
+
+		return getKeywordItems(query, limit);
+	}
+
+
+	public Data getUserItem(int userId) throws ParseException, NoResultsException {
+
+		return null;
+	}
+
+
+	public Data getUserItem(String userId) throws ParseException, NoResultsException {
+
+		return null;
+	}
+
+
+	public List<Data> getUserItems(int userId, int limit) throws ParseException, NoResultsException {
+		
+		return null;
+	}
+
+
+	public List<Data> getUserItems(String userId, int limit) throws ParseException, NoResultsException {
+
+		return null;
+	}
+
+
+	public Data getLatestUserItem(int userId) throws ParseException, NoResultsException {
+
+		return null;
+	}
+
+
+	public Data getLatestUserItem(String userId) throws ParseException, NoResultsException {
+
+		return null;
+	}
+
+
+	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException, NoResultsException {
+
+		return null;
+	}
+
+
+	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException, NoResultsException {
+
+		return null;
+	}
+
+
+	// Fetch Items from an RSS feed and return a list of Data objects
+	// with an agreed limit (maybe added in future - limit parameter.
+	private List<Data> getData(String query) throws ParseException, NoResultsException {
 
 		// RSS Helper object to map RSS Items
 		// to Data objects
@@ -63,213 +178,40 @@ public class TwinglyParser extends AbstractParser {
 		try {
 			channel = parser.parseFeed();
 		} catch (Exception e) {
-			throw new ParseException("Unable to parse WordPress RSS data:" + e.getStackTrace());
+			throw new ParseException("Unable to parse Twingly RSS data:" + e.getStackTrace());
 		}
 
-		/* get a list of RSS items and then shuffle them up for a random peek! */
-		List<Item> items = (List<Item>) channel.getItems();
+		List<Item> items = null;
 
-		if (items==null)
-			return new ArrayList<Data>();
+		if (channel!=null)
+			items = (List<Item>) channel.getItems();
+
+		if (items==null || items.size()==0)
+			throw new NoResultsException();
 
 		return rssHelper.convertToData(items);
-		
 	}
 
 
-	public Data getItem() throws ParseException {
+	/**
+	 * 
+	 * Receives a list of data and extracts the amount required
+	 * If a random element is to be selected, shuffle is set to true
+	 * 
+	 * @param data
+	 * @param limit
+	 * @param shuffle
+	 * @return
+	 */
+	private List<Data> extractData(List<Data> data, int limit, boolean shuffle){
 
-		String query = BASE_URL;
+		if (shuffle)
+			Collections.shuffle(data);
 
-		List<Data> extractedData = getData(query);
-		
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		// Shuffle Result
-		Collections.shuffle(extractedData);
-		return extractedData.get(0);
-
-	}
-
-
-	public List<Data> getItems(int limit) throws ParseException {
-
-		String query = BASE_URL;
-		query += LIMIT_SUFFIX;
-		query += limit;
-		
-		List<Data> extractedData = this.getData(query);
-
-		/* shuffle it up for some randomness */
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		if (extractedData.size() > limit)
-			return extractedData.subList(0,limit);
+		if (data.size() > limit)
+			return data.subList(0,limit);
 		else
-			return extractedData;
-	}
-
-
-	public Data getKeywordItem(String keyword) throws ParseException {
-
-		String query = BASE_URL;
-		query += keyword;
-
-		List<Data> extractedData = getData(query);
-		
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		// Shuffle Result
-		Collections.shuffle(extractedData);
-		return extractedData.get(0);
-		
-	}
-
-	public Data getKeywordItem(String[] keywords) throws ParseException {
-
-		// Construct query in form: term1+term2+term3
-		String query = keywords[0];
-
-		for (int i = 1; i < keywords.length; i++)
-			query += "+" + keywords[i];
-
-		return getKeywordItem(query);
-	}
-
-	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException {
-
-		String query = BASE_URL;
-		query += keyword;
-		query += LIMIT_SUFFIX;
-		query += limit;
-		
-		List<Data> extractedData = this.getData(query);
-
-		/* shuffle it up for some randomness */
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-		
-		if (extractedData.size() > limit)
-			return extractedData.subList(0,limit);
-		else
-			return extractedData;
-	}
-
-
-	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException {
-
-		// Construct query in form: term1+term2+term3
-		String query = keywords[0];
-
-		for (int i = 1; i < keywords.length; i++)
-			query += "+" + keywords[i];
-
-		return getKeywordItems(query, limit);
-
-	}
-
-
-	public Data getLatestUserItem(int userId) throws ParseException {
-
-		return getLatestUserItem(String.valueOf(userId));
-	}
-
-
-	public Data getLatestUserItem(String userId) throws ParseException {
-
-//		String query = BASE_URL + USER_SUFFIX;
-//		query += userId;
-//
-//		List<Data> extractedData = getData(query);
-//		
-//		if (extractedData==null || extractedData.size()==0)
-//			return null;
-//		
-//		return extractedData.get(0);
-		
-		return null;
-	}
-
-
-	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException {
-
-		return getLatestUserItems(String.valueOf(userId), limit);
-	}
-
-	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException {
-
-//		String query = BASE_URL + USER_SUFFIX;
-//		query += userId;
-//		
-//		List<Data> extractedData = this.getData(query);
-//
-//		/* shuffle it up for some randomness */
-//		if (extractedData==null || extractedData.size()==0)
-//			return null;
-//		
-//		if (extractedData.size() > limit)
-//			return extractedData.subList(0,limit);
-//		else
-//			return extractedData;
-		
-		return null;
-	}
-
-	public Data getUserItem(int userId) throws ParseException {
-
-		return getUserItem(String.valueOf(userId));
-	}
-
-	public Data getUserItem(String userId) throws ParseException {
-
-//		String query = BASE_URL + USER_SUFFIX;
-//		query += userId;
-//
-//		List<Data> extractedData = getData(query);
-//		
-//		if (extractedData==null || extractedData.size()==0)
-//			return null;
-//		
-//		Collections.shuffle(extractedData);
-//		return extractedData.get(0);
-		
-		return null;
-	}
-
-	public List<Data> getUserItems(int userId, int limit) throws ParseException {
-
-		return getUserItems(String.valueOf(userId), limit);
-	}
-
-
-	public List<Data> getUserItems(String userId, int limit) throws ParseException {
-
-//		String query = BASE_URL + USER_SUFFIX;
-//		query += userId;
-//		
-//		List<Data> extractedData = this.getData(query);
-//
-//		/* shuffle it up for some randomness */
-//		if (extractedData==null || extractedData.size()==0)
-//			return null;
-//		
-//		Collections.shuffle(extractedData);
-//		
-//		if (extractedData.size() > limit)
-//			return extractedData.subList(0,limit);
-//		else
-//			return extractedData;
-		
-		return null;
-
-	}
-	
-	public void checkLimit(int limit) throws KeywordLimitException{
-		if (limit>20)
-			throw new KeywordLimitException();
+			return data;
 	}
 
 }

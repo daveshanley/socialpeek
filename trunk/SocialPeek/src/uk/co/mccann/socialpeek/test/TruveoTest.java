@@ -16,7 +16,7 @@ public class TruveoTest {
 		
 		TruveoParser bp = new TruveoParser();
 		
-		String[] john = {"smell"};
+		String[] john = {"testing"};
 
 		try {
 

@@ -16,7 +16,7 @@ public class DiggTest {
 
 		DiggParser bp = new DiggParser();
 
-		String[] john = {"smell"};
+		String[] john = {"testing"};
 
 		try {
 

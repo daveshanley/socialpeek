@@ -89,7 +89,7 @@ public class RSSHelper {
 				data.setLink(rssItem.getLink().getText()); 
 			else 
 				data.setLink("http://socialpeek.com");
-			
+
 			// Set User
 			if(rssItem.getAuthor()!=null) 
 				data.setUser(rssItem.getAuthor().getText()); // only take the first creator
@@ -100,7 +100,7 @@ public class RSSHelper {
 			// Set Date
 			Calendar cal = Calendar.getInstance();
 
-			
+
 			try {
 				if (dateFormat!=null && rssItem.getPubDate()!=null)
 					cal.setTime(dateFormat.parse(rssItem.getPubDate().getText()));
@@ -119,7 +119,23 @@ public class RSSHelper {
 
 	}
 
-	public Data covertFlickrToData(Item item){
+
+	public Data convertBlinkxToData(Item item){
+
+		List<Item> items = new ArrayList<Item>();
+		items.add(item);
+
+		// Return the first item in the returned list
+		return convertBlinkxToData(items).get(0);
+	}
+
+	public List<Data> convertBlinkxToData(List<Item> items){
+
+		return getDataListWithEnclosure(items);
+	}
+
+
+	public Data convertFlickrToData(Item item){
 
 		List<Item> items = new ArrayList<Item>();
 		items.add(item);
@@ -129,6 +145,11 @@ public class RSSHelper {
 	}
 
 	public List<Data> convertFlickrToData(List<Item> items){
+
+		return getDataListWithEnclosure(items);
+	}
+
+	private List<Data> getDataListWithEnclosure(List<Item> items){
 
 		List<Data> dataItems = new ArrayList<Data>();
 
@@ -148,6 +169,7 @@ public class RSSHelper {
 		}
 
 		return dataItems;
+
 	}
 
 	public Data covertYouTubeToData(Item item){
@@ -169,11 +191,11 @@ public class RSSHelper {
 
 			Data data = convertToData(rssItem);
 
-			
+
 			// Extract thumbnail data from description as YouTube is shit!
 			String description = data.getBody();
-		
-			
+
+
 			String[] result = description.split("<img alt=\"\" src=\"");
 
 			String thumbnail = null;
@@ -182,9 +204,9 @@ public class RSSHelper {
 				end = result[1].indexOf("\">");
 				thumbnail = result[1].substring(0, end);
 			}
-			
+
 			data.setThumbnail(thumbnail);
-			
+
 			// Also do the same with the user
 			String[] userResult = description.split("user=");
 
@@ -194,9 +216,9 @@ public class RSSHelper {
 				end = userResult[1].indexOf("\">");
 				user = userResult[1].substring(0, end);
 			}
-			
+
 			data.setUser(user);
-			
+
 			dataItems.add(data);
 		}
 
@@ -204,43 +226,43 @@ public class RSSHelper {
 	}
 
 	public Data covertTruveoToData(Item item){
-	
+
 		List<Item> items = new ArrayList<Item>();
 		items.add(item);
-	
+
 		// Return the first item in the returned list
 		return convertTruveoToData(items).get(0);
 	}
 
 	public List<Data> convertTruveoToData(List<Item> items){
-	
+
 		List<Data> dataItems = new ArrayList<Data>();
-	
-	
+
+
 		// Map each rss item to a data object
 		for (Item rssItem : items){
-	
+
 			Data data = convertToData(rssItem);
-	
-			
+
+
 			// Extract thumbnail data from description as YouTube is shit!
 			String description = data.getBody();
-		
-			
+
+
 			String[] result = description.split("<img src=\"");
-	
+
 			String thumbnail = null;
 			if (result[1]!=null){
 				int end = 0;
 				end = result[1].indexOf("\">");
 				thumbnail = result[1].substring(0, end);
 			}
-			
+
 			data.setThumbnail(thumbnail);
-			
+
 			dataItems.add(data);
 		}
-	
+
 		return dataItems;
 	}
 

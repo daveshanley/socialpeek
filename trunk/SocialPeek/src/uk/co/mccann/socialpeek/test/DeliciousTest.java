@@ -16,7 +16,7 @@ public class DeliciousTest {
 
 		DeliciousParser bp = new DeliciousParser();
 
-		String[] john = {"smell"};
+		String[] john = {"testing"};
 
 		try {
 

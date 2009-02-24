@@ -17,13 +17,13 @@ public class TechnoratiTest {
 		
 		TechnoratiParser bp = new TechnoratiParser();
 		
-		String[] john = {"smell"};
+		String[] john = {"testing"};
 
 		try {
 
 			System.out.println("Getting user items : 13");
 
-			List<Data> d = bp.getUserItems("jim", 13);
+			List<Data> d = bp.getLatestUserItems("ottomatik", 2);
 			
 			if (d!=null){
 				for(Data t : d){

@@ -16,13 +16,13 @@ import uk.co.mccann.socialpeek.parser.YahooSearchParser;
  *
  * @author Lewis Taylor <lewis.taylory@europe.mccann.com>
  */
-public class YahooSearchervice extends AbstractSocialService {
+public class YahooSearchService extends AbstractSocialService {
 
 	
 	/**
      *  Set up service and configure parser.
      */
-	public YahooSearchervice() {
+	public YahooSearchService() {
 		
 		this(new YahooSearchParser());
 		this.parser.setSocialService(this);
@@ -33,7 +33,7 @@ public class YahooSearchervice extends AbstractSocialService {
 	
 	}
 	
-	public YahooSearchervice(Parser parser) {
+	public YahooSearchService(Parser parser) {
 		super(parser);
 	}
 	

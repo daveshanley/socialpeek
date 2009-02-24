@@ -16,7 +16,7 @@ public class LiveTest {
 
 		LiveParser bp = new LiveParser();
 
-		String[] john = {"smell"};
+		String[] john = {"testing"};
 
 		try {
 

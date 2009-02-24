@@ -27,6 +27,10 @@ import com.sun.cnpi.rss.elements.Item;
  * <a href="http://creativecommons.org/licenses/by-nc-sa/2.5/">http://creativecommons.org/licenses/by-nc-sa/2.5/</a>
  * for license details. This code comes with no warranty or support.
  *
+ *
+ *	Limit parameter not known
+ *	Maximum result set is 20
+ *
  * @author Lewis Taylor <lewis.taylor@europe.mccann.com>
  */
 public class FlickrParser extends AbstractParser {
@@ -40,7 +44,6 @@ public class FlickrParser extends AbstractParser {
 	private final String KEYWORD_URL = "http://api.flickr.com/services/feeds/photos_public.gne?format=rss2&count={limit}&tags={keyword}";
 	private final String USER_URL = "http://api.flickr.com/services/feeds/photos_public.gne?format=rss2&count={limit}&id={user}";
 
-	// Date format - Dates parsed to calendar objects
 	private final String dateFormat = "EEE, d MMM yyyy H:mm:ss z";
 
 	private final int DEFAULT_LIMIT = 10;
@@ -199,8 +202,10 @@ public class FlickrParser extends AbstractParser {
 		}
 		
 		
-		/* get a list of RSS items and then shuffle them up for a random peek! */
-		List<Item> items = (List<Item>) channel.getItems();
+		List<Item> items = null;
+
+		if (channel!=null)
+			items = (List<Item>) channel.getItems();
 	
 		if (items==null || items.size()==0)
 			throw new NoResultsException();

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.rss.RSSHelper;
@@ -32,104 +33,46 @@ import com.sun.cnpi.rss.elements.Item;
  */
 public class TruveoParser extends AbstractParser {
 
-	// &sa=N 						provides less relevant results
-	// q=query+inpostauthor:john	provides author search
-	private final String BASE_URL = "http://xml.truveo.com/rss?query=";
-
-	private final String KEYWORD_SUFFIX = null;
-	private final String USER_SUFFIX = "author:";
-	private final String LIMIT_SUFFIX = "&results=";
-
+	// Query URLs
+	private final String BASE_URL = "http://xml.truveo.com/rss?results={limit}";
+	private final String KEYWORD_URL = "http://xml.truveo.com/rss?query={keyword}&results={limit}";
+	private final String USER_URL = "http://xml.truveo.com/rss?query=author:{user}&results={limit}";
+	
+	private final int DEFAULT_LIMIT = 10;
+	
 	private final String dateFormat = "EEE, d MMM yyyy H:mm:ss z";
 
-
+	
 	public void setUpParser(){
 		this.random = new Random();
 	}
 
 
-	// Fetch Items from an RSS feed and return a list of Data objects
-	// with an agreed limit (maybe added in future - limit parameter.
-	public List<Data> getData(String query) throws ParseException {
+	public Data getItem() throws ParseException, NoResultsException {
 
-
-		// RSS Helper object to map RSS Items
-		// to Data objects
-		RSSHelper rssHelper = new RSSHelper();
-
-		// Set up date format
-		rssHelper.setDateFormat(dateFormat);
-
-		RSSReader parser = new RSSReader();
-
-		// Set the URL for the RSS reader to point to
-		parser.setURL(query);
-
-		// Parse the Feed and get the feed's channel
-		Channel channel = null;
-		try {
-			channel = parser.parseFeed();
-		} catch (Exception e) {
-			throw new ParseException("Unable to parse Blogger RSS data:" + e.getStackTrace());
-		}
-
-		/* get a list of RSS items and then shuffle them up for a random peek! */
-		List<Item> items = (List<Item>) channel.getItems();
-
-		if (items==null)
-			return new ArrayList<Data>();
-
-		return rssHelper.convertTruveoToData(items);
-
+		return getItems(1).get(0);
 	}
 
 
-	public Data getItem() throws ParseException {
+	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
 
-		String query = BASE_URL;
-
-		List<Data> extractedData = getData(query);
-
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-
-		// Shuffle Result
-		Collections.shuffle(extractedData);
-		return extractedData.get(0);
-
-	}
-
-
-	public List<Data> getItems(int limit) throws ParseException {
-
-		String query = BASE_URL;
-		query += LIMIT_SUFFIX + limit;
+		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
+		String query = BASE_URL.replace("{limit}", String.valueOf(itemLimit));
 
 		List<Data> extractedData = this.getData(query);
 
-		if (extractedData.size() > limit)
-			return extractedData.subList(0,limit);
-		else
-			return extractedData;
+		// return 'limit' items of shuffled data
+		return extractData(extractedData, limit, true);
 	}
 
 
-	public Data getKeywordItem(String keyword) throws ParseException {
+	public Data getKeywordItem(String keyword) throws ParseException, NoResultsException {
 
-		String query = BASE_URL;
-		query += keyword;
-
-		List<Data> extractedData = getData(query);
-
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-
-		// Shuffle Result
-		Collections.shuffle(extractedData);
-		return extractedData.get(0);
+		return getKeywordItems(keyword, 1).get(0);
 	}
 
-	public Data getKeywordItem(String[] keywords) throws ParseException {
+
+	public Data getKeywordItem(String[] keywords) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
 		String query = keywords[0];
@@ -140,22 +83,22 @@ public class TruveoParser extends AbstractParser {
 		return getKeywordItem(query);
 	}
 
-	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException {
 
-		String query = BASE_URL;
-		query += keyword;
-		query += LIMIT_SUFFIX + limit;
+	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
+
+		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
+
+		String query = KEYWORD_URL.replace("{keyword}", keyword);
+		query = query.replace("{limit}", String.valueOf(itemLimit));
 
 		List<Data> extractedData = this.getData(query);
 
-		if (extractedData.size() > limit)
-			return extractedData.subList(0,limit);
-		else
-			return extractedData;
+		// return 'limit' items of shuffled data
+		return extractData(extractedData, limit, true);
 	}
 
 
-	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException {
+	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
 		String query = keywords[0];
@@ -164,89 +107,124 @@ public class TruveoParser extends AbstractParser {
 			query += "+" + keywords[i];
 
 		return getKeywordItems(query, limit);
-
 	}
 
 
-	public Data getLatestUserItem(int userId) throws ParseException {
+	public Data getUserItem(int userId) throws ParseException, NoResultsException {
+	
+		return getUserItem(String.valueOf(userId));
+	}
+
+
+	public Data getUserItem(String userId) throws ParseException, NoResultsException {
+	
+		return getUserItems(userId, 1).get(0);
+	}
+
+
+	public List<Data> getUserItems(int userId, int limit) throws ParseException, NoResultsException {
+		return getUserItems(String.valueOf(userId), limit);
+	
+	}
+
+
+	public List<Data> getUserItems(String userId, int limit) throws ParseException, NoResultsException {
+	
+		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
+	
+		String query = USER_URL.replace("{user}", userId);
+		query = query.replace("{limit}", String.valueOf(itemLimit));
+	
+		List<Data> extractedData = this.getData(query);
+	
+		return extractData(extractedData, limit, true);
+	}
+
+
+	public Data getLatestUserItem(int userId) throws ParseException, NoResultsException {
 
 		return getLatestUserItem(String.valueOf(userId));
 	}
 
 
-	public Data getLatestUserItem(String userId) throws ParseException {
+	public Data getLatestUserItem(String userId) throws ParseException, NoResultsException {
 
-		String query = BASE_URL;
-		query += USER_SUFFIX + userId;
-
-		List<Data> extractedData = getData(query);
-
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-
-		return extractedData.get(0);
+		return getLatestUserItems(userId, 1).get(0);
 	}
 
 
-	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException {
+	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException, NoResultsException {
 
 		return getLatestUserItems(String.valueOf(userId), limit);
 	}
 
-	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException {
 
-		String query = BASE_URL;
-		query += USER_SUFFIX + userId;
-		query += LIMIT_SUFFIX + limit;
+	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
-		List<Data> extractedData = this.getData(query);
-
-		if (extractedData.size() > limit)
-			return extractedData.subList(0,limit);
-		else
-			return extractedData;
-	}
-
-	public Data getUserItem(int userId) throws ParseException {
-
-		return getUserItem(String.valueOf(userId));
-	}
-
-	public Data getUserItem(String userId) throws ParseException {
-
-		String query = BASE_URL;
-		query += USER_SUFFIX + userId;
-
-		List<Data> extractedData = getData(query);
-
-		if (extractedData==null || extractedData.size()==0)
-			return null;
-
-		Collections.shuffle(extractedData);
-		return extractedData.get(0);
-	}
-
-	public List<Data> getUserItems(int userId, int limit) throws ParseException {
-		return getUserItems(String.valueOf(userId), limit);
-
-	}
-
-
-	public List<Data> getUserItems(String userId, int limit) throws ParseException {
-
-		String query = BASE_URL;
-		query += USER_SUFFIX + userId;
-		query += LIMIT_SUFFIX + limit;
+		String query = USER_URL.replace("{user}", userId);
+		query = query.replace("{limit}", String.valueOf(limit));
 
 		List<Data> extractedData = this.getData(query);
 
-		Collections.shuffle(extractedData);
-		if (extractedData.size() > limit)
-			return extractedData.subList(0,limit);
-		else
-			return extractedData;
+		return extractData(extractedData, limit, false);
+	}
 
+
+	// Fetch Items from an RSS feed and return a list of Data objects
+	// with an agreed limit (maybe added in future - limit parameter.
+	private List<Data> getData(String query) throws ParseException, NoResultsException {
+		
+		// RSS Helper object to map RSS Items
+		// to Data objects
+		RSSHelper rssHelper = new RSSHelper();
+	
+		// Set up date format
+		rssHelper.setDateFormat(dateFormat);
+	
+		RSSReader parser = new RSSReader();
+	
+		// Set the URL for the RSS reader to point to
+		parser.setURL(query);
+	
+		// Parse the Feed and get the feed's channel
+		Channel channel = null;
+		try {
+			channel = parser.parseFeed();
+		} catch (Exception e) {
+			throw new ParseException("Unable to parse Truveo RSS data:" + e.getStackTrace());
+		}
+		
+		List<Item> items = null;
+
+		if (channel!=null)
+			items = (List<Item>) channel.getItems();
+	
+		if (items==null || items.size()==0)
+			throw new NoResultsException();
+	
+		return rssHelper.convertTruveoToData(items);
+	}
+
+	
+	/**
+	 * 
+	 * Receives a list of data and extracts the amount required
+	 * If a random element is to be selected, shuffle is set to true
+	 * 
+	 * @param data
+	 * @param limit
+	 * @param shuffle
+	 * @return
+	 */
+	private List<Data> extractData(List<Data> data, int limit, boolean shuffle){
+
+		if (shuffle)
+			Collections.shuffle(data);
+
+		if (data.size() > limit)
+			return data.subList(0,limit);
+		else
+			return data;
 	}
 
 }
-

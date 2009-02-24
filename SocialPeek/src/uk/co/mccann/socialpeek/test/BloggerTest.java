@@ -16,7 +16,7 @@ public class BloggerTest {
 
 		BloggerParser bp = new BloggerParser();
 
-		String[] john = {"smell"};
+		String[] john = {"testing"};
 
 		try {
 

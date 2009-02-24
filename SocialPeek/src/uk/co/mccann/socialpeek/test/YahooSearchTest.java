@@ -17,7 +17,7 @@ public class YahooSearchTest {
 		
 		YahooSearchParser bp = new YahooSearchParser();
 		
-		String[] john = {"smell"};
+		String[] john = {"testing"};
 
 		try {
 

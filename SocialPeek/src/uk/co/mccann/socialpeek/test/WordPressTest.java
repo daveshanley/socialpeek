@@ -16,7 +16,7 @@ public class WordPressTest {
 		
 		WordPressParser bp = new WordPressParser();
 		
-		String[] john = {"smell"};
+		String[] john = {"testing"};
 
 		try {
 

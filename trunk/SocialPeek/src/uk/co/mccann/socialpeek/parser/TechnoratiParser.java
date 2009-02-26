@@ -35,9 +35,11 @@ import com.sun.cnpi.rss.elements.Item;
 public class TechnoratiParser extends AbstractParser {
 
 	// RSS Caching variables
+	/*
 	private final String xmlKey = "technorati.rss.";
 	private final long expireLengthMillis = 1800000; // 30  minutes
-
+	*/
+	
 	// Query URLs
 	private final String BASE_URL = "http://feeds.technorati.com/?language=en";
 	private final String KEYWORD_URL = "http://api.technorati.com/search?language=en&key=b888a12e033abe371165e7605ffd1642&query={keyword}&format=rss&limit={limit}";

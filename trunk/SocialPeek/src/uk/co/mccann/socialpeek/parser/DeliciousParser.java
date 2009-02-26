@@ -1,7 +1,6 @@
 package uk.co.mccann.socialpeek.parser;
 
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -34,8 +33,10 @@ import com.sun.cnpi.rss.elements.Item;
 public class DeliciousParser extends AbstractParser {
 
 	// RSS Caching variables
+	/*
 	private final String xmlKey = "delicious.rss.";
 	private final long expireLengthMillis = 1800000; // 30  minutes
+	*/
 	
 	// Query URLs
 	private final String BASE_URL = "http://feeds.delicious.com/v2/rss?count={limit}";

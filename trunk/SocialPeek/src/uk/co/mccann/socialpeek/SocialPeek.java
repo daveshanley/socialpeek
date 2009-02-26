@@ -1,6 +1,5 @@
 package uk.co.mccann.socialpeek;
 
-import org.apache.log4j.Logger;
 
 import uk.co.mccann.socialpeek.interfaces.Configurable;
 import uk.co.mccann.socialpeek.interfaces.PeekFactory;

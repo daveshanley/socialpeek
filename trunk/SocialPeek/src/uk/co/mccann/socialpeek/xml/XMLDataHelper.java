@@ -3,10 +3,9 @@ package uk.co.mccann.socialpeek.xml;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.model.PeekData;
+
 
 // Helper Class to allow conversion from Strings to Data Formats
 

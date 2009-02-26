@@ -2,7 +2,6 @@ package uk.co.mccann.socialpeek.parser;
 
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,7 +11,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -25,12 +23,7 @@ import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.model.PeekData;
-import uk.co.mccann.socialpeek.rss.RSSHelper;
-import uk.co.mccann.socialpeek.rss.RSSReader;
 import uk.co.mccann.socialpeek.xml.XMLDataHelper;
-
-import com.sun.cnpi.rss.elements.Channel;
-import com.sun.cnpi.rss.elements.Item;
 
 /**
  * <b>YouTubeParser</b><br/>
@@ -52,9 +45,11 @@ public class DiggParser extends AbstractParser {
 
 
 	// RSS Caching variables
+	/*
 	private final String xmlKey = "digg.rss.";
 	private final long expireLengthMillis = 1800000; // 30  minutes
-
+	*/
+	
 	// query variables
 	private final String BASE_URL = "http://services.digg.com/stories?appkey=http://socialpeek.com&type=xml&count={limit}";
 	private final String KEYWORD_URL = "http://services.digg.com/stories?appkey=http://socialpeek.com&type=xml&search={keyword}&count={limit}";
@@ -192,6 +187,7 @@ public class DiggParser extends AbstractParser {
 	}
 
 
+	/*
 	private String doCacheInspection(String suffix){
 
 		File file = new File(getSocialService().getConfiguration().getRSSCacheLocation() + xmlKey + suffix + ".xml");
@@ -209,7 +205,8 @@ public class DiggParser extends AbstractParser {
 		}
 
 	}
-
+	*/
+	
 	// Fetch Items from an RSS feed and return a list of Data objects
 	// with an agreed limit (maybe added in future - limit parameter.
 	private List<Data> getData(String query) throws ParseException {

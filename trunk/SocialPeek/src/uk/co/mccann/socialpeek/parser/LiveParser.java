@@ -1,7 +1,5 @@
 package uk.co.mccann.socialpeek.parser;
 
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -31,9 +29,11 @@ import com.sun.cnpi.rss.elements.Item;
 public class LiveParser extends AbstractParser {
 
 	// RSS Caching variables
+	/*
 	private final String xmlKey = "live.rss.";
 	private final long expireLengthMillis = 1800000; // 30  minutes
-
+	 */
+	
 	// Other Parameters
 	// scope=news		provides only news feedback
 	private final String KEYWORD_URL = "http://search.live.com/results.aspx?format=rss&q={keyword}&count={limit}";

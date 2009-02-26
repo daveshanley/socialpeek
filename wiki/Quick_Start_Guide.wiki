@@ -10,16 +10,26 @@ You can use the pre-defined services (Twitter, LastFM, Del.icio.us, Technorati &
 
 {{{
 
-SocialService wwfService = new WeFeelFineService();
+SocialService blinkxService = new BlinkxService();
+SocialService bloggerService = new BloggerService();
+SocialService bloglinesService = new BloglinesService();
+SocialService deliciousService = new DeliciousService();
+SocialService diggService = new DiggService();
+SocialService flickrService = new FlickrService();
+SocialService lastFMService = new LastFMService();
+SocialService liveService = new LiveService();
+SocialService technoratiService = new TechnoratiService();
+SocialService truveoService = new TruveoService();
+SocialService twinglyService = new TwinglyService();
 SocialService twitterService = new TwitterService();
+SocialService weFeelFineService = new WeFeelFineService();
+SocialService wordPressService = new WordPressService();
+SocialService yahooSearchService = new YahooSearchService();
+SocialService youTubeService = new YouTubeService(); 
 
 /* twitter service requires a username and password */
 twitterService.setUsername("twitteruser");
 twitterService.setPassword("twitterpassword");
-		
-SocialService deliciousService = new DeliciousService();
-SocialService technoratiService = new TechnoratiService();
-SocialService lastFMService = new LastFMService();
 		
 }}}
 
@@ -34,11 +44,22 @@ Configurable config = new SocialPeekConfiguration();
 
 /* I want RSS data (but could be RETURN_JSON or RETURN_XML */ as well.
 config.setFeedType(SocialPeek.RETURN_RSS);
-config.registerService(wwfService);
-config.registerService(deliciousService);
-config.registerService(twitterService);
-config.registerService(lastFMService);
-config.registerService(technoratiService);
+config.registerService(this.blinkxService);
+config.registerService(this.bloggerService);
+config.registerService(this.bloglinesService);
+config.registerService(this.deliciousService);
+config.registerService(this.diggService);
+config.registerService(this.flickrService);
+config.registerService(this.lastFMService);
+config.registerService(this.liveService);
+config.registerService(this.technoratiService);
+config.registerService(this.truveoService);
+config.registerService(this.twinglyService);
+config.registerService(this.twitterService);
+config.registerService(this.weFeelFineService);
+config.registerService(this.wordPressService);
+config.registerService(this.yahooSearchService);
+config.registerService(this.youTubeService);
 		
 }}}
 

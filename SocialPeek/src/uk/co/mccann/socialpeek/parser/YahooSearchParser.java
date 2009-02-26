@@ -18,16 +18,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.sun.cnpi.rss.elements.Channel;
-import com.sun.cnpi.rss.elements.Item;
-
-import uk.co.mccann.socialpeek.exceptions.KeywordLimitException;
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.model.PeekData;
-import uk.co.mccann.socialpeek.rss.RSSHelper;
-import uk.co.mccann.socialpeek.rss.RSSReader;
 import uk.co.mccann.socialpeek.xml.XMLDataHelper;
 
 /**

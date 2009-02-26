@@ -1,12 +1,10 @@
 package uk.co.mccann.socialpeek.parser;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import uk.co.mccann.socialpeek.exceptions.KeywordLimitException;
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
@@ -36,8 +34,10 @@ import com.sun.cnpi.rss.elements.Item;
 public class FlickrParser extends AbstractParser {
 
 	// RSS Caching variables
+	/*
 	private final String xmlKey = "flickr.rss.";
 	private final long expireLengthMillis = 1800000; // 30  minutes
+	*/
 	
 	// Query URLs
 	private final String BASE_URL = "http://api.flickr.com/services/feeds/photos_public.gne?format=rss2&count={limit}";

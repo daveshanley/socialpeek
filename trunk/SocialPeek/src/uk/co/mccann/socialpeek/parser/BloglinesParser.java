@@ -16,7 +16,7 @@ import com.sun.cnpi.rss.elements.Item;
 
 /**
  * <b>BloglinesParser</b><br/>
- * Use the WWF API to read and parse feelings and thoughts from around the web
+ * Use the BlogLines API to fetch blogs containing given keywords
  *
  * <h4>Copyright and License</h4>
  * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
@@ -35,8 +35,10 @@ import com.sun.cnpi.rss.elements.Item;
 public class BloglinesParser extends AbstractParser {
 
 	// RSS Caching variables
+	/*
 	private final String xmlKey = "bloglines.rss.";
 	private final long expireLengthMillis = 1800000; // 30  minutes
+	*/
 	
 	// Query URLs
 	private final String KEYWORD_URL = "http://www.bloglines.com/search?format=rss&q={keyword}&n={limit}";
@@ -46,29 +48,25 @@ public class BloglinesParser extends AbstractParser {
 	private final int DEFAULT_LIMIT = 10;
 
 
-	public void setUpParser(){
-		this.random = new Random();
-	}
-
-
+	/** {@inheritDoc} */
 	public Data getItem() throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String keyword) throws ParseException, NoResultsException {
 
 		return getKeywordItems(keyword, 1).get(0);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String[] keywords) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -80,7 +78,7 @@ public class BloglinesParser extends AbstractParser {
 		return getKeywordItem(query);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
 
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
@@ -94,7 +92,7 @@ public class BloglinesParser extends AbstractParser {
 		return extractData(extractedData, limit, true);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -106,57 +104,62 @@ public class BloglinesParser extends AbstractParser {
 		return getKeywordItems(query, limit);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getUserItem(int userId) throws ParseException, NoResultsException {
 
 		return getUserItem(String.valueOf(userId));
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getUserItem(String userId) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getUserItems(int userId, int limit) throws ParseException, NoResultsException {
 		
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getLatestUserItem(int userId) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getLatestUserItem(String userId) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
 
-	// Fetch Items from an RSS feed and return a list of Data objects
-	// with an agreed limit (maybe added in future - limit parameter.
+	/**
+	 * Fetch Items from an RSS location and convert the feed a list 
+	 * of Data objects
+	 *  
+	 * @param query
+	 * @return List<Data>
+	 */
 	private List<Data> getData(String query) throws ParseException, NoResultsException {
 
 		// RSS Helper object to map RSS Items

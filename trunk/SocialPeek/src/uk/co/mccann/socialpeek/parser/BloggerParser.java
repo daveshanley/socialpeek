@@ -1,7 +1,6 @@
 package uk.co.mccann.socialpeek.parser;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -16,8 +15,9 @@ import com.sun.cnpi.rss.elements.Channel;
 import com.sun.cnpi.rss.elements.Item;
 
 /**
- * <b>WeFeelFineParser</b><br/>
- * Use the WWF API to read and parse feelings and thoughts from around the web
+ * <b>BloggerParser</b><br/>
+ * Use the Blogger API to read Blog posts containing certain keywords or
+ * submitted by a certain user
  *
  * <h4>Copyright and License</h4>
  * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
@@ -31,12 +31,12 @@ import com.sun.cnpi.rss.elements.Item;
 public class BloggerParser extends AbstractParser {
 
 	// RSS Caching variables
+	/*
 	private final String xmlKey = "blogger.rss.";
 	private final long expireLengthMillis = 1800000; // 30  minutes
+	 */
 
-
-	// Query URLs  - sa=N 	provides less relevant results
-	private final String BASE_URL = "http://blogsearch.google.com/blogsearch_feeds?output=rss&ie=utf-8&filter=0&q={keyword}&num={limit}";
+	// Query URLs
 	private final String KEYWORD_URL = "http://blogsearch.google.com/blogsearch_feeds?output=rss&ie=utf-8&filter=0&q={keyword}&num={limit}";
 	private final String USER_URL = "http://blogsearch.google.com/blogsearch_feeds?output=rss&ie=utf-8&filter=0&q=inpostauthor:{user}&num={limit}";
 
@@ -44,38 +44,25 @@ public class BloggerParser extends AbstractParser {
 
 	private final int DEFAULT_LIMIT = 10;
 
-
-	public void setUpParser(){
-		this.random = new Random();
-	}
-
-
+	/** {@inheritDoc} */
 	public Data getItem() throws ParseException, NoResultsException {
 
-		return getItems(1).get(0);
-
-	}
-
-
-	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
-
-//		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
-//		String query = BASE_URL.replace("{limit}", String.valueOf(itemLimit));
-//
-//		List<Data> extractedData = this.getData(query);
-//
-//		// return 'limit' items of shuffled data
-//		return extractData(extractedData, limit, true);
 		return null;
 	}
 
+	/** {@inheritDoc} */
+	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
 
+		return null;
+	}
+
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String keyword) throws ParseException, NoResultsException {
 
 		return getKeywordItems(keyword, 1).get(0);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String[] keywords) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -87,7 +74,7 @@ public class BloggerParser extends AbstractParser {
 		return getKeywordItem(query);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
 
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
@@ -101,7 +88,7 @@ public class BloggerParser extends AbstractParser {
 		return extractData(extractedData, limit, true);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -113,42 +100,50 @@ public class BloggerParser extends AbstractParser {
 		return getKeywordItems(query, limit);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getUserItem(int userId) throws ParseException, NoResultsException {
-	
+
 		return getUserItem(String.valueOf(userId));
 	}
+	
+	/** {@inheritDoc} */
 
 
 	public Data getUserItem(String userId) throws ParseException, NoResultsException {
-	
+
 		return getUserItems(userId, 1).get(0);
 	}
 
+	/** {@inheritDoc} */
 
 	public List<Data> getUserItems(int userId, int limit) throws ParseException, NoResultsException {
 		return getUserItems(String.valueOf(userId), limit);
-	
+
 	}
 
+	/** {@inheritDoc} */
 
 	public List<Data> getUserItems(String userId, int limit) throws ParseException, NoResultsException {
-	
+
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
-	
+
 		String query = USER_URL.replace("{user}", userId);
 		query = query.replace("{limit}", String.valueOf(itemLimit));
-	
+
 		List<Data> extractedData = this.getData(query);
-	
+
 		return extractData(extractedData, limit, true);
 	}
+	
+	/** {@inheritDoc} */
 
 
 	public Data getLatestUserItem(int userId) throws ParseException, NoResultsException {
 
 		return getLatestUserItem(String.valueOf(userId));
 	}
+	
+	/** {@inheritDoc} */
 
 
 	public Data getLatestUserItem(String userId) throws ParseException, NoResultsException {
@@ -156,12 +151,14 @@ public class BloggerParser extends AbstractParser {
 		return getLatestUserItems(userId, 1).get(0);
 	}
 
+	/** {@inheritDoc} */
 
 	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException, NoResultsException {
 
 		return getLatestUserItems(String.valueOf(userId), limit);
 	}
 
+	/** {@inheritDoc} */
 
 	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
@@ -172,24 +169,31 @@ public class BloggerParser extends AbstractParser {
 
 		return extractData(extractedData, limit, false);
 	}
+	
+	
 
 
-	// Fetch Items from an RSS feed and return a list of Data objects
-	// with an agreed limit (maybe added in future - limit parameter.
+	/**
+	 * Fetch Items from an RSS location and convert the feed a list 
+	 * of Data objects
+	 *  
+	 * @param query
+	 * @return List<Data>
+	 */
 	private List<Data> getData(String query) throws ParseException, NoResultsException {
-		
+
 		// RSS Helper object to map RSS Items
 		// to Data objects
 		RSSHelper rssHelper = new RSSHelper();
-	
+
 		// Set up date format
 		rssHelper.setDateFormat(dateFormat);
-	
+
 		RSSReader parser = new RSSReader();
-	
+
 		// Set the URL for the RSS reader to point to
 		parser.setURL(query);
-	
+
 		// Parse the Feed and get the feed's channel
 		Channel channel = null;
 		try {
@@ -197,29 +201,30 @@ public class BloggerParser extends AbstractParser {
 		} catch (Exception e) {
 			throw new ParseException("Unable to parse Deilicious RSS data:" + e.getStackTrace());
 		}
-		
-		
+
+
 		List<Item> items = null;
 
 		if (channel!=null)
 			items = (List<Item>) channel.getItems();
-	
+
 		if (items==null || items.size()==0)
 			throw new NoResultsException();
-	
+
 		return rssHelper.convertToData(items);
 	}
-
 	
+	
+
+
 	/**
-	 * 
 	 * Receives a list of data and extracts the amount required
 	 * If a random element is to be selected, shuffle is set to true
 	 * 
 	 * @param data
 	 * @param limit
 	 * @param shuffle
-	 * @return
+	 * @return {@link List}
 	 */
 	private List<Data> extractData(List<Data> data, int limit, boolean shuffle){
 

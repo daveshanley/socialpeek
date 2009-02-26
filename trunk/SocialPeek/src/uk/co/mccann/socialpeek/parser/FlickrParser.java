@@ -37,8 +37,8 @@ public class FlickrParser extends AbstractParser {
 	/*
 	private final String xmlKey = "flickr.rss.";
 	private final long expireLengthMillis = 1800000; // 30  minutes
-	*/
-	
+	 */
+
 	// Query URLs
 	private final String BASE_URL = "http://api.flickr.com/services/feeds/photos_public.gne?format=rss2&count={limit}";
 	private final String KEYWORD_URL = "http://api.flickr.com/services/feeds/photos_public.gne?format=rss2&count={limit}&tags={keyword}";
@@ -48,19 +48,16 @@ public class FlickrParser extends AbstractParser {
 
 	private final int DEFAULT_LIMIT = 10;
 
-	
-	public void setUpParser(){
-		this.random = new Random();
-	}
 
 
+	/** {@inheritDoc} */
 	public Data getItem() throws ParseException, NoResultsException {
 
 		return getItems(1).get(0);
 
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
 
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
@@ -72,13 +69,13 @@ public class FlickrParser extends AbstractParser {
 		return extractData(extractedData, limit, true);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String keyword) throws ParseException, NoResultsException {
 
 		return getKeywordItems(keyword, 1).get(0);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String[] keywords) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -90,7 +87,7 @@ public class FlickrParser extends AbstractParser {
 		return getKeywordItem(query);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
 
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
@@ -104,7 +101,7 @@ public class FlickrParser extends AbstractParser {
 		return extractData(extractedData, limit, true);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -116,56 +113,56 @@ public class FlickrParser extends AbstractParser {
 		return getKeywordItems(query, limit);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getUserItem(int userId) throws ParseException, NoResultsException {
-	
+
 		return getUserItem(String.valueOf(userId));
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getUserItem(String userId) throws ParseException, NoResultsException {
-	
+
 		return getUserItems(userId, 1).get(0);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getUserItems(int userId, int limit) throws ParseException, NoResultsException {
 		return getUserItems(String.valueOf(userId), limit);
-	
+
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getUserItems(String userId, int limit) throws ParseException, NoResultsException {
-	
+
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
-	
+
 		String query = USER_URL.replace("{user}", userId);
 		query = query.replace("{limit}", String.valueOf(itemLimit));
-	
+
 		List<Data> extractedData = this.getData(query);
-	
+
 		return extractData(extractedData, limit, true);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getLatestUserItem(int userId) throws ParseException, NoResultsException {
 
 		return getLatestUserItem(String.valueOf(userId));
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getLatestUserItem(String userId) throws ParseException, NoResultsException {
 
 		return getLatestUserItems(userId, 1).get(0);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException, NoResultsException {
 
 		return getLatestUserItems(String.valueOf(userId), limit);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
 		String query = USER_URL.replace("{user}", userId);
@@ -177,22 +174,27 @@ public class FlickrParser extends AbstractParser {
 	}
 
 
-	// Fetch Items from an RSS feed and return a list of Data objects
-	// with an agreed limit (maybe added in future - limit parameter.
+	/**
+	 * Fetch Items from an RSS location and convert the feed a list 
+	 * of Data objects
+	 *  
+	 * @param query
+	 * @return List<Data>
+	 */
 	private List<Data> getData(String query) throws ParseException, NoResultsException {
-		
+
 		// RSS Helper object to map RSS Items
 		// to Data objects
 		RSSHelper rssHelper = new RSSHelper();
-	
+
 		// Set up date format
 		rssHelper.setDateFormat(dateFormat);
-	
+
 		RSSReader parser = new RSSReader();
-	
+
 		// Set the URL for the RSS reader to point to
 		parser.setURL(query);
-	
+
 		// Parse the Feed and get the feed's channel
 		Channel channel = null;
 		try {
@@ -200,20 +202,20 @@ public class FlickrParser extends AbstractParser {
 		} catch (Exception e) {
 			throw new ParseException("Unable to parse Flickr RSS data:" + e.getStackTrace());
 		}
-		
-		
+
+
 		List<Item> items = null;
 
 		if (channel!=null)
 			items = (List<Item>) channel.getItems();
-	
+
 		if (items==null || items.size()==0)
 			throw new NoResultsException();
-	
+
 		return rssHelper.convertFlickrToData(items);
 	}
 
-	
+
 	/**
 	 * 
 	 * Receives a list of data and extracts the amount required

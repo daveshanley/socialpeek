@@ -47,9 +47,9 @@ public interface Parser {
 	/**
      * Get a multiple PeekData Objects
      * 
+     * @param limit
      * @return a List filled with Data objects 
      * @throws ParseException
-     * @param limit integer limit of the number of results you want back.
    	 */
 	public List<Data> getItems(int limit) throws ParseException, NoResultsException;
 	

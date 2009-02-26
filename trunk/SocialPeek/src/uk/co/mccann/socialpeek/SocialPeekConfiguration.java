@@ -164,7 +164,7 @@ public class SocialPeekConfiguration implements Configurable {
 	/**
      * get the location of the cached RSS files
      *
-     * @param rssCacheLocation;
+     * @param rssCacheLocation
      */
 	public void setRSSCacheLocation(String rssCacheLocation) {
 		this.rssCacheLocation = rssCacheLocation;

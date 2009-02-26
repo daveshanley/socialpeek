@@ -495,7 +495,7 @@ public class Twitter {
 
 	/**
 	 * Returns a list of <i>all</i> the direct messages sent to the authenticating user.
-	 * @see getRecentDirectMessages()
+	 * @see #getRecentDirectMessages()
 	 */
 	public List<Message> getDirectMessages() throws TwitterException {
 		// FIXME !

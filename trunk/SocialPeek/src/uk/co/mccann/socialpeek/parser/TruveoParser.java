@@ -15,8 +15,8 @@ import com.sun.cnpi.rss.elements.Channel;
 import com.sun.cnpi.rss.elements.Item;
 
 /**
- * <b>YouTubeParser</b><br/>
- * Use the WWF API to read and parse feelings and thoughts from around the web
+ * <b>Truveo</b><br/>
+ * Use the Truveo API to search for video results
  *
  * <h4>Copyright and License</h4>
  * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
@@ -25,12 +25,11 @@ import com.sun.cnpi.rss.elements.Item;
  * <a href="http://creativecommons.org/licenses/by-nc-sa/2.5/">http://creativecommons.org/licenses/by-nc-sa/2.5/</a>
  * for license details. This code comes with no warranty or support.
  *
- *	Limit parameter not known
  *
  *
  * @author Lewis Taylor <lewis.taylor@europe.mccann.com>
  */
-public class TruveoParser extends AbstractParser {
+public class /** {@inheritDoc} */ extends AbstractParser {
 
 	// Query URLs
 	private final String BASE_URL = "http://xml.truveo.com/rss?results={limit}";
@@ -41,18 +40,14 @@ public class TruveoParser extends AbstractParser {
 	
 	private final String dateFormat = "EEE, d MMM yyyy H:mm:ss z";
 
-	
-	public void setUpParser(){
-		this.random = new Random();
-	}
 
-
+	/** {@inheritDoc} */
 	public Data getItem() throws ParseException, NoResultsException {
 
 		return getItems(1).get(0);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
 
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
@@ -64,13 +59,13 @@ public class TruveoParser extends AbstractParser {
 		return extractData(extractedData, limit, true);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String keyword) throws ParseException, NoResultsException {
 
 		return getKeywordItems(keyword, 1).get(0);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String[] keywords) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -82,7 +77,7 @@ public class TruveoParser extends AbstractParser {
 		return getKeywordItem(query);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
 
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
@@ -96,7 +91,7 @@ public class TruveoParser extends AbstractParser {
 		return extractData(extractedData, limit, true);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -108,25 +103,25 @@ public class TruveoParser extends AbstractParser {
 		return getKeywordItems(query, limit);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getUserItem(int userId) throws ParseException, NoResultsException {
 	
 		return getUserItem(String.valueOf(userId));
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getUserItem(String userId) throws ParseException, NoResultsException {
 	
 		return getUserItems(userId, 1).get(0);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getUserItems(int userId, int limit) throws ParseException, NoResultsException {
 		return getUserItems(String.valueOf(userId), limit);
 	
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getUserItems(String userId, int limit) throws ParseException, NoResultsException {
 	
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
@@ -139,25 +134,25 @@ public class TruveoParser extends AbstractParser {
 		return extractData(extractedData, limit, true);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getLatestUserItem(int userId) throws ParseException, NoResultsException {
 
 		return getLatestUserItem(String.valueOf(userId));
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getLatestUserItem(String userId) throws ParseException, NoResultsException {
 
 		return getLatestUserItems(userId, 1).get(0);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException, NoResultsException {
 
 		return getLatestUserItems(String.valueOf(userId), limit);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
 		String query = USER_URL.replace("{user}", userId);
@@ -169,8 +164,13 @@ public class TruveoParser extends AbstractParser {
 	}
 
 
-	// Fetch Items from an RSS feed and return a list of Data objects
-	// with an agreed limit (maybe added in future - limit parameter.
+	/**
+	 * Fetch Items from an RSS location and convert the feed a list 
+	 * of Data objects
+	 *  
+	 * @param query
+	 * @return List<Data>
+	 */
 	private List<Data> getData(String query) throws ParseException, NoResultsException {
 		
 		// RSS Helper object to map RSS Items

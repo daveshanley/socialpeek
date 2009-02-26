@@ -26,8 +26,9 @@ import com.sun.cnpi.rss.elements.Item;
  * for license details. This code comes with no warranty or support.
  *
  *	NOTES:
- *	MAX_RESULTS = 10
- *
+ *	No Random Options
+ *	No User Options
+ *	No Limit Options
  *
  * @author Lewis Taylor <lewis.taylor@europe.mccann.com>
  */
@@ -40,29 +41,28 @@ public class BlinkxParser extends AbstractParser {
 	private final String dateFormat = "EEE, d MMM yyyy H:mm:ss z";
 
 
-	public void setUpParser(){
-		this.random = new Random();
-	}
-
-
+	/** {@inheritDoc} */
 	public Data getItem() throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String keyword) throws ParseException, NoResultsException {
 
 		return getKeywordItems(keyword, 1).get(0);
 	}
 
 
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String[] keywords) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -74,7 +74,8 @@ public class BlinkxParser extends AbstractParser {
 		return getKeywordItem(query);
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
 
 		String query = KEYWORD_URL.replace("{keyword}", keyword);
@@ -85,7 +86,8 @@ public class BlinkxParser extends AbstractParser {
 		return extractData(extractedData, limit, true);
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -97,57 +99,70 @@ public class BlinkxParser extends AbstractParser {
 		return getKeywordItems(query, limit);
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public Data getUserItem(int userId) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public Data getUserItem(String userId) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public List<Data> getUserItems(int userId, int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public List<Data> getUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public Data getLatestUserItem(int userId) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public Data getLatestUserItem(String userId) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
 
-	// Fetch Items from an RSS feed and return a list of Data objects
-	// with an agreed limit (maybe added in future - limit parameter.
+	/**
+	 * Fetch Items from an RSS location and convert the feed a list 
+	 * of Data objects
+	 *  
+	 * @param query
+	 * @return List<Data>
+	 */
 	private List<Data> getData(String query) throws ParseException, NoResultsException {
 
 		// RSS Helper object to map RSS Items
@@ -167,19 +182,17 @@ public class BlinkxParser extends AbstractParser {
 		try {
 			channel = parser.parseFeed();
 		} catch (Exception e) {
-			throw new ParseException("Unable to parse WordPress RSS data:" + e.getStackTrace());
+			throw new ParseException("Unable to parse BlinkxParser RSS data:" + e.getStackTrace());
 		}
 
 		List<Item> items = null;
 
 		if (channel!=null)
-			
 			items = (List<Item>) channel.getItems();
 
 		if (items==null || items.size()==0)
 			throw new NoResultsException();
 
-		// Use Flickr method as identical
 		return rssHelper.convertBlinkxToData(items);
 	}
 

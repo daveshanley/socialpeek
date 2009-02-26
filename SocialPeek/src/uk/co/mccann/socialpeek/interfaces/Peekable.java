@@ -107,8 +107,8 @@ public interface Peekable {
      * Get a single peek for a keyword or tag
    	 * 
    	 * @param tag the tag or keyword you want to peek into (if supported)
-     * @throws SocialPeekException
      * @return formatted string data produced by generator
+     * @throws SocialPeekException
      */
 	public String getRandomPeekUsingTag(String tag) throws SocialPeekException;
 	
@@ -117,8 +117,8 @@ public interface Peekable {
      * Get a single peek for multiple keywords or tag
    	 * 
    	 * @param tags the String array of tags or keywords you want to peek into (if supported)
-     * @throws SocialPeekException
      * @return formatted string data produced by generator
+     * @throws SocialPeekException
      */
 	public String getRandomPeekUsingTags(String[] tags) throws SocialPeekException;
 	
@@ -126,10 +126,10 @@ public interface Peekable {
 	/**
      * Get multiple peeks for a keyword or tag
    	 * 
-     * @throws SocialPeekException
      * @param tag the tag or keyword you want to peek into (if supported)
      * @param limit limit the returned results 
      * @return formatted string data produced by generator
+     * @throws SocialPeekException
      */
 	public String getMultiplePeekUsingTag(String tag, int limit) throws SocialPeekException;
 	
@@ -137,10 +137,10 @@ public interface Peekable {
 	/**
      * Get multiple peeks for multiple keywords or tags
    	 * 
-     * @throws SocialPeekException
      * @param tags String array of tags or keywords you want to use (if supported)
      * @param limit limit the number of returned results
      * @return formatted string data produced by generator
+     * @throws SocialPeekException
      */
 	public String getMultiplePeekUsingTags(String[] tags, int limit) throws SocialPeekException;
 	
@@ -149,8 +149,8 @@ public interface Peekable {
      * Get a Data Object back for a single peek for a keyword or tag
    	 * 
    	 * @param tag the tag or keyword you want to peek into (if supported)
-     * @throws SocialPeekException
      * @return plain old POJO Data object
+     * @throws SocialPeekException
      */
 	public Data getRawRandomPeekUsingTag(String tag) throws SocialPeekException;
 	
@@ -159,8 +159,8 @@ public interface Peekable {
      * Get a Data object back for a single peek for multiple keywords or tag
    	 * 
    	 * @param tags the String array of tags or keywords you want to peek into (if supported)
-     * @throws SocialPeekException
      * @return plain old POJO Data object
+     * @throws SocialPeekException
      */
 	public Data getRawRandomPeekUsingTags(String[] tags) throws SocialPeekException;
 	
@@ -168,10 +168,10 @@ public interface Peekable {
 	/**
      * Get a List filled will Data objects for multiple peeks for a keyword or tag
    	 * 
-     * @throws SocialPeekException
      * @param tag the tag or keyword you want to peek into (if supported)
      * @param limit limit the returned results 
      * @return plain old List filled with Data objects
+     * @throws SocialPeekException
      */
 	public List<Data> getRawMultiplePeekUsingTag(String tag, int limit) throws SocialPeekException;
 	
@@ -179,22 +179,20 @@ public interface Peekable {
 	/**
      * Get a List filled with Data Objects for multiple peeks for multiple keywords or tags
    	 * 
-     * @throws SocialPeekException
      * @param tags String array of tags or keywords you want to use (if supported)
      * @param limit limit the number of returned results
      * @return plain old list filled with Data Objects
+     * @throws SocialPeekException
      */
 	public List<Data> getRawMultiplePeekUsingTags(String[] tags, int limit) throws SocialPeekException;
-	
-	
 	
 	
 	
 	/**
      * Get a single random peek without running the result through a generator
    	 * 
-     * @throws SocialPeekException
      * @return POJO Data object for your own manipulation
+     * @throws SocialPeekException
      */
 	public Data getRawDataRandomPeek() throws SocialPeekException;
 	
@@ -202,46 +200,46 @@ public interface Peekable {
 	/**
      * Get multiple peeks without running the result through a generator
    	 * 
-     * @throws SocialPeekException
      * @return List filled with POJO Data objects for your own manipulation
+     * @throws SocialPeekException
      */
 	public List<Data> getRawDataRandomPeek(int limit) throws SocialPeekException;
 	
 	/**
      * Get single peek from a service user without running the result through a generator
    	 * 
-     * @throws SocialPeekException
      * @param userId the user id of the service user (if implemented)
      * @return POJO Data object for your own manipulation
+     * @throws SocialPeekException
      */
 	public Data getRawDataUserPeek(int userId)  throws SocialPeekException;
 	
 	/**
      * Get single peek from a service user without running the result through a generator
    	 * 
-     * @throws SocialPeekException
      * @param userId the user id of the service user (if implemented)
      * @return POJO Data object for your own manipulation
+     * @throws SocialPeekException
      */
 	public Data getRawDataUserPeek(String userId) throws SocialPeekException;
 	
 	/**
      * Get multiple peeks from a service user without running the result through a generator
    	 * 
-     * @throws SocialPeekException
      * @param userId the user id of the service user (if implemented)
      * @param limit limit the number of items returned
      * @return List filled with POJO Data objects for your own manipulation
+     * @throws SocialPeekException
      */
 	public List<Data> getRawDataUserPeek(int userId, int limit) throws SocialPeekException;
 	
 	/**
      * Get multiple peeks from a service user without running the result through a generator
    	 * 
-     * @throws SocialPeekException
      * @param userId the user id of the service user (if implemented)
      * @param limit limit the number of items returned
      * @return List filled with POJO Data objects for your own manipulation
+     * @throws SocialPeekException
      */
 	public List<Data> getRawDataUserPeek(String userId, int limit)  throws SocialPeekException;
 

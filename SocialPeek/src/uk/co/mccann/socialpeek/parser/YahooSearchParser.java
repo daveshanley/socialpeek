@@ -47,29 +47,26 @@ public class YahooSearchParser extends AbstractParser {
 	private final String dateFormat = "yyyy/MM/dd";
 
 
-	public void setUpParser(){
-		this.random = new Random();
-	}
-
-
+	/** {@inheritDoc} */
 	public Data getItem() throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	
+	/** {@inheritDoc} */
 	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String keyword) throws ParseException, NoResultsException {
 
 		return getKeywordItems(keyword, 1).get(0);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getKeywordItem(String[] keywords) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -81,7 +78,7 @@ public class YahooSearchParser extends AbstractParser {
 		return getKeywordItem(query);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String keyword, int limit) throws ParseException, NoResultsException {
 
 		int itemLimit = (limit>DEFAULT_LIMIT) ? limit : DEFAULT_LIMIT; 
@@ -95,7 +92,7 @@ public class YahooSearchParser extends AbstractParser {
 		return extractData(extractedData, limit, true);
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getKeywordItems(String[] keywords, int limit) throws ParseException, NoResultsException {
 
 		// Construct query in form: term1+term2+term3
@@ -107,55 +104,61 @@ public class YahooSearchParser extends AbstractParser {
 		return getKeywordItems(query, limit);
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getUserItem(int userId) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getUserItem(String userId) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getUserItems(int userId, int limit) throws ParseException, NoResultsException {
 
 		return null;	
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getLatestUserItem(int userId) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public Data getLatestUserItem(String userId) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getLatestUserItems(int userId, int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/** {@inheritDoc} */
 	public List<Data> getLatestUserItems(String userId, int limit) throws ParseException, NoResultsException {
 
 		return null;
 	}
 
-
+	/**
+	 * Retrieves an XML document from the given URL and converts it 
+	 * to a list of Data objects
+	 *  
+	 * @param query
+	 * @return List<Data>
+	 */
 	private List<Data> getData(String query) throws ParseException, NoResultsException {
 
 		List<Data> dataList = new ArrayList<Data>();
@@ -264,6 +267,15 @@ public class YahooSearchParser extends AbstractParser {
 
 	}
 
+	/**
+	 * Searches for the nth occurence of a tag with the name tagName
+	 * inside the current element.
+	 * 
+	 * @param node
+	 * @param tagName
+	 * @param occurence
+	 * @return element text
+	 */
 	private String getNodeText(Element node, String tagName, int occurence){
 		String textVal = null;
 

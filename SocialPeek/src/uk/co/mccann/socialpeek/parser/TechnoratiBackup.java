@@ -421,3 +421,23 @@
 //	}
 //
 //}
+
+	/*
+	private String doCacheInspection(String suffix){
+
+		File file = new File(getSocialService().getConfiguration().getRSSCacheLocation() + xmlKey + suffix + ".xml");
+
+		if(file.exists()) {
+
+			long time = System.currentTimeMillis();
+
+			if(file.lastModified() > (time - expireLengthMillis)) 
+				return file.getAbsolutePath();
+			else 
+				return null;
+		} else {
+			return null;
+		}
+
+	}
+	*/

@@ -30,6 +30,12 @@ public class RSSReader {
 		url = null;
 	}
 	
+	/**
+	 * Sets the URL of the RSSReader to be
+	 * used when parsing later
+	 * 
+	 * @param url - url to fetch RSS feed
+	 */
 	public void setURL(String url){
 		try {
 			setURL(new URL(url));
@@ -38,10 +44,23 @@ public class RSSReader {
 		}
 	}
 	
+	/**
+	 * Sets the URL of the RSSReader to be
+	 * used when parsing later
+	 * 
+	 * @param url - url to fetch RSS feed
+	 */
 	public void setURL(URL url){
 		this.url = url;
 	}
 	
+	/**
+	 * Fetches a feed from a stored location and parses it
+	 * before returning the RSS Feed as an object
+	 * 
+	 * @return a Channel onject containing the RSS Data
+	 * @throws Exception
+	 */
 	public Channel parseFeed() throws Exception {
 
 	    

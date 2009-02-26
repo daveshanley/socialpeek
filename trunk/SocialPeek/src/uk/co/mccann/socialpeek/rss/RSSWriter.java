@@ -29,7 +29,18 @@ import com.sun.cnpi.rss.elements.Source;
 import com.sun.cnpi.rss.elements.Title;
 
 
-// Provides methods to take an RSS object and write it to XML.
+/**
+ *  Provides methods to take an RSS object and write it to XML.
+ * 
+ * <h4>Copyright and License</h4>
+ * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
+ * otherwise stated. It is released as
+ * open-source under the Creative Commons NC-SA license. See
+ * <a href="http://creativecommons.org/licenses/by-nc-sa/2.5/">http://creativecommons.org/licenses/by-nc-sa/2.5/</a>
+ * for license details. This code comes with no warranty or support.
+ * 
+ * @author Lewis Taylor <lewis.taylor@europe.mccann.com>
+ */
 public class RSSWriter {
 
 	private DocumentBuilderFactory dbf;
@@ -37,6 +48,9 @@ public class RSSWriter {
 	private Document document;
 	private Element rootElement;
 
+	/**
+	 * Sets the writer up in preparation for XML write
+	 */
 	private void setupWriter(){
 		/* create instance of document builder factory */
 		dbf = DocumentBuilderFactory.newInstance();
@@ -53,6 +67,14 @@ public class RSSWriter {
 		document = docBuilder.newDocument();
 	}
 
+	
+	/**
+	 * Creates an XML document from an RSS Channel and writes
+	 * it to file
+	 * 
+	 * @param file - the file to write the XML to
+	 * @param channelFeed - the RSS channel to write to file
+	 */
 	public void structureRSS(File file, Channel channelFeed){
 
 		setupWriter();
@@ -244,7 +266,7 @@ public class RSSWriter {
 				imageDescriptionNode.setTextContent(imageDescription.getText());
 				imageNode.appendChild(imageDescriptionNode);
 			}
-			
+
 			channel.appendChild(imageNode);
 		}
 
@@ -283,37 +305,39 @@ public class RSSWriter {
 				skipHoursNode.appendChild(hourNode);
 			}
 		}
-		
+
 		if (skipDays!=null){
 			Element skipDaysNode = document.createElement("skipDays");
 			channel.appendChild(skipDaysNode);
 
 			String[] days = skipDays.getText().split("\\s+");
-			
+
 			for (int i = 1; i < days.length; i++){
 				Element dayNode = document.createElement("day");
 				dayNode.setTextContent(days[i]);
 				skipDaysNode.appendChild(dayNode);
 			}
 		}
-		
+
 		// Structure Items
 		structureItems(channel, items);
 		formDocument();
 	}
-	
-	
+
+
 	/**
+	 * Structures the list of items into an XML element and appends
+	 * them to the given channel element
 	 * 
-	 * @param channel
-	 * @param items
+	 * @param channel - the channel element to append the items to
+	 * @param items - the list of items to structure
 	 */
 	public Element structureItems(Element channel, List<Item> items){
-		
+
 		for (Item item : items){
-			
+
 			Element itemNode = document.createElement("item");
-			
+
 			Title title = item.getTitle();
 			Link link = item.getLink();
 			Description description = item.getDescription();
@@ -324,31 +348,31 @@ public class RSSWriter {
 			PubDate pubDate = item.getPubDate();
 			Source source = item.getSource();
 			List<Category> categories = (List<Category>) item.getCategories();
-			
+
 			if (title!=null){
 				Element titleNode = document.createElement("title");
 				titleNode.setTextContent(title.getText());
 				itemNode.appendChild(titleNode);
 			}
-			
+
 			if (link!=null){
 				Element linkNode = document.createElement("link");
 				linkNode.setTextContent(link.getText());
 				itemNode.appendChild(linkNode);
 			}
-			
+
 			if (description!=null){
 				Element descriptionNode = document.createElement("description");
 				descriptionNode.setTextContent(description.getText());
 				itemNode.appendChild(descriptionNode);
 			}
-			
+
 			if (author!=null){
 				Element authorNode = document.createElement("author");
 				authorNode.setTextContent(author.getText());
 				itemNode.appendChild(authorNode);
 			}
-			
+
 			if (categories!=null && categories.size()>0){
 				for (Category category : categories){
 					Element categoryNode = document.createElement("category");
@@ -360,49 +384,52 @@ public class RSSWriter {
 					itemNode.appendChild(categoryNode);
 				}
 			}
-			
+
 			if (comments!=null){
 				Element commentsNode = document.createElement("comments");
 				commentsNode.setTextContent(comments.getText());
 				itemNode.appendChild(commentsNode);
 			}
-			
+
 			if (enclosure!=null){
 				Element enclosureNode = document.createElement("enclosure");
 				itemNode.appendChild(enclosureNode);
-				
+
 				String url = enclosure.getAttribute("url");
 				String length = enclosure.getAttribute("length");
 				String type = enclosure.getAttribute("type");
-				
+
 				enclosureNode.setAttribute("url", url);
 				enclosureNode.setAttribute("length", length);
 				enclosureNode.setAttribute("type", type);
 			}
-			
+
 			if (guid!=null){
 				Element guidNode = document.createElement("guid");
 				guidNode.setTextContent(guid.getText());
 				itemNode.appendChild(guidNode);
 			}
-			
+
 			if (pubDate!=null){
 				Element pubDateNode = document.createElement("pubDate");
 				pubDateNode.setTextContent(pubDate.getText());
 				itemNode.appendChild(pubDateNode);
 			}
-			
+
 			if (source!=null){
 				Element sourceNode = document.createElement("source");
 				sourceNode.setTextContent(source.getText());
 				itemNode.appendChild(sourceNode);
 			}
-			
+
 			channel.appendChild(itemNode);
 		}
 		return channel;
 	}
-	
+
+	/**
+	 * Writes the document to file
+	 */
 	public void formDocument(){
 		/* create a DOM implementation */
 		DOMImplementation impl = this.document.getImplementation();

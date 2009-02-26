@@ -13,6 +13,18 @@ import com.sun.cnpi.rss.elements.Item;
 
 
 /**
+ * 
+ * Provides Methods to convert RSS Items to Data objects
+ * Differing services require different methods construct
+ * the Data objects
+ * 
+ *  <h4>Copyright and License</h4>
+ * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
+ * otherwise stated. It is released as
+ * open-source under the Creative Commons NC-SA license. See
+ * <a href="http://creativecommons.org/licenses/by-nc-sa/2.5/">http://creativecommons.org/licenses/by-nc-sa/2.5/</a>
+ * for license details. This code comes with no warranty or support.
+ * 
  * @author Lewis Taylor - lewis.taylor@europe.mccann.com
  *
  */
@@ -46,11 +58,26 @@ public class RSSHelper {
 		this.dateFormat = dateFormat==null ? null : new SimpleDateFormat(dateFormat);
 	}
 
+	/**
+	 * Sets the format of the date to allow
+	 * parsing of the date element in the 
+	 * RSS item.
+	 * 
+	 * @param dateFormat
+	 */
 	public void setDateFormat(SimpleDateFormat dateFormat){
 
 		this.dateFormat = dateFormat;
 	}
 
+	
+	/**
+	 * Converts an RSS Item into a Data item for use
+	 * with SocialPeek
+	 * 
+	 * @param item - item to be converted
+	 * @return the converted data item
+	 */
 	public Data convertToData(Item item){
 
 		List<Item> items = new ArrayList<Item>();
@@ -60,6 +87,13 @@ public class RSSHelper {
 		return convertToData(items).get(0);
 	}
 
+	/**
+	 * Converts a list of RSS Items into a Data item
+	 * for use with SocialPeek
+	 * 
+	 * @param items - items to be converted
+	 * @return the converted data items
+	 */
 	public List<Data> convertToData(List<Item> items){
 
 		List<Data> dataItems = new ArrayList<Data>();
@@ -120,6 +154,13 @@ public class RSSHelper {
 	}
 
 
+	/**
+	 * Converts an RSS Item into a Data item for use
+	 * with SocialPeek
+	 * 
+	 * @param item - item to be converted
+	 * @return the converted data item
+	 */
 	public Data convertBlinkxToData(Item item){
 
 		List<Item> items = new ArrayList<Item>();
@@ -129,12 +170,26 @@ public class RSSHelper {
 		return convertBlinkxToData(items).get(0);
 	}
 
+	/**
+	 * Converts a list of RSS Items into a Data item
+	 * for use with SocialPeek
+	 * 
+	 * @param items - items to be converted
+	 * @return the converted data items
+	 */
 	public List<Data> convertBlinkxToData(List<Item> items){
 
 		return getDataListWithEnclosure(items);
 	}
 
 
+	/**
+	 * Converts an RSS Item into a Data item for use
+	 * with SocialPeek
+	 * 
+	 * @param item - items to be converted
+	 * @return the converted data item
+	 */
 	public Data convertFlickrToData(Item item){
 
 		List<Item> items = new ArrayList<Item>();
@@ -144,11 +199,27 @@ public class RSSHelper {
 		return convertFlickrToData(items).get(0);
 	}
 
+	/**
+	 * Converts a list of RSS Items into a Data item
+	 * for use with SocialPeek
+	 * 
+	 * @param items - items to be converted
+	 * @return the converted data items
+	 */
 	public List<Data> convertFlickrToData(List<Item> items){
 
 		return getDataListWithEnclosure(items);
 	}
 
+	
+	/**
+	 * Converts a list of RSS Items into a Data item
+	 * for use with SocialPeek. Extracts enclosure
+	 * property to use with thumbnail field
+	 * 
+	 * @param items - items to be converted
+	 * @return the converted data items
+	 */
 	private List<Data> getDataListWithEnclosure(List<Item> items){
 
 		List<Data> dataItems = new ArrayList<Data>();
@@ -172,6 +243,14 @@ public class RSSHelper {
 
 	}
 
+	
+	/**
+	 * Converts an RSS Item into a Data item for use
+	 * with SocialPeek
+	 * 
+	 * @param item - items to be converted
+	 * @return the converted data item
+	 */
 	public Data covertYouTubeToData(Item item){
 
 		List<Item> items = new ArrayList<Item>();
@@ -181,6 +260,13 @@ public class RSSHelper {
 		return convertYouTubeToData(items).get(0);
 	}
 
+	/**
+	 * Converts a list of RSS Items into a Data item
+	 * for use with SocialPeek
+	 * 
+	 * @param items - items to be converted
+	 * @return the converted data items
+	 */
 	public List<Data> convertYouTubeToData(List<Item> items){
 
 		List<Data> dataItems = new ArrayList<Data>();
@@ -225,6 +311,13 @@ public class RSSHelper {
 		return dataItems;
 	}
 
+	/**
+	 * Converts an RSS Item into a Data item for use
+	 * with SocialPeek
+	 * 
+	 * @param item - items to be converted
+	 * @return the converted data item
+	 */
 	public Data covertTruveoToData(Item item){
 
 		List<Item> items = new ArrayList<Item>();
@@ -234,6 +327,13 @@ public class RSSHelper {
 		return convertTruveoToData(items).get(0);
 	}
 
+	/**
+	 * Converts a list of RSS Items into a Data item
+	 * for use with SocialPeek
+	 * 
+	 * @param item - item to be converted
+	 * @return the converted data item
+	 */
 	public List<Data> convertTruveoToData(List<Item> items){
 
 		List<Data> dataItems = new ArrayList<Data>();

@@ -9,6 +9,7 @@ import java.util.List;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.model.PeekData;
 
+import com.sun.cnpi.rss.elements.Author;
 import com.sun.cnpi.rss.elements.Item;
 
 
@@ -70,7 +71,7 @@ public class RSSHelper {
 		this.dateFormat = dateFormat;
 	}
 
-	
+
 	/**
 	 * Converts an RSS Item into a Data item for use
 	 * with SocialPeek
@@ -112,8 +113,10 @@ public class RSSHelper {
 
 
 			// Set Description
-			if(rssItem.getDescription()!=null && !rssItem.getDescription().equals("null")) 
+			if(rssItem.getDescription()!=null && !rssItem.getDescription().equals("null")){
+				rssItem.getDescription().setText(rssItem.getDescription().getText().replace("\n", " "));
 				data.setBody(rssItem.getDescription().getText());
+			}
 			else 
 				data.setBody("");
 
@@ -208,10 +211,19 @@ public class RSSHelper {
 	 */
 	public List<Data> convertFlickrToData(List<Item> items){
 
+		// Change RSS items author from attribute to node text
+		for (Item item : items){
+			Author author = new Author();
+			String userSuffix = item.getLink().getText().replace("http://www.flickr.com/photos/", "");
+			userSuffix = userSuffix.replaceAll("/.*/", "");
+			author.setText(userSuffix);
+			item.setAuthor(author);
+		}
+		
 		return getDataListWithEnclosure(items);
 	}
 
-	
+
 	/**
 	 * Converts a list of RSS Items into a Data item
 	 * for use with SocialPeek. Extracts enclosure
@@ -236,14 +248,18 @@ public class RSSHelper {
 			else
 				data.setThumbnail("not available");
 
+			// Remove the HTML from the description
+			data.setBody(data.getBody().replaceAll("<.*?>", ""));
+
 			dataItems.add(data);
 		}
+
 
 		return dataItems;
 
 	}
 
-	
+
 	/**
 	 * Converts an RSS Item into a Data item for use
 	 * with SocialPeek
@@ -297,13 +313,18 @@ public class RSSHelper {
 			String[] userResult = description.split("user=");
 
 			String user = null;
-			if (userResult[1]!=null){
-				int end = 0;
-				end = userResult[1].indexOf("\">");
-				user = userResult[1].substring(0, end);
+			if (userResult.length>1){
+				if (userResult[1]!=null){
+					int end = 0;
+					end = userResult[1].indexOf("\">");
+					user = userResult[1].substring(0, end);
+				}
 			}
 
 			data.setUser(user);
+
+			// Remove the HTML from the description
+			data.setBody(description.replaceAll("<.*?>", ""));
 
 			dataItems.add(data);
 		}
@@ -331,8 +352,8 @@ public class RSSHelper {
 	 * Converts a list of RSS Items into a Data item
 	 * for use with SocialPeek
 	 * 
-	 * @param item - item to be converted
-	 * @return the converted data item
+	 * @param items - items to be converted
+	 * @return the converted data items
 	 */
 	public List<Data> convertTruveoToData(List<Item> items){
 
@@ -352,13 +373,18 @@ public class RSSHelper {
 			String[] result = description.split("<img src=\"");
 
 			String thumbnail = null;
-			if (result[1]!=null){
-				int end = 0;
-				end = result[1].indexOf("\">");
-				thumbnail = result[1].substring(0, end);
+			if(result.length>1){
+				if (result[1]!=null){
+					int end = 0;
+					end = result[1].indexOf("\">");
+					thumbnail = result[1].substring(0, end);
+				}
 			}
 
 			data.setThumbnail(thumbnail);
+
+			// Remove the HTML from the description
+			data.setBody(description.replaceAll("<.*?>", ""));
 
 			dataItems.add(data);
 		}

@@ -1,24 +1,10 @@
 package uk.co.mccann.socialpeek.test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import static org.junit.Assert.fail;
-
-import org.apache.xalan.xsltc.runtime.Node;
 import org.apache.xerces.parsers.DOMParser;
 import org.junit.Test;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 import uk.co.mccann.socialpeek.service.WeFeelFineService;
 
 public class URLTest {

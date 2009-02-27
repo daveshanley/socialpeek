@@ -8,7 +8,6 @@ import org.junit.Test;
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.parser.YahooSearchParser;
 import uk.co.mccann.socialpeek.parser.YouTubeParser;
 
 public class YouTubeTest {
@@ -24,7 +23,7 @@ public class YouTubeTest {
 
 		YouTubeParser bp = new YouTubeParser();
 
-		String[] john = {"testing"};
+		String[] john = {"lewis"};
 
 		try {
 
@@ -58,9 +57,9 @@ public class YouTubeTest {
 				for(Data t : d){
 
 					System.out.println("Headline: " + t.getHeadline());
-					//					System.out.println("Description: " + t.getBody());
-					//					System.out.println("Link: " + t.getLink());
-					//					System.out.println("User: " + t.getUser());
+							System.out.println("Description: " + t.getBody());
+										System.out.println("Link: " + t.getLink());
+										System.out.println("User: " + t.getUser());
 					System.out.println("Date: " + t.getDate().get(Calendar.DATE));
 					System.out.println("Location: " + t.getLocation());
 					System.out.println("Thumbnail URL: " + t.getThumbnail());

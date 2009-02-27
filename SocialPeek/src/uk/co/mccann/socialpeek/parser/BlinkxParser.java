@@ -3,7 +3,6 @@ package uk.co.mccann.socialpeek.parser;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
@@ -15,7 +14,7 @@ import com.sun.cnpi.rss.elements.Channel;
 import com.sun.cnpi.rss.elements.Item;
 
 /**
- * <b>BlinkParser</b><br/>
+ * <b>BlinkxParser</b><br/>
  * Use the Blinkx web API to get video results
  *
  * <h4>Copyright and License</h4>

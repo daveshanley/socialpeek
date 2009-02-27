@@ -292,7 +292,7 @@ public class DiggParser extends AbstractParser {
 
 		} catch (IOException e) {
 
-			throw new ParseException("unable to retrive from BL API: "
+			throw new ParseException("unable to retrive from Digg API: "
 					+ e.getMessage());
 		}
 

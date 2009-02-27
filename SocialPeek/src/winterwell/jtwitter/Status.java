@@ -9,8 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import winterwell.jtwitter.*;
-
 /**
  * A Twitter status post. .toString() returns the status text.
  * <p>

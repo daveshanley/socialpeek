@@ -429,6 +429,7 @@ public class WeFeelFineParser extends AbstractParser {
 		return null;
 	}
 
+	@Override
 	public void setUpParser() {
 		
 		this.random = new Random();

@@ -73,6 +73,7 @@ public class LastFMUser {
 		this.image = image;
 	}
 	
+	@Override
 	public String toString() {
 		
 		StringWriter writer = new StringWriter();

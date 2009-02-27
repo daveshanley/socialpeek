@@ -1,11 +1,5 @@
 package uk.co.mccann.socialpeek.test;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-
 import org.junit.Test;
 
 import uk.co.mccann.socialpeek.SocialPeek;
@@ -14,7 +8,6 @@ import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
 import uk.co.mccann.socialpeek.interfaces.PeekFactory;
 import uk.co.mccann.socialpeek.model.SocialService;
 import uk.co.mccann.socialpeek.service.DeliciousService;
-import uk.co.mccann.socialpeek.service.LastFMService;
 import uk.co.mccann.socialpeek.service.TwitterService;
 import uk.co.mccann.socialpeek.service.WeFeelFineService;
 import static org.junit.Assert.fail;

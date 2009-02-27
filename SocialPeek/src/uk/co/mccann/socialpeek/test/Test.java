@@ -3,21 +3,13 @@ package uk.co.mccann.socialpeek.test;
 import static org.junit.Assert.fail;
 
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
-
 import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.SocialPeekConfiguration;
-import uk.co.mccann.socialpeek.SocialPeekFactory;
 import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
-import uk.co.mccann.socialpeek.generator.XMLGenerator;
-import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.interfaces.Generator;
 import uk.co.mccann.socialpeek.interfaces.PeekFactory;
-import uk.co.mccann.socialpeek.model.PeekData;
 import uk.co.mccann.socialpeek.model.SocialService;
 import uk.co.mccann.socialpeek.service.AbstractSocialService;
 import uk.co.mccann.socialpeek.service.TwitterService;

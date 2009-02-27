@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.SocialPeekConfiguration;
-import uk.co.mccann.socialpeek.SocialPeekFactory;
 import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
 import uk.co.mccann.socialpeek.interfaces.PeekFactory;
 import uk.co.mccann.socialpeek.model.SocialService;
@@ -74,7 +73,7 @@ public class TwitterTests {
 		SocialPeek.logging = true;
 		
 		SocialPeekConfiguration config = new SocialPeekConfiguration();
-		config.setFeedType(SocialPeek.RETURN_RSS);
+		config.setFeedType(SocialPeek.RETURN_XML);
 		config.registerService(service);
 		
 		SocialPeek socialPeek = new SocialPeek(config);

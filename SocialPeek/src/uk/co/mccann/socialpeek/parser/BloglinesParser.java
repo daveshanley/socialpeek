@@ -3,7 +3,6 @@ package uk.co.mccann.socialpeek.parser;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
@@ -179,7 +178,7 @@ public class BloglinesParser extends AbstractParser {
 		try {
 			channel = parser.parseFeed();
 		} catch (Exception e) {
-			throw new ParseException("Unable to parse Deilicious RSS data:" + e.getStackTrace());
+			throw new ParseException("Unable to parse Bloglines RSS data:" + e.getStackTrace());
 		}
 
 

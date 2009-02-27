@@ -39,6 +39,7 @@ public class WeFeelFineService extends AbstractSocialService {
 	}
 	
 	/* overridden methods */
+	@Override
 	public String getUserPeek(int userId) throws SocialPeekException {
 		
 		/* not implemented */
@@ -46,6 +47,7 @@ public class WeFeelFineService extends AbstractSocialService {
 	
 	}
 	
+	@Override
 	public String getUserPeek(String userId) throws SocialPeekException {
 		
 		/* not implemented */
@@ -53,6 +55,7 @@ public class WeFeelFineService extends AbstractSocialService {
 		
 	}
 
+	@Override
 	public String getUserPeek(int userId, int limit) throws SocialPeekException {
 		
 		/* not implemented */
@@ -60,6 +63,7 @@ public class WeFeelFineService extends AbstractSocialService {
 		
 	}
 
+	@Override
 	public String getUserPeek(String userId, int limit) throws SocialPeekException {
 		
 		/* not implemented */
@@ -67,6 +71,7 @@ public class WeFeelFineService extends AbstractSocialService {
 		
 	}
 	
+	@Override
 	public Data getRawDataUserPeek(int userId) throws SocialPeekException {
 		
 		/* not implemented */
@@ -74,24 +79,28 @@ public class WeFeelFineService extends AbstractSocialService {
 		
 	}
 
+	@Override
 	public Data getRawDataUserPeek(String userId) throws SocialPeekException {
 		
 		/* not implemented */
 		throw new SocialPeekException("this method is not implemented wefeelfine service!");
 	}
 
+	@Override
 	public List<Data> getRawDataUserPeek(int userId, int limit) throws SocialPeekException {
 		
 		/* not implemented */
 		throw new SocialPeekException("this method is not implemented wefeelfine service!");
 	}
 
+	@Override
 	public List<Data> getRawDataUserPeek(String userId, int limit) throws SocialPeekException {
 		
 		/* not implemented */
 		throw new SocialPeekException("this method is not implemented wefeelfine service!");
 	}
 
+	@Override
 	public String getLatestUserPeek(String userId) throws SocialPeekException {
 		
 		/* not implemented */
@@ -99,12 +108,14 @@ public class WeFeelFineService extends AbstractSocialService {
 		
 	}
 
+	@Override
 	public String getLatestUserPeek(int userId, int limit) throws SocialPeekException {
 		/* not implemented */
 		throw new SocialPeekException("this method is not implemented wefeelfine service!");
 		
 	}
 
+	@Override
 	public String getLatestUserPeek(String userId, int limit) throws SocialPeekException {
 		
 		/* not implemented */

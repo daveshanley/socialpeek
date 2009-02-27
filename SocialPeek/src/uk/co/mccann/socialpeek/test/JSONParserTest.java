@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import uk.co.mccann.socialpeek.SocialPeek;
 import uk.co.mccann.socialpeek.SocialPeekConfiguration;
-import uk.co.mccann.socialpeek.SocialPeekFactory;
 import uk.co.mccann.socialpeek.exceptions.SocialPeekException;
 import uk.co.mccann.socialpeek.generator.JSONGenerator;
 import uk.co.mccann.socialpeek.interfaces.Data;

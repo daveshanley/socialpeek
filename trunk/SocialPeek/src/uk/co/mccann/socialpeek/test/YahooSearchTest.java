@@ -8,7 +8,6 @@ import org.junit.Test;
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
-import uk.co.mccann.socialpeek.parser.WordPressParser;
 import uk.co.mccann.socialpeek.parser.YahooSearchParser;
 
 public class YahooSearchTest {

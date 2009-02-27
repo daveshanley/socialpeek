@@ -3,7 +3,6 @@ package uk.co.mccann.socialpeek.parser;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
@@ -29,8 +28,9 @@ import com.sun.cnpi.rss.elements.Item;
  *
  * @author Lewis Taylor <lewis.taylor@europe.mccann.com>
  */
-public class /** {@inheritDoc} */ extends AbstractParser {
+public class TruveoParser extends AbstractParser {
 
+	
 	// Query URLs
 	private final String BASE_URL = "http://xml.truveo.com/rss?results={limit}";
 	private final String KEYWORD_URL = "http://xml.truveo.com/rss?query={keyword}&results={limit}";

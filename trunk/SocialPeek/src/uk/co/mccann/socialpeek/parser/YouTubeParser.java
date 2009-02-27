@@ -4,8 +4,6 @@ package uk.co.mccann.socialpeek.parser;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
@@ -47,7 +45,7 @@ public class YouTubeParser extends AbstractParser {
 
 	/** {@inheritDoc} */
 	public List<Data> getItems(int limit) throws ParseException, NoResultsException {
-
+		
 		String query = BASE_URL;
 
 		List<Data> extractedData = this.getData(query);
@@ -172,7 +170,7 @@ public class YouTubeParser extends AbstractParser {
 		try {
 			channel = parser.parseFeed();
 		} catch (Exception e) {
-			throw new ParseException("Unable to parse Twingly RSS data:" + e.getStackTrace());
+			throw new ParseException("Unable to parse TouTube RSS data:" + e.getStackTrace());
 		}
 
 		List<Item> items = null;

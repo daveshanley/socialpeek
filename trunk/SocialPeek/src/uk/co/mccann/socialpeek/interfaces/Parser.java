@@ -69,7 +69,7 @@ public interface Parser {
 	 * 
 	 * This method may not be implemented by all services, should not be called if so.
 	 * 
-	 * @param keyword name of the tag you want to use.
+	 * @param keywords name of the tag you want to use.
 	 * @return Single Data Object
 	 * @throws ParseException
 	 */

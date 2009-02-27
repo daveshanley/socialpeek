@@ -9,7 +9,6 @@ import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
 import uk.co.mccann.socialpeek.parser.TechnoratiParser;
-import uk.co.mccann.socialpeek.parser.TruveoParser;
 
 public class TechnoratiTest {
 

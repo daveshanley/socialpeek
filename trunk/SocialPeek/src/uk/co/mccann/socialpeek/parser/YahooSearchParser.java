@@ -11,8 +11,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-
 import org.apache.xerces.parsers.DOMParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -25,8 +23,8 @@ import uk.co.mccann.socialpeek.model.PeekData;
 import uk.co.mccann.socialpeek.xml.XMLDataHelper;
 
 /**
- * <b>YahooSearchParsre</b><br/>
- * Use the Yahoo bBoss API to read and parse feelings and thoughts from around the web
+ * <b>YahooSearchParser</b><br/>
+ * Use the Yahoo Boss API to read and parse feelings and thoughts from around the web
  *
  * <h4>Copyright and License</h4>
  * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where

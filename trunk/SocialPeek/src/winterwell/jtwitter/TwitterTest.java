@@ -6,8 +6,6 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import winterwell.jtwitter.Twitter.Message;
 import winterwell.jtwitter.Status;
 import winterwell.jtwitter.User;

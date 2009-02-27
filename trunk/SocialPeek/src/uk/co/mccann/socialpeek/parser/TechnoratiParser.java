@@ -2,8 +2,6 @@ package uk.co.mccann.socialpeek.parser;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
@@ -15,7 +13,7 @@ import com.sun.cnpi.rss.elements.Item;
 
 /**
  * <b>TechnoratiParser</b><br/>
- * Use technorati RSS feeds to generate data
+ * Use Technorati RSS feeds to generate data
  *
  * <h4>Copyright and License</h4>
  * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where

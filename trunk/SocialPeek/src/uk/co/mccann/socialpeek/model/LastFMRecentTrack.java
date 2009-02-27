@@ -52,7 +52,7 @@ public class LastFMRecentTrack {
 	
 	/**
      *  Set the name of artist of the track
-     *  @param name is the name of the artist
+     *  @param artist is the name of the artist
      */
 	public void setArtist(String artist) {
 		this.artist = artist;
@@ -75,6 +75,7 @@ public class LastFMRecentTrack {
 	}
 	
 	
+	@Override
 	public String toString() {
 		
 		StringWriter writer = new StringWriter();
@@ -97,8 +98,8 @@ public class LastFMRecentTrack {
      *  Set the username of the person who recently played the track
      *  @param username of the user
      */
-	public void setUsername(String usermame) {
-		this.username = usermame;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	/**

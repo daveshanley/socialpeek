@@ -3,9 +3,6 @@ package uk.co.mccann.socialpeek.test;
 
 import static org.junit.Assert.fail;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Calendar;
 
 import org.junit.Before;

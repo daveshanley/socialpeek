@@ -3,8 +3,6 @@ package uk.co.mccann.socialpeek.parser;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
@@ -32,7 +30,7 @@ public class BloggerParser extends AbstractParser {
 
 	// RSS Caching variables
 	/*
-	private final String xmlKey = "blogger.rss.";
+	private final String = "blogger.rss.";
 	private final long expireLengthMillis = 1800000; // 30  minutes
 	 */
 
@@ -199,7 +197,7 @@ public class BloggerParser extends AbstractParser {
 		try {
 			channel = parser.parseFeed();
 		} catch (Exception e) {
-			throw new ParseException("Unable to parse Deilicious RSS data:" + e.getStackTrace());
+			throw new ParseException("Unable to parse Blogger RSS data:" + e.getStackTrace());
 		}
 
 

@@ -2,8 +2,6 @@ package uk.co.mccann.socialpeek.parser;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
@@ -15,7 +13,7 @@ import com.sun.cnpi.rss.elements.Item;
 
 /**
  * <b>LiveParser</b><br/>
- * Use the WWF API to read and parse feelings and thoughts from around the web
+ * Use the Live search API to get data containing given keywords
  *
  * <h4>Copyright and License</h4>
  * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where

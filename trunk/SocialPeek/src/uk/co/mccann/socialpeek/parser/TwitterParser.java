@@ -52,6 +52,7 @@ public class TwitterParser extends AbstractParser  {
      *  Configures the parser for any properties that need initializing
      *  
      */
+	@Override
 	public void setUpParser() {
 		super.setUpParser();
 		

@@ -50,7 +50,7 @@ public class LastFMTrack {
 	
 	/**
      *  Set the name of artist of the track
-     *  @param name is the name of the artist
+     *  @param artist is the name of the artist
      */
 	public void setArtist(String artist) {
 		this.artist = artist;
@@ -104,6 +104,7 @@ public class LastFMTrack {
 		this.image = image;
 	}
 	
+	@Override
 	public String toString() {
 		
 		StringWriter writer = new StringWriter();

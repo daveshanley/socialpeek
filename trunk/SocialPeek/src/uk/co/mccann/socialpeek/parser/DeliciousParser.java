@@ -3,8 +3,6 @@ package uk.co.mccann.socialpeek.parser;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-
 import uk.co.mccann.socialpeek.exceptions.NoResultsException;
 import uk.co.mccann.socialpeek.exceptions.ParseException;
 import uk.co.mccann.socialpeek.interfaces.Data;
@@ -15,8 +13,8 @@ import com.sun.cnpi.rss.elements.Channel;
 import com.sun.cnpi.rss.elements.Item;
 
 /**
- * <b>YouTubeParser</b><br/>
- * Use the WWF API to read and parse feelings and thoughts from around the web
+ * <b>DeliciousParser</b><br/>
+ * Use the delicious API to read and parse feelings and thoughts from around the web
  *
  * <h4>Copyright and License</h4>
  * This code is copyright (c) McCann Erickson Advertising Ltd, 2008 except where
@@ -198,7 +196,7 @@ public class DeliciousParser extends AbstractParser {
 		try {
 			channel = parser.parseFeed();
 		} catch (Exception e) {
-			throw new ParseException("Unable to parse Deilicious RSS data:" + e.getStackTrace());
+			throw new ParseException("Unable to parse Delicious RSS data:" + e.getStackTrace());
 		}
 
 

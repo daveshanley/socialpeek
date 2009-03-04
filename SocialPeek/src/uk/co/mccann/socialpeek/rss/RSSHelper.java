@@ -106,7 +106,7 @@ public class RSSHelper {
 			Data data = new PeekData();
 
 			// Set Title
-			if(rssItem.getTitle()!=null) 
+			if(rssItem.getTitle()!=null && rssItem.getTitle().getText()!=null) 
 				data.setHeadline(rssItem.getTitle().getText());
 			else 
 				data.setHeadline("not available");
@@ -122,13 +122,13 @@ public class RSSHelper {
 
 
 			// Set Link
-			if(rssItem.getLink()!= null) 
+			if(rssItem.getLink()!= null && rssItem.getLink().getText()!= null) 
 				data.setLink(rssItem.getLink().getText()); 
 			else 
 				data.setLink("http://socialpeek.com");
 
 			// Set User
-			if(rssItem.getAuthor()!=null) 
+			if(rssItem.getAuthor()!=null && rssItem.getAuthor().getText()!=null) 
 				data.setUser(rssItem.getAuthor().getText()); // only take the first creator
 			else 
 				data.setUser("not available");
@@ -139,7 +139,7 @@ public class RSSHelper {
 
 
 			try {
-				if (dateFormat!=null && rssItem.getPubDate()!=null)
+				if (dateFormat!=null && rssItem.getPubDate()!=null && rssItem.getPubDate().getText()!=null)
 					cal.setTime(dateFormat.parse(rssItem.getPubDate().getText()));
 			} catch (ParseException e) {
 				cal.setTime(Calendar.getInstance().getTime());
